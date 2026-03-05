@@ -191,6 +191,21 @@ Partiendo de la brecha entre escenarios:
 
 ### FASE 4: Extras
 
+- **Cierre/hardening pendiente de Fase 2**
+  - UI explicita para alternar entre modo auto-calculado y override manual de aportacion mensual
+  - Control visible de anos de drawdown/desacumulacion con reset al valor derivado por defecto
+  - Tooltip especifico del grafico combinado que incluya la linea "pension + ahorro"
+  - Aislar los recalculos: cambios de ahorro/inversion no deben volver a ejecutar el motor de pension
+  - Cobertura de tests de hooks/URL codec de ahorro y lint/typecheck verdes tambien sobre `tests/`
+  - Pulido de copy y unidades en la UI de ahorro para evitar duplicidades del tipo "EUR/mes al mes"
+
+- **Cierre/hardening pendiente de Fase 3**
+  - Disclaimer visible tipo callout sobre USD/EUR y nota explicita de que la simulacion usa rentabilidades anuales
+  - Tooltip del spaghetti chart con contexto correcto de cohorte e indice temporal, sin presentar `yearIndex` como ano calendario
+  - Atribucion de fuentes ajustada por serie, especialmente para `MSCI World`
+  - Tests de hook/UI para selector de serie, disclaimer visible y limite maximo de 25 lineas en el chart
+  - Alinear el contrato del hook de backtesting con el patron de ahorro (`summary` + `error`) si se mantiene como API publica
+
 - Plan de pensiones vs indexados (fiscalidad simplificada)
 - Quiz estilo tu-ipc para generar perfil automaticamente
 - Captura de imagen para redes
@@ -232,9 +247,15 @@ Partiendo de la brecha entre escenarios:
 ### Fase 2
 - [ ] Calculo de brecha mensual entre escenarios.
 - [ ] Calculadora inversa: cuanto ahorrar para compensar.
+- [ ] UI para override manual de aportacion mensual, con opcion clara para volver al modo automatico.
+- [ ] UI para ajustar anos de drawdown/desacumulacion o restaurar el valor derivado desde esperanza de vida.
 - [ ] Comparador invertir vs depositos con chart temporal.
 - [ ] Perfiles de inversion predefinidos.
 - [ ] Hero chart combinado: pension + cartera = ingreso total.
+- [ ] Tooltip del hero chart combinado muestra tambien la serie "pension + ahorro".
+- [ ] Parametros de ahorro comparten URL y persisten en localStorage sin perder round-trip.
+- [ ] Cambios en parametros de ahorro no fuerzan recalculo completo de los escenarios de pension.
+- [ ] Tests de hooks de ahorro/combinacion y verificacion de lint completan el cierre de la fase.
 
 ## Assumptions Exposed & Resolved
 | Assumption | Challenge | Resolution |

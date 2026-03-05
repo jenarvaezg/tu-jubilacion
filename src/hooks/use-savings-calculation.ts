@@ -26,6 +26,7 @@ export interface SavingsCalculationResult {
   readonly savings: SavingsResult | null;
   readonly portfolioTimeline: readonly PortfolioYearlyProjection[];
   readonly comparisonTimeline: readonly ComparisonYearlyPoint[];
+  readonly drawdownYears: number;
   readonly error: string | null;
 }
 
@@ -43,6 +44,7 @@ export function useSavingsCalculation(params: {
           savings: null,
           portfolioTimeline: [],
           comparisonTimeline: [],
+          drawdownYears: 0,
           error: null,
         };
       }
@@ -58,6 +60,7 @@ export function useSavingsCalculation(params: {
           savings: null,
           portfolioTimeline: [],
           comparisonTimeline: [],
+          drawdownYears: 0,
           error: null,
         };
       }
@@ -108,7 +111,14 @@ export function useSavingsCalculation(params: {
         currentYear,
       });
 
-      return { gap, savings, portfolioTimeline, comparisonTimeline, error: null };
+      return {
+        gap,
+        savings,
+        portfolioTimeline,
+        comparisonTimeline,
+        drawdownYears,
+        error: null,
+      };
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Error en el calculo de ahorro";
@@ -117,6 +127,7 @@ export function useSavingsCalculation(params: {
         savings: null,
         portfolioTimeline: [],
         comparisonTimeline: [],
+        drawdownYears: 0,
         error: message,
       };
     }

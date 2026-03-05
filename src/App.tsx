@@ -13,6 +13,7 @@ import { ShareButton } from "./components/results/ShareButton.tsx";
 import { EducationSection } from "./components/education/EducationSection.tsx";
 import { DetailToggle } from "./components/detail/DetailToggle.tsx";
 import { SavingsSection } from "./components/savings/SavingsSection.tsx";
+import { BacktestSection } from "./components/backtest/BacktestSection.tsx";
 
 function App() {
   const { state, dispatch, getShareUrl } = useAppState();
@@ -89,6 +90,14 @@ function App() {
           displayMode={state.display.displayMode}
           dispatch={dispatch}
         />
+
+        {savingsCalc.savings !== null && (
+          <BacktestSection
+            monthlyContribution={savingsCalc.savings.monthlyContribution}
+            yearsOfAccumulation={savingsCalc.savings.yearsOfAccumulation}
+            drawdownYears={savingsCalc.drawdownYears}
+          />
+        )}
 
         <EducationSection />
       </div>
