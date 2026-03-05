@@ -8,6 +8,7 @@ import { calculateActuarialFactor, buildGenerationalTable } from "../actuarial";
 import {
   netToGross,
   grossToBaseCotizacion,
+  grossMonthlyToContributionMonthly,
   monthlyToAnnualGross,
   calculateIRPF,
 } from "../salary";
@@ -53,13 +54,21 @@ export function calculateNotionalAccounts(
       ? FEDEA_PARAMS.gdpGrowthHistoric
       : FEDEA_PARAMS.gdpGrowthAgeingReport;
 
-  // Step 1: Get monthly gross salary
-  const monthlyGross =
+  // Step 1: Get monthly gross salary (per payment)
+  const monthlyGrossPerPayment =
     profile.salaryType === "net"
       ? netToGross(profile.monthlySalary, profile.ccaa, profile.pagasExtra)
       : profile.monthlySalary;
+  const annualGross = monthlyToAnnualGross(
+    monthlyGrossPerPayment,
+    profile.pagasExtra,
+  );
+  const contributionMonthlyGross = grossMonthlyToContributionMonthly(
+    monthlyGrossPerPayment,
+    profile.pagasExtra,
+  );
 
-  const currentBase = grossToBaseCotizacion(monthlyGross);
+  const currentBase = grossToBaseCotizacion(contributionMonthlyGross);
 
   // Step 2: Project bases
   const projected = projectBases({
@@ -142,7 +151,6 @@ export function calculateNotionalAccounts(
   const monthlyPension = annualPension / 14;
 
   // Replacement rates
-  const annualGross = monthlyToAnnualGross(monthlyGross, profile.pagasExtra);
   const replacementRate = annualGross > 0 ? annualPension / annualGross : 0;
 
   const irpfResult = calculateIRPF(annualGross, profile.ccaa);
@@ -156,7 +164,8 @@ export function calculateNotionalAccounts(
   const timeline = generateTimeline({
     retirementAge: profile.desiredRetirementAge,
     initialMonthlyPension: monthlyPension,
-    revalorizationRate: cfg.ipcRate,
+    // Swedish-style: pensions indexed to income growth, typically ~IPC - 0.5pp
+    revalorizationRate: Math.max(0, cfg.ipcRate - 0.005),
     ipcRate: cfg.ipcRate,
     currentYear: cfg.currentYear,
     currentAge: profile.age,

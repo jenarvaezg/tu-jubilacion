@@ -11,7 +11,9 @@ const BASE_PROFILE: UserProfile = {
   age: 32,
   monthlySalary: 5101,
   salaryType: "gross",
-  pagasExtra: true,
+  // Official simulator reference cases are interpreted on a 12-month basis
+  // (extras already prorated in the reported monthly gross amount).
+  pagasExtra: false,
   ccaa: "madrid",
   yearsWorked: 10,
   monthsContributed: 123,

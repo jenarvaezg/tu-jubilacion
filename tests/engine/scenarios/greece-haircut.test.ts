@@ -71,13 +71,17 @@ describe("calculateGreeceHaircut", () => {
     expect(large.monthlyPension).toBeLessThan(small.monthlyPension);
   });
 
-  it("timeline uses IPC revalorization (same as current law)", () => {
+  it("timeline has frozen pensions (0% revalorization in crisis)", () => {
     const result = calculateGreeceHaircut(REFERENCE_PROFILE);
     const tl = result.timeline;
     if (tl.length > 1) {
-      const yearlyGrowth =
-        tl[1].monthlyPensionNominal / tl[0].monthlyPensionNominal - 1;
-      expect(yearlyGrowth).toBeCloseTo(0.02, 3);
+      // Nominal pension stays constant (frozen)
+      expect(tl[1].monthlyPensionNominal).toBeCloseTo(
+        tl[0].monthlyPensionNominal,
+        2,
+      );
+      // Real pension decreases (inflation erodes purchasing power)
+      expect(tl[1].monthlyPensionReal).toBeLessThan(tl[0].monthlyPensionReal);
     }
   });
 

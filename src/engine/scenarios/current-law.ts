@@ -11,6 +11,7 @@ import { SS_RULES } from "../../data/ss-tables";
 import {
   netToGross,
   grossToBaseCotizacion,
+  grossMonthlyToContributionMonthly,
   calculateIRPF,
   monthlyToAnnualGross,
 } from "../salary";
@@ -53,14 +54,22 @@ export function calculateCurrentLaw(
   const cfg = { ...DEFAULT_CONFIG, ...config };
   const personalSituations = getPersonalSituations(profile);
 
-  // Step 1: Get monthly gross salary
-  const monthlyGross =
+  // Step 1: Get monthly gross salary (per payment)
+  const monthlyGrossPerPayment =
     profile.salaryType === "net"
       ? netToGross(profile.monthlySalary, profile.ccaa, profile.pagasExtra)
       : profile.monthlySalary;
+  const annualGross = monthlyToAnnualGross(
+    monthlyGrossPerPayment,
+    profile.pagasExtra,
+  );
+  const contributionMonthlyGross = grossMonthlyToContributionMonthly(
+    monthlyGrossPerPayment,
+    profile.pagasExtra,
+  );
 
   // Step 2: Base de cotización
-  const currentBase = grossToBaseCotizacion(monthlyGross);
+  const currentBase = grossToBaseCotizacion(contributionMonthlyGross);
 
   // Step 3: Project bases forward (base limits grow at IPC rate)
   const projected = projectBases({
@@ -142,7 +151,6 @@ export function calculateCurrentLaw(
   const annualPension = monthlyPension * SS_RULES.paymentsPerYear;
 
   // Replacement rate vs last gross salary
-  const annualGross = monthlyToAnnualGross(monthlyGross, profile.pagasExtra);
   const replacementRate = annualGross > 0 ? annualPension / annualGross : 0;
 
   // Replacement rate vs net salary

@@ -44,7 +44,8 @@ export function calculateGreeceHaircut(
   const timeline = generateTimeline({
     retirementAge: profile.desiredRetirementAge,
     initialMonthlyPension: monthlyPension,
-    revalorizationRate: cfg.ipcRate,
+    // Crisis conditions: pensions frozen (no revalorization)
+    revalorizationRate: 0,
     ipcRate: cfg.ipcRate,
     currentYear: cfg.currentYear,
     currentAge: profile.age,

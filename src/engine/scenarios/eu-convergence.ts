@@ -1,11 +1,7 @@
 // Scenario 4: Convergencia UE (EU Convergence)
 // Forces replacement rate to EU average (~60% of last gross salary)
 import type { UserProfile, ScenarioResult } from "../types";
-import {
-  netToGross,
-  monthlyToAnnualGross,
-  calculateIRPF,
-} from "../salary";
+import { netToGross, monthlyToAnnualGross, calculateIRPF } from "../salary";
 import { generateTimeline } from "../pension-timeline";
 import { SS_RULES } from "../../data/ss-tables";
 
@@ -54,7 +50,8 @@ export function calculateEUConvergence(
   const timeline = generateTimeline({
     retirementAge: profile.desiredRetirementAge,
     initialMonthlyPension: monthlyPension,
-    revalorizationRate: cfg.ipcRate,
+    // EU average: partial indexation (many countries don't fully track CPI)
+    revalorizationRate: cfg.ipcRate * 0.5,
     ipcRate: cfg.ipcRate,
     currentYear: cfg.currentYear,
     currentAge: profile.age,

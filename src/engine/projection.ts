@@ -50,7 +50,9 @@ export function projectBases(params: {
       Math.max(projectedGrossMonthly, SS_RULES.baseMinMonthly),
       yearBaseMax,
     );
-    const annualGrossSalary = projectedGrossMonthly * 14; // 14 pagas
+    // projectedGrossMonthly is already on a 12-month contribution basis
+    // (extras prorated when needed), so annual is x12.
+    const annualGrossSalary = projectedGrossMonthly * 12;
 
     projections.push({
       year,

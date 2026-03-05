@@ -22,6 +22,8 @@ const SCENARIO_ORDER: readonly ScenarioId[] = [
   'greece-haircut',
 ];
 
+const REFERENCE_LABEL_FONT_SIZE = 10;
+
 interface HeroChartProps {
   readonly data: readonly ChartDataPoint[];
   readonly retirementAge: number;
@@ -45,12 +47,12 @@ export function HeroChart({ data, retirementAge, displayMode }: HeroChartProps) 
         <ResponsiveContainer width="100%" height={360}>
           <LineChart
             data={data as ChartDataPoint[]}
-            margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+            margin={{ top: 56, right: 18, left: 20, bottom: 26 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis
               dataKey="age"
-              label={{ value: 'Edad', position: 'insideBottom', offset: -5, fontSize: 12 }}
+              label={{ value: 'Edad', position: 'insideBottom', offset: -8, fontSize: 12 }}
               tick={{ fontSize: 11 }}
               stroke="#9ca3af"
             />
@@ -58,7 +60,7 @@ export function HeroChart({ data, retirementAge, displayMode }: HeroChartProps) 
               tick={{ fontSize: 11 }}
               stroke="#9ca3af"
               tickFormatter={(v: number) => `${Math.round(v)}`}
-              label={{ value: 'EUR/mes', angle: -90, position: 'insideLeft', offset: 0, fontSize: 12 }}
+              label={{ value: 'EUR/mes', angle: -90, position: 'insideLeft', offset: -2, fontSize: 12 }}
             />
             <Tooltip
               content={<ChartTooltip displayMode={displayMode} />}
@@ -67,26 +69,50 @@ export function HeroChart({ data, retirementAge, displayMode }: HeroChartProps) 
               x={63}
               stroke="#9ca3af"
               strokeDasharray="3 3"
-              label={{ value: '63 (anticipada)', position: 'top', fontSize: 10, fill: '#6b7280' }}
+              label={{
+                value: '63 (anticipada)',
+                position: 'insideTop',
+                dy: 2,
+                fontSize: REFERENCE_LABEL_FONT_SIZE,
+                fill: '#6b7280',
+              }}
             />
             <ReferenceLine
               x={67}
               stroke="#6b7280"
               strokeDasharray="4 4"
-              label={{ value: '67 (legal)', position: 'top', fontSize: 10, fill: '#6b7280' }}
+              label={{
+                value: '67 (legal)',
+                position: 'insideTop',
+                dy: 16,
+                fontSize: REFERENCE_LABEL_FONT_SIZE,
+                fill: '#6b7280',
+              }}
             />
             <ReferenceLine
               x={70}
               stroke="#9ca3af"
               strokeDasharray="3 3"
-              label={{ value: '70 (demorada)', position: 'top', fontSize: 10, fill: '#6b7280' }}
+              label={{
+                value: '70 (demorada)',
+                position: 'insideTop',
+                dy: 30,
+                fontSize: REFERENCE_LABEL_FONT_SIZE,
+                fill: '#6b7280',
+              }}
             />
             {retirementAge !== 63 && retirementAge !== 67 && retirementAge !== 70 && (
               <ReferenceLine
                 x={retirementAge}
                 stroke="#1e40af"
                 strokeDasharray="4 4"
-                label={{ value: `${retirementAge} (tuya)`, position: 'top', fontSize: 10, fill: '#1e40af' }}
+                label={{
+                  value: `${retirementAge} (tuya)`,
+                  position: 'insideTop',
+                  dy: 44,
+                  fontSize: REFERENCE_LABEL_FONT_SIZE,
+                  fill: '#1e40af',
+                }}
               />
             )}
             {SCENARIO_ORDER.map((scenarioId) => (

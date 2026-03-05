@@ -115,6 +115,21 @@ export function grossToBaseCotizacion(grossMonthly: number): number {
 }
 
 /**
+ * Normalize a per-payment gross salary to the monthly amount used as
+ * contribution base input (12-month basis with extras prorated).
+ *
+ * - 14 payments (extras aparte): annual = monthly * 14 -> contribution monthly = annual / 12
+ * - 12 payments (prorrateadas): annual = monthly * 12 -> contribution monthly = annual / 12 (= monthly)
+ */
+export function grossMonthlyToContributionMonthly(
+  grossMonthly: number,
+  pagasExtra: boolean,
+): number {
+  const annualGross = monthlyToAnnualGross(grossMonthly, pagasExtra);
+  return annualGross / 12;
+}
+
+/**
  * Convert net monthly salary to gross using bisection method.
  * Bisection is preferred over Newton-Raphson because IRPF bracket
  * discontinuities create non-smooth derivatives.

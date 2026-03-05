@@ -174,7 +174,7 @@ describe("Boundary tests - extreme input values", () => {
     expect(result70.timeline[0].age).toBe(70);
   });
 
-  it("pagasExtra affects replacement rate for gross salary", () => {
+  it("pagasExtra affects pension for gross salary", () => {
     const base: UserProfile = {
       age: 35,
       monthlySalary: 2000,
@@ -187,10 +187,9 @@ describe("Boundary tests - extreme input values", () => {
     };
     const result14 = calculateCurrentLaw(base);
     const result12 = calculateCurrentLaw({ ...base, pagasExtra: false });
-    // With gross salary, the base cotizacion is the same, so pension is the same.
-    // But replacement rate differs because annualGross = monthly * 14 vs monthly * 12
-    // 14 pagas -> higher annual gross -> lower replacement rate
-    expect(result14.replacementRate).toBeLessThan(result12.replacementRate);
+    // For the same monthly figure, 14 pays imply higher annual salary
+    // and therefore a higher contribution-base equivalent.
+    expect(result14.monthlyPension).toBeGreaterThan(result12.monthlyPension);
   });
 
   it("pagasExtra affects pension for net salary", () => {
@@ -234,6 +233,46 @@ describe("Boundary tests - extreme input values", () => {
       expect(r.timeline.length).toBeGreaterThan(0);
       expect(Number.isFinite(r.monthlyPension)).toBe(true);
       expect(Number.isNaN(r.monthlyPension)).toBe(false);
+    }
+  });
+
+  it("pagasExtra affects all scenarios when salary is gross", () => {
+    const base: UserProfile = {
+      age: 35,
+      monthlySalary: 2000,
+      salaryType: "gross",
+      pagasExtra: true,
+      ccaa: "madrid",
+      yearsWorked: 13,
+      monthsContributed: 156,
+      desiredRetirementAge: 67,
+    };
+
+    const variants = [
+      [
+        calculateCurrentLaw(base),
+        calculateCurrentLaw({ ...base, pagasExtra: false }),
+      ],
+      [
+        calculateNotionalAccounts(base),
+        calculateNotionalAccounts({ ...base, pagasExtra: false }),
+      ],
+      [
+        calculateSustainability2013(base),
+        calculateSustainability2013({ ...base, pagasExtra: false }),
+      ],
+      [
+        calculateEUConvergence(base),
+        calculateEUConvergence({ ...base, pagasExtra: false }),
+      ],
+      [
+        calculateGreeceHaircut(base),
+        calculateGreeceHaircut({ ...base, pagasExtra: false }),
+      ],
+    ] as const;
+
+    for (const [result14, result12] of variants) {
+      expect(result14.monthlyPension).toBeGreaterThan(result12.monthlyPension);
     }
   });
 });
