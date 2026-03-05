@@ -21,6 +21,14 @@ export const SS_RULES: SSRules = {
   workerContributionRate: 0.0647,
   employerContributionRate: 0.236,
 
+  // Complemento por brecha de genero (aprox. 2025)
+  childComplementPerMonth: 35.9,
+  childComplementMaxChildren: 4,
+
+  // Reduccion aplicada a la penalizacion cuando la anticipada es involuntaria
+  // (modelo simplificado para configuraciones especiales).
+  involuntaryEarlyPenaltyRelief: 0.8,
+
   paymentsPerYear: 14,
 
   // Base reguladora (cohortes futuras): 324 mejores bases de las últimas 348,

@@ -2,8 +2,21 @@ import { useReducer, useEffect, useCallback, useRef } from 'react';
 import type { AppState, AppAction } from './types.ts';
 import { DEFAULT_STATE } from './defaults.ts';
 import { decodeStateFromUrl, encodeStateToUrl, hasUrlParams } from './url-codec.ts';
+import {
+  DEFAULT_PERSONAL_SITUATIONS,
+  type PersonalSituations,
+} from '../engine/types.ts';
 
 const STORAGE_KEY = 'tu-jubilacion:state:v1';
+
+function withPersonalSituations(state: AppState) {
+  return {
+    ...DEFAULT_PERSONAL_SITUATIONS,
+    ...(DEFAULT_STATE.calculation.profile.personalSituations ??
+      DEFAULT_PERSONAL_SITUATIONS),
+    ...(state.calculation.profile.personalSituations ?? {}),
+  } satisfies PersonalSituations;
+}
 
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
@@ -89,6 +102,83 @@ function appReducer(state: AppState, action: AppAction): AppState {
           },
         },
       };
+    case 'SET_CHILDREN_COUNT': {
+      const childrenCount = Math.max(0, Math.min(4, Math.round(action.payload)));
+      return {
+        ...state,
+        calculation: {
+          ...state.calculation,
+          profile: {
+            ...state.calculation.profile,
+            personalSituations: {
+              ...withPersonalSituations(state),
+              childrenCount,
+            },
+          },
+        },
+      };
+    }
+    case 'SET_DISABILITY_LEVEL':
+      return {
+        ...state,
+        calculation: {
+          ...state.calculation,
+          profile: {
+            ...state.calculation.profile,
+            personalSituations: {
+              ...withPersonalSituations(state),
+              disabilityLevel: action.payload,
+            },
+          },
+        },
+      };
+    case 'SET_HAZARDOUS_JOB':
+      return {
+        ...state,
+        calculation: {
+          ...state.calculation,
+          profile: {
+            ...state.calculation.profile,
+            personalSituations: {
+              ...withPersonalSituations(state),
+              hazardousJob: action.payload,
+            },
+          },
+        },
+      };
+    case 'SET_INVOLUNTARY_EARLY_RETIREMENT':
+      return {
+        ...state,
+        calculation: {
+          ...state.calculation,
+          profile: {
+            ...state.calculation.profile,
+            personalSituations: {
+              ...withPersonalSituations(state),
+              involuntaryEarlyRetirement: action.payload,
+            },
+          },
+        },
+      };
+    case 'SET_FOREIGN_CONTRIBUTION_YEARS': {
+      const foreignContributionYears = Math.max(
+        0,
+        Math.min(20, Math.round(action.payload)),
+      );
+      return {
+        ...state,
+        calculation: {
+          ...state.calculation,
+          profile: {
+            ...state.calculation.profile,
+            personalSituations: {
+              ...withPersonalSituations(state),
+              foreignContributionYears,
+            },
+          },
+        },
+      };
+    }
     case 'SET_DISPLAY_MODE':
       return {
         ...state,

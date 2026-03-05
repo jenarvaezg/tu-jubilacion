@@ -7,9 +7,9 @@ export function MethodologyPanel() {
       <FormulaBlock
         title="Escenario 1: Legislacion vigente"
         formula={`Base reguladora = Suma 324 mejores bases de las ultimas 348 / 396
-Porcentaje = f(anos cotizados): 15a=50%, +0.21%/mes (49m), +0.19%/mes (160m)
-Pension = Base reguladora x Porcentaje x Factor edad`}
-        explanation="Calculo segun la normativa actual de la Seguridad Social. En modo base, proyectamos la cotizacion futura en terminos reales constantes."
+Porcentaje = f(anos cotizados): 15a=50%, +0.21%/mes (49m), +0.18479%/mes (215m)
+Pension = Base reguladora x Porcentaje x Factor edad + complementos especiales`}
+        explanation="Calculo calibrado con validaciones frente al simulador oficial. En modo base, proyectamos la cotizacion futura en terminos reales constantes; las situaciones personales se aplican como ajustes simplificados."
       />
 
       <FormulaBlock

@@ -1,7 +1,12 @@
 // Scenario 1: Legislación Vigente (Current Law)
 // Calculates pension under current Spanish SS legislation.
 // Source: LGSS art. 205-215, reformed by Ley 21/2021 and RD-ley 2/2023
-import type { UserProfile, ScenarioResult } from "../types";
+import {
+  DEFAULT_PERSONAL_SITUATIONS,
+  type PersonalSituations,
+  type UserProfile,
+  type ScenarioResult,
+} from "../types";
 import { SS_RULES } from "../../data/ss-tables";
 import {
   netToGross,
@@ -42,6 +47,7 @@ export function calculateCurrentLaw(
   config: Partial<CurrentLawConfig> = {},
 ): ScenarioResult {
   const cfg = { ...DEFAULT_CONFIG, ...config };
+  const personalSituations = getPersonalSituations(profile);
 
   // Step 1: Get monthly gross salary
   const monthlyGross =
@@ -63,7 +69,10 @@ export function calculateCurrentLaw(
 
   // Total months contributed at retirement
   const yearsToRetirement = profile.desiredRetirementAge - profile.age;
-  const totalYearsContributed = profile.yearsWorked + yearsToRetirement;
+  const totalYearsContributed =
+    profile.yearsWorked +
+    yearsToRetirement +
+    personalSituations.foreignContributionYears;
   const totalMonthsContributed = totalYearsContributed * 12;
 
   // Step 4: Base reguladora
@@ -79,11 +88,12 @@ export function calculateCurrentLaw(
   const coefficient = computeCoefficient(totalMonthsContributed);
 
   // Step 6: Early/late retirement adjustment
-  const legalAge = getLegalRetirementAge(totalYearsContributed);
+  const legalAge = getLegalRetirementAge(totalYearsContributed, personalSituations);
   const ageAdjustment = computeAgeAdjustment(
     profile.desiredRetirementAge,
     legalAge,
     totalYearsContributed,
+    personalSituations,
   );
 
   // Step 7: Monthly pension (one of 14 pagas)
@@ -94,6 +104,11 @@ export function calculateCurrentLaw(
   // today's cap for cohorts retiring in 2050+ severely underestimates
   // results versus the official simulator.
   monthlyPension = Math.max(monthlyPension, SS_RULES.pensionMinMonthly);
+
+  // Complemento por hijos (modelo simplificado del complemento por brecha de genero).
+  monthlyPension += computeChildrenComplement(
+    personalSituations.childrenCount,
+  );
 
   // Annual pension (14 pagas)
   const annualPension = monthlyPension * SS_RULES.paymentsPerYear;
@@ -138,10 +153,17 @@ export function calculateCurrentLaw(
  * - 65 with >= 38.5 years contributed
  * - 67 otherwise
  */
-function getLegalRetirementAge(yearsContributed: number): number {
-  return yearsContributed >= SS_RULES.reducedRetirementYearsRequired
+function getLegalRetirementAge(
+  yearsContributed: number,
+  situations: PersonalSituations,
+): number {
+  const baseAge =
+    yearsContributed >= SS_RULES.reducedRetirementYearsRequired
     ? SS_RULES.reducedRetirementAge
     : SS_RULES.legalRetirementAge;
+
+  const reduction = getSpecialLegalAgeReduction(situations);
+  return Math.max(60, baseAge - reduction);
 }
 
 /**
@@ -186,6 +208,7 @@ function computeAgeAdjustment(
   desiredAge: number,
   legalAge: number,
   yearsContributed: number,
+  situations: PersonalSituations,
 ): number {
   if (desiredAge === legalAge) {
     return 1.0;
@@ -194,7 +217,10 @@ function computeAgeAdjustment(
   if (desiredAge < legalAge) {
     // Early retirement penalty
     const monthsEarly = Math.min(24, Math.round((legalAge - desiredAge) * 12));
-    const penalty = computeEarlyPenalty(monthsEarly, yearsContributed);
+    let penalty = computeEarlyPenalty(monthsEarly, yearsContributed);
+    if (situations.involuntaryEarlyRetirement) {
+      penalty *= SS_RULES.involuntaryEarlyPenaltyRelief;
+    }
     return Math.max(0, 1.0 - penalty);
   }
 
@@ -257,4 +283,32 @@ function findBonusRate(yearsContributed: number): number {
     }
   }
   return rate;
+}
+
+function getPersonalSituations(profile: UserProfile): PersonalSituations {
+  return {
+    ...DEFAULT_PERSONAL_SITUATIONS,
+    ...(profile.personalSituations ?? {}),
+  };
+}
+
+function getSpecialLegalAgeReduction(situations: PersonalSituations): number {
+  let reduction = 0;
+  if (situations.hazardousJob) {
+    reduction += 2;
+  }
+  if (situations.disabilityLevel === "33") {
+    reduction += 1;
+  } else if (situations.disabilityLevel === "65") {
+    reduction += 2;
+  }
+  return Math.min(4, reduction);
+}
+
+function computeChildrenComplement(childrenCount: number): number {
+  const children = Math.max(
+    0,
+    Math.min(SS_RULES.childComplementMaxChildren, Math.round(childrenCount)),
+  );
+  return children * SS_RULES.childComplementPerMonth;
 }

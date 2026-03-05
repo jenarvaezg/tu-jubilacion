@@ -52,6 +52,9 @@ export interface SSRules {
   readonly baseMaxMonthly: number;
   readonly workerContributionRate: number;
   readonly employerContributionRate: number;
+  readonly childComplementPerMonth: number;
+  readonly childComplementMaxChildren: number;
+  readonly involuntaryEarlyPenaltyRelief: number;
   readonly paymentsPerYear: number;
   readonly regulatoryBaseMonths: number;
   readonly regulatoryBaseDivisor: number;
@@ -128,6 +131,24 @@ export interface CcaaInfo {
 
 // ── User Profile & Calculation ────────────────────────────────────
 
+export type DisabilityLevel = "none" | "33" | "65";
+
+export interface PersonalSituations {
+  readonly childrenCount: number;
+  readonly disabilityLevel: DisabilityLevel;
+  readonly hazardousJob: boolean;
+  readonly involuntaryEarlyRetirement: boolean;
+  readonly foreignContributionYears: number;
+}
+
+export const DEFAULT_PERSONAL_SITUATIONS: PersonalSituations = {
+  childrenCount: 0,
+  disabilityLevel: "none",
+  hazardousJob: false,
+  involuntaryEarlyRetirement: false,
+  foreignContributionYears: 0,
+};
+
 export interface UserProfile {
   readonly age: number;
   readonly monthlySalary: number;
@@ -137,6 +158,7 @@ export interface UserProfile {
   readonly yearsWorked: number;
   readonly monthsContributed: number;
   readonly desiredRetirementAge: number;
+  readonly personalSituations?: PersonalSituations;
 }
 
 export interface ProjectedBase {

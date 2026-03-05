@@ -1,4 +1,7 @@
-import type { CcaaCode } from '../engine/types.ts';
+import {
+  DEFAULT_PERSONAL_SITUATIONS,
+  type CcaaCode,
+} from '../engine/types.ts';
 import type { AppState } from './types.ts';
 import { DEFAULT_STATE } from './defaults.ts';
 
@@ -17,6 +20,11 @@ const PARAM_KEYS = {
   notionalScenario: 'ns',
   salaryGrowth: 'sg',
   showDetail: 'sd',
+  childrenCount: 'ch',
+  disabilityLevel: 'dl',
+  hazardousJob: 'hz',
+  involuntaryEarly: 'ie',
+  foreignYears: 'fy',
 } as const;
 
 const CCAA_SHORT: Record<CcaaCode, string> = {
@@ -42,6 +50,10 @@ export function encodeStateToUrl(state: AppState): string {
   const params = new URLSearchParams();
   const { profile } = state.calculation;
   const defaults = DEFAULT_STATE;
+  const defaultSituations =
+    defaults.calculation.profile.personalSituations ??
+    DEFAULT_PERSONAL_SITUATIONS;
+  const situations = profile.personalSituations ?? defaultSituations;
 
   // Only encode values that differ from defaults
   if (profile.age !== defaults.calculation.profile.age) {
@@ -83,6 +95,38 @@ export function encodeStateToUrl(state: AppState): string {
   if (state.display.showDetail !== defaults.display.showDetail) {
     params.set(PARAM_KEYS.showDetail, state.display.showDetail ? '1' : '0');
   }
+  if (situations.childrenCount !== defaultSituations.childrenCount) {
+    params.set(PARAM_KEYS.childrenCount, String(situations.childrenCount));
+  }
+  if (situations.disabilityLevel !== defaultSituations.disabilityLevel) {
+    const dlCode =
+      situations.disabilityLevel === '65'
+        ? '6'
+        : situations.disabilityLevel === '33'
+          ? '3'
+          : 'n';
+    params.set(PARAM_KEYS.disabilityLevel, dlCode);
+  }
+  if (situations.hazardousJob !== defaultSituations.hazardousJob) {
+    params.set(PARAM_KEYS.hazardousJob, situations.hazardousJob ? '1' : '0');
+  }
+  if (
+    situations.involuntaryEarlyRetirement !==
+    defaultSituations.involuntaryEarlyRetirement
+  ) {
+    params.set(
+      PARAM_KEYS.involuntaryEarly,
+      situations.involuntaryEarlyRetirement ? '1' : '0',
+    );
+  }
+  if (
+    situations.foreignContributionYears !== defaultSituations.foreignContributionYears
+  ) {
+    params.set(
+      PARAM_KEYS.foreignYears,
+      String(situations.foreignContributionYears),
+    );
+  }
 
   const queryString = params.toString();
   return queryString ? `?${queryString}` : '';
@@ -101,6 +145,9 @@ function parseFiniteNumber(raw: string | null, fallback: number): number {
 export function decodeStateFromUrl(search: string): AppState {
   const params = new URLSearchParams(search);
   const defaults = DEFAULT_STATE;
+  const defaultSituations =
+    defaults.calculation.profile.personalSituations ??
+    DEFAULT_PERSONAL_SITUATIONS;
 
   const age = clamp(
     Math.round(parseFiniteNumber(params.get(PARAM_KEYS.age), defaults.calculation.profile.age)),
@@ -156,6 +203,39 @@ export function decodeStateFromUrl(search: string): AppState {
   const sdRaw = params.get(PARAM_KEYS.showDetail);
   const showDetail = sdRaw === '1';
 
+  const childrenCount = clamp(
+    Math.round(
+      parseFiniteNumber(
+        params.get(PARAM_KEYS.childrenCount),
+        defaultSituations.childrenCount,
+      ),
+    ),
+    0,
+    4,
+  );
+
+  const disabilityRaw = params.get(PARAM_KEYS.disabilityLevel);
+  const disabilityLevel =
+    disabilityRaw === '6'
+      ? '65'
+      : disabilityRaw === '3'
+        ? '33'
+        : defaultSituations.disabilityLevel;
+
+  const hazardousJob = params.get(PARAM_KEYS.hazardousJob) === '1';
+  const involuntaryEarlyRetirement =
+    params.get(PARAM_KEYS.involuntaryEarly) === '1';
+  const foreignContributionYears = clamp(
+    Math.round(
+      parseFiniteNumber(
+        params.get(PARAM_KEYS.foreignYears),
+        defaultSituations.foreignContributionYears,
+      ),
+    ),
+    0,
+    20,
+  );
+
   return {
     calculation: {
       profile: {
@@ -167,6 +247,13 @@ export function decodeStateFromUrl(search: string): AppState {
         yearsWorked,
         monthsContributed: yearsWorked * 12,
         desiredRetirementAge: retirementAge,
+        personalSituations: {
+          childrenCount,
+          disabilityLevel,
+          hazardousJob,
+          involuntaryEarlyRetirement,
+          foreignContributionYears,
+        },
       },
       salaryGrowthRate,
       greeceHaircutRate,

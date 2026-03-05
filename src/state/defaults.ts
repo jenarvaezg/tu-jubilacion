@@ -1,4 +1,5 @@
 import type { AppState } from './types.ts';
+import { DEFAULT_PERSONAL_SITUATIONS } from '../engine/types.ts';
 
 export const DEFAULT_STATE: AppState = {
   calculation: {
@@ -11,6 +12,7 @@ export const DEFAULT_STATE: AppState = {
       yearsWorked: 13,
       monthsContributed: 156,
       desiredRetirementAge: 67,
+      personalSituations: DEFAULT_PERSONAL_SITUATIONS,
     },
     salaryGrowthRate: 0,
     greeceHaircutRate: 0.30,

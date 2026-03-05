@@ -1,4 +1,4 @@
-import type { CcaaCode, UserProfile } from '../engine/types.ts';
+import type { CcaaCode, DisabilityLevel, UserProfile } from '../engine/types.ts';
 
 export interface CalculationInputs {
   readonly profile: UserProfile;
@@ -26,6 +26,11 @@ export type AppAction =
   | { readonly type: 'SET_CCAA'; readonly payload: CcaaCode }
   | { readonly type: 'SET_YEARS_WORKED'; readonly payload: number }
   | { readonly type: 'SET_RETIREMENT_AGE'; readonly payload: number }
+  | { readonly type: 'SET_CHILDREN_COUNT'; readonly payload: number }
+  | { readonly type: 'SET_DISABILITY_LEVEL'; readonly payload: DisabilityLevel }
+  | { readonly type: 'SET_HAZARDOUS_JOB'; readonly payload: boolean }
+  | { readonly type: 'SET_INVOLUNTARY_EARLY_RETIREMENT'; readonly payload: boolean }
+  | { readonly type: 'SET_FOREIGN_CONTRIBUTION_YEARS'; readonly payload: number }
   | { readonly type: 'SET_DISPLAY_MODE'; readonly payload: 'real' | 'nominal' }
   | { readonly type: 'SET_IPC_RATE'; readonly payload: number }
   | { readonly type: 'SET_GREECE_HAIRCUT'; readonly payload: number }

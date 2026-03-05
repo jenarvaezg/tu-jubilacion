@@ -24,6 +24,13 @@ describe('url-codec', () => {
             yearsWorked: 23,
             monthsContributed: 276,
             desiredRetirementAge: 65,
+            personalSituations: {
+              childrenCount: 2,
+              disabilityLevel: '33',
+              hazardousJob: true,
+              involuntaryEarlyRetirement: true,
+              foreignContributionYears: 3,
+            },
           },
           salaryGrowthRate: 0.02,
           greeceHaircutRate: 0.40,
@@ -48,12 +55,44 @@ describe('url-codec', () => {
       expect(decoded.calculation.profile.yearsWorked).toBe(23);
       expect(decoded.calculation.profile.monthsContributed).toBe(276);
       expect(decoded.calculation.profile.desiredRetirementAge).toBe(65);
+      expect(decoded.calculation.profile.personalSituations?.childrenCount).toBe(2);
+      expect(decoded.calculation.profile.personalSituations?.disabilityLevel).toBe('33');
+      expect(decoded.calculation.profile.personalSituations?.hazardousJob).toBe(true);
+      expect(decoded.calculation.profile.personalSituations?.involuntaryEarlyRetirement).toBe(true);
+      expect(decoded.calculation.profile.personalSituations?.foreignContributionYears).toBe(3);
       expect(decoded.calculation.greeceHaircutRate).toBe(0.40);
       expect(decoded.calculation.notionalGrowthScenario).toBe('ageing-report');
       expect(decoded.calculation.ipcRate).toBeCloseTo(0.025, 4);
       expect(decoded.calculation.salaryGrowthRate).toBe(0.02);
       expect(decoded.display.displayMode).toBe('nominal');
       expect(decoded.display.showDetail).toBe(true);
+    });
+
+    it('round-trips special situations independently', () => {
+      const state: AppState = {
+        ...DEFAULT_STATE,
+        calculation: {
+          ...DEFAULT_STATE.calculation,
+          profile: {
+            ...DEFAULT_STATE.calculation.profile,
+            personalSituations: {
+              ...DEFAULT_STATE.calculation.profile.personalSituations,
+              childrenCount: 4,
+              disabilityLevel: '65',
+              hazardousJob: true,
+              involuntaryEarlyRetirement: true,
+              foreignContributionYears: 8,
+            },
+          },
+        },
+      };
+      const encoded = encodeStateToUrl(state);
+      const decoded = decodeStateFromUrl(encoded);
+      expect(decoded.calculation.profile.personalSituations?.childrenCount).toBe(4);
+      expect(decoded.calculation.profile.personalSituations?.disabilityLevel).toBe('65');
+      expect(decoded.calculation.profile.personalSituations?.hazardousJob).toBe(true);
+      expect(decoded.calculation.profile.personalSituations?.involuntaryEarlyRetirement).toBe(true);
+      expect(decoded.calculation.profile.personalSituations?.foreignContributionYears).toBe(8);
     });
 
     it('round-trips each CCAA code', () => {
