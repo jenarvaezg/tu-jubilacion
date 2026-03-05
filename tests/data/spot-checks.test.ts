@@ -34,6 +34,20 @@ describe("SS Tables spot-checks", () => {
   it("pension max monthly is 3175.04", () => {
     expect(SS_RULES.pensionMaxMonthly).toBe(3175.04);
   });
+
+  it("early retirement 12-month penalties match official anchors", () => {
+    expect(SS_RULES.earlyRetirementPenalties[0].penaltyAt12Months).toBe(0.055);
+    expect(SS_RULES.earlyRetirementPenalties[1].penaltyAt12Months).toBe(0.0525);
+    expect(SS_RULES.earlyRetirementPenalties[2].penaltyAt12Months).toBe(0.05);
+    expect(SS_RULES.earlyRetirementPenalties[3].penaltyAt12Months).toBe(0.0475);
+  });
+
+  it("early retirement 24-month penalties match official anchors", () => {
+    expect(SS_RULES.earlyRetirementPenalties[0].penaltyAt24Months).toBe(0.21);
+    expect(SS_RULES.earlyRetirementPenalties[1].penaltyAt24Months).toBe(0.19);
+    expect(SS_RULES.earlyRetirementPenalties[2].penaltyAt24Months).toBe(0.17);
+    expect(SS_RULES.earlyRetirementPenalties[3].penaltyAt24Months).toBe(0.13);
+  });
 });
 
 describe("IRPF Tables spot-checks", () => {

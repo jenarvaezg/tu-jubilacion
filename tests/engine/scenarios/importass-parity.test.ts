@@ -27,13 +27,15 @@ function expectClosePct(actual: number, expected: number, maxPctError: number): 
   expect(pctError).toBeLessThanOrEqual(maxPctError);
 }
 
+const STRICT_MAX_PCT_ERROR = 0.003; // 0.3%
+
 describe("Importass parity (current law, deflated values)", () => {
   it("base maxima + edad ordinaria", () => {
     const result = calculateCurrentLaw(
       { ...BASE_PROFILE, monthlySalary: 5101, desiredRetirementAge: 65 },
       OFFICIAL_CONFIG,
     );
-    expectClosePct(result.monthlyPension, 4173.95, 0.03);
+    expectClosePct(result.monthlyPension, 4173.95, STRICT_MAX_PCT_ERROR);
   });
 
   it("base intermedia + edad ordinaria", () => {
@@ -41,7 +43,7 @@ describe("Importass parity (current law, deflated values)", () => {
       { ...BASE_PROFILE, monthlySalary: 3000, desiredRetirementAge: 65 },
       OFFICIAL_CONFIG,
     );
-    expectClosePct(result.monthlyPension, 2454.69, 0.03);
+    expectClosePct(result.monthlyPension, 2454.69, STRICT_MAX_PCT_ERROR);
   });
 
   it("base baja + edad ordinaria", () => {
@@ -49,7 +51,7 @@ describe("Importass parity (current law, deflated values)", () => {
       { ...BASE_PROFILE, monthlySalary: 1599.6, desiredRetirementAge: 65 },
       OFFICIAL_CONFIG,
     );
-    expectClosePct(result.monthlyPension, 1308.86, 0.03);
+    expectClosePct(result.monthlyPension, 1308.86, STRICT_MAX_PCT_ERROR);
   });
 
   it("base maxima + 1 ano de demora", () => {
@@ -58,7 +60,7 @@ describe("Importass parity (current law, deflated values)", () => {
       OFFICIAL_CONFIG,
     );
     // En este caso se compara contra el total (con complemento por demora).
-    expectClosePct(result.monthlyPension, 4340.92, 0.03);
+    expectClosePct(result.monthlyPension, 4340.92, STRICT_MAX_PCT_ERROR);
   });
 
   it("base maxima + 1 ano de anticipada", () => {
@@ -66,7 +68,7 @@ describe("Importass parity (current law, deflated values)", () => {
       { ...BASE_PROFILE, monthlySalary: 5101, desiredRetirementAge: 64 },
       OFFICIAL_CONFIG,
     );
-    expectClosePct(result.monthlyPension, 3965.25, 0.03);
+    expectClosePct(result.monthlyPension, 3965.25, STRICT_MAX_PCT_ERROR);
   });
 
   it("base maxima + 2 anos de demora (edad ordinaria 67)", () => {
@@ -74,7 +76,7 @@ describe("Importass parity (current law, deflated values)", () => {
       { ...BASE_PROFILE, monthlySalary: 5101, desiredRetirementAge: 67 },
       OFFICIAL_CONFIG,
     );
-    expectClosePct(result.monthlyPension, 4507.88, 0.03);
+    expectClosePct(result.monthlyPension, 4507.88, STRICT_MAX_PCT_ERROR);
   });
 
   it("base maxima + 2 anos de anticipada", () => {
@@ -84,6 +86,6 @@ describe("Importass parity (current law, deflated values)", () => {
     );
     // El usuario reporta pension inicial 6.246,49 €/mes en 2057.
     // En euros de hoy (ipc=2% durante 31 anos): ~3.380,89 €/mes.
-    expectClosePct(result.monthlyPension, 3380.89, 0.03);
+    expectClosePct(result.monthlyPension, 3380.89, STRICT_MAX_PCT_ERROR);
   });
 });

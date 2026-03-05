@@ -67,18 +67,26 @@ export function calculateCurrentLaw(
     currentYear: cfg.currentYear,
   });
 
-  // Total months contributed at retirement
+  // Total contribution career at retirement (months precision).
+  // We prioritize explicit monthsContributed when available.
   const yearsToRetirement = profile.desiredRetirementAge - profile.age;
-  const totalYearsContributed =
-    profile.yearsWorked +
-    yearsToRetirement +
-    personalSituations.foreignContributionYears;
-  const totalMonthsContributed = totalYearsContributed * 12;
+  const currentMonthsContributed = Math.max(
+    profile.monthsContributed,
+    profile.yearsWorked * 12,
+  );
+  const futureMonthsContributed = Math.max(0, Math.round(yearsToRetirement * 12));
+  const foreignMonthsContributed =
+    personalSituations.foreignContributionYears * 12;
+  const totalMonthsContributed =
+    currentMonthsContributed +
+    futureMonthsContributed +
+    foreignMonthsContributed;
+  const totalYearsContributed = totalMonthsContributed / 12;
 
   // Step 4: Base reguladora
   const lastMonthlyBases = getLastNMonthlyBases(
     projected,
-    profile.yearsWorked,
+    currentMonthsContributed / 12,
     SS_RULES.regulatoryBaseMonths,
   );
   const sumBases = lastMonthlyBases.reduce((acc, b) => acc + b, 0);

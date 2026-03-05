@@ -26,10 +26,12 @@ export function usePensionCalculation(
         greeceHaircutRate,
         notionalGrowthScenario,
       } = inputs;
+      const currentYear = new Date().getFullYear();
 
       const sharedConfig = {
         ipcRate,
         salaryGrowthRate,
+        currentYear,
       };
 
       const results: ScenarioResult[] = [

@@ -49,9 +49,10 @@ export const SS_RULES: SSRules = {
   ],
 
   // Jubilación anticipada voluntaria (hasta 24 meses).
-  // Se modela con penalización acumulada a 12 y 24 meses por tramo de carrera,
-  // y se interpola linealmente entre ambos hitos.
-  // Tramos calibrados para aproximar Importass (cohortes jóvenes).
+  // Anclas oficiales BOE (Ley 21/2021, art. 210.2 y disposición transitoria):
+  // 12 meses: 5,50% / 5,25% / 5,00% / 4,75%
+  // 24 meses: 21,00% / 19,00% / 17,00% / 13,00%
+  // En el motor se interpola linealmente para meses intermedios.
   earlyRetirementPenalties: [
     {
       minYearsContributed: 0,
@@ -62,19 +63,19 @@ export const SS_RULES: SSRules = {
     {
       minYearsContributed: 38.5,
       maxYearsContributed: 41.5,
-      penaltyAt12Months: 0.05,
+      penaltyAt12Months: 0.0525,
       penaltyAt24Months: 0.19,
     },
     {
       minYearsContributed: 41.5,
       maxYearsContributed: 44.5,
-      penaltyAt12Months: 0.0475,
+      penaltyAt12Months: 0.05,
       penaltyAt24Months: 0.17,
     },
     {
       minYearsContributed: 44.5,
       maxYearsContributed: 100,
-      penaltyAt12Months: 0.045,
+      penaltyAt12Months: 0.0475,
       penaltyAt24Months: 0.13,
     },
   ],
