@@ -193,9 +193,9 @@ function computeAgeAdjustment(
 
   if (desiredAge < legalAge) {
     // Early retirement penalty
-    const monthsEarly = (legalAge - desiredAge) * 12;
-    const penaltyRow = findPenaltyRate(yearsContributed);
-    return Math.max(0, 1.0 - monthsEarly * penaltyRow);
+    const monthsEarly = Math.min(24, Math.round((legalAge - desiredAge) * 12));
+    const penalty = computeEarlyPenalty(monthsEarly, yearsContributed);
+    return Math.max(0, 1.0 - penalty);
   }
 
   // Late retirement bonus
@@ -205,20 +205,44 @@ function computeAgeAdjustment(
 }
 
 /**
- * Find the applicable monthly penalty rate based on years contributed.
+ * Compute early retirement penalty using 12/24 month anchors.
+ * - 0..12 months: linear interpolation from 0 to penaltyAt12Months
+ * - 13..24 months: linear interpolation from penaltyAt12Months to penaltyAt24Months
  */
-function findPenaltyRate(yearsContributed: number): number {
+function computeEarlyPenalty(
+  monthsEarly: number,
+  yearsContributed: number,
+): number {
   const penalties = SS_RULES.earlyRetirementPenalties;
+  const months = Math.max(0, Math.min(24, monthsEarly));
+  if (months === 0) return 0;
+
   for (const row of penalties) {
     if (
       yearsContributed >= row.minYearsContributed &&
       yearsContributed < row.maxYearsContributed
     ) {
-      return row.penaltyRate;
+      if (months <= 12) {
+        return (row.penaltyAt12Months * months) / 12;
+      }
+      return (
+        row.penaltyAt12Months +
+        ((row.penaltyAt24Months - row.penaltyAt12Months) * (months - 12)) / 12
+      );
     }
   }
-  // Default to highest penalty
-  return penalties[0].penaltyRate;
+
+  // Default to highest-penalty row if no bracket matches.
+  const fallback = penalties[0];
+  if (months <= 12) {
+    return (fallback.penaltyAt12Months * months) / 12;
+  }
+  return (
+    fallback.penaltyAt12Months +
+    ((fallback.penaltyAt24Months - fallback.penaltyAt12Months) *
+      (months - 12)) /
+      12
+  );
 }
 
 /**

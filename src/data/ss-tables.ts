@@ -40,28 +40,34 @@ export const SS_RULES: SSRules = {
     { fromMonth: 230, toMonth: 444, ratePerMonth: 0.001847906976744186 },
   ],
 
-  // Jubilación anticipada voluntaria
-  // Calibrada en esta versión para aproximar el simulador oficial Importass
-  // en cohortes jóvenes (ej. nacidos en los 90), usando tasas mensuales.
+  // Jubilación anticipada voluntaria (hasta 24 meses).
+  // Se modela con penalización acumulada a 12 y 24 meses por tramo de carrera,
+  // y se interpola linealmente entre ambos hitos.
+  // Tramos calibrados para aproximar Importass (cohortes jóvenes).
   earlyRetirementPenalties: [
-    // Menos de 38.5 años cotizados - penalización más alta
     {
-      monthsAnticipation: 1,
       minYearsContributed: 0,
       maxYearsContributed: 38.5,
-      penaltyRate: 0.005,
+      penaltyAt12Months: 0.055,
+      penaltyAt24Months: 0.21,
     },
     {
-      monthsAnticipation: 1,
       minYearsContributed: 38.5,
-      maxYearsContributed: 44.5,
-      penaltyRate: 0.0045,
+      maxYearsContributed: 41.5,
+      penaltyAt12Months: 0.05,
+      penaltyAt24Months: 0.19,
     },
     {
-      monthsAnticipation: 1,
+      minYearsContributed: 41.5,
+      maxYearsContributed: 44.5,
+      penaltyAt12Months: 0.0475,
+      penaltyAt24Months: 0.17,
+    },
+    {
       minYearsContributed: 44.5,
       maxYearsContributed: 100,
-      penaltyRate: 0.0042,
+      penaltyAt12Months: 0.045,
+      penaltyAt24Months: 0.13,
     },
   ],
 

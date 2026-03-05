@@ -68,4 +68,22 @@ describe("Importass parity (current law, deflated values)", () => {
     );
     expectClosePct(result.monthlyPension, 3965.25, 0.03);
   });
+
+  it("base maxima + 2 anos de demora (edad ordinaria 67)", () => {
+    const result = calculateCurrentLaw(
+      { ...BASE_PROFILE, monthlySalary: 5101, desiredRetirementAge: 67 },
+      OFFICIAL_CONFIG,
+    );
+    expectClosePct(result.monthlyPension, 4507.88, 0.03);
+  });
+
+  it("base maxima + 2 anos de anticipada", () => {
+    const result = calculateCurrentLaw(
+      { ...BASE_PROFILE, monthlySalary: 5101, desiredRetirementAge: 63 },
+      OFFICIAL_CONFIG,
+    );
+    // El usuario reporta pension inicial 6.246,49 €/mes en 2057.
+    // En euros de hoy (ipc=2% durante 31 anos): ~3.380,89 €/mes.
+    expectClosePct(result.monthlyPension, 3380.89, 0.03);
+  });
 });

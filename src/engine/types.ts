@@ -35,10 +35,10 @@ export interface CoefficientBracket {
 }
 
 export interface EarlyPenaltyRow {
-  readonly monthsAnticipation: number;
   readonly minYearsContributed: number;
   readonly maxYearsContributed: number;
-  readonly penaltyRate: number;
+  readonly penaltyAt12Months: number;
+  readonly penaltyAt24Months: number;
 }
 
 export interface LateBonusRow {
