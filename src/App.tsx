@@ -1,6 +1,9 @@
 import { useAppState } from "./state/use-app-state.ts";
 import { usePensionCalculation } from "./hooks/use-pension-calculation.ts";
 import { useChartData } from "./hooks/use-chart-data.ts";
+import { useSavingsCalculation } from "./hooks/use-savings-calculation.ts";
+import { useCombinedChartData } from "./hooks/use-combined-chart-data.ts";
+import { useComparisonChartData } from "./hooks/use-comparison-chart-data.ts";
 import { PageLayout } from "./components/layout/PageLayout.tsx";
 import { InputPanel } from "./components/input/InputPanel.tsx";
 import { HeroChart } from "./components/chart/HeroChart.tsx";
@@ -9,6 +12,7 @@ import { ResultsSummary } from "./components/results/ResultsSummary.tsx";
 import { ShareButton } from "./components/results/ShareButton.tsx";
 import { EducationSection } from "./components/education/EducationSection.tsx";
 import { DetailToggle } from "./components/detail/DetailToggle.tsx";
+import { SavingsSection } from "./components/savings/SavingsSection.tsx";
 
 function App() {
   const { state, dispatch, getShareUrl } = useAppState();
@@ -17,6 +21,21 @@ function App() {
     results,
     displayMode: state.display.displayMode,
     currentAge: state.calculation.profile.age,
+  });
+  const savingsCalc = useSavingsCalculation({
+    pensionResults: results,
+    inputs: state.calculation,
+  });
+  const combinedChartData = useCombinedChartData({
+    results,
+    portfolioTimeline: savingsCalc.portfolioTimeline,
+    comparisonScenarioId: state.calculation.comparisonScenarioId,
+    displayMode: state.display.displayMode,
+    currentAge: state.calculation.profile.age,
+  });
+  const comparisonChartData = useComparisonChartData({
+    comparisonTimeline: savingsCalc.comparisonTimeline,
+    displayMode: state.display.displayMode,
   });
 
   return (
@@ -58,6 +77,17 @@ function App() {
         <ResultsSummary
           results={results}
           showDetail={state.display.showDetail}
+        />
+
+        <SavingsSection
+          savingsCalc={savingsCalc}
+          comparisonChartData={comparisonChartData}
+          combinedChartData={combinedChartData}
+          comparisonScenarioId={state.calculation.comparisonScenarioId}
+          investmentProfileId={state.calculation.investmentProfileId}
+          retirementAge={state.calculation.profile.desiredRetirementAge}
+          displayMode={state.display.displayMode}
+          dispatch={dispatch}
         />
 
         <EducationSection />

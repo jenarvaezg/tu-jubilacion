@@ -1,4 +1,9 @@
-import { DEFAULT_PERSONAL_SITUATIONS, type CcaaCode } from "../engine/types.ts";
+import {
+  DEFAULT_PERSONAL_SITUATIONS,
+  type CcaaCode,
+  type ScenarioId,
+} from "../engine/types.ts";
+import type { InvestmentProfileId } from "../engine/savings/types.ts";
 import type { AppState } from "./types.ts";
 import { DEFAULT_STATE } from "./defaults.ts";
 
@@ -22,7 +27,38 @@ const PARAM_KEYS = {
   hazardousJob: "hz",
   involuntaryEarly: "ie",
   foreignYears: "fy",
+  comparisonScenario: "cs",
+  investmentProfile: "ip",
+  monthlyContribution: "mc",
+  drawdownYears: "dy",
 } as const;
+
+const SCENARIO_SHORT: Record<ScenarioId, string> = {
+  "current-law": "cl",
+  "notional-accounts": "na",
+  "sustainability-2013": "s2",
+  "eu-convergence": "eu",
+  "greece-haircut": "gh",
+};
+
+const SHORT_TO_SCENARIO: Record<string, ScenarioId> = Object.fromEntries(
+  Object.entries(SCENARIO_SHORT).map(([k, v]) => [v, k as ScenarioId]),
+) as Record<string, ScenarioId>;
+
+const PROFILE_SHORT: Record<InvestmentProfileId, string> = {
+  conservative: "c",
+  moderate: "m",
+  aggressive: "a",
+  "glide-path": "g",
+};
+
+const SHORT_TO_PROFILE: Record<string, InvestmentProfileId> =
+  Object.fromEntries(
+    Object.entries(PROFILE_SHORT).map(([k, v]) => [
+      v,
+      k as InvestmentProfileId,
+    ]),
+  ) as Record<string, InvestmentProfileId>;
 
 const CCAA_SHORT: Record<CcaaCode, string> = {
   madrid: "mad",
@@ -146,6 +182,37 @@ export function encodeStateToUrl(state: AppState): string {
     params.set(
       PARAM_KEYS.foreignYears,
       String(situations.foreignContributionYears),
+    );
+  }
+
+  if (
+    state.calculation.comparisonScenarioId !==
+    defaults.calculation.comparisonScenarioId
+  ) {
+    params.set(
+      PARAM_KEYS.comparisonScenario,
+      SCENARIO_SHORT[state.calculation.comparisonScenarioId],
+    );
+  }
+  if (
+    state.calculation.investmentProfileId !==
+    defaults.calculation.investmentProfileId
+  ) {
+    params.set(
+      PARAM_KEYS.investmentProfile,
+      PROFILE_SHORT[state.calculation.investmentProfileId],
+    );
+  }
+  if (state.calculation.monthlyContributionOverride !== null) {
+    params.set(
+      PARAM_KEYS.monthlyContribution,
+      String(Math.round(state.calculation.monthlyContributionOverride)),
+    );
+  }
+  if (state.calculation.drawdownYears !== null) {
+    params.set(
+      PARAM_KEYS.drawdownYears,
+      String(state.calculation.drawdownYears),
     );
   }
 
@@ -316,6 +383,34 @@ export function decodeStateFromUrl(search: string): AppState {
       greeceHaircutRate,
       notionalGrowthScenario,
       ipcRate,
+      comparisonScenarioId: (() => {
+        const raw = params.get(PARAM_KEYS.comparisonScenario);
+        return raw !== null && raw in SHORT_TO_SCENARIO
+          ? SHORT_TO_SCENARIO[raw]
+          : defaults.calculation.comparisonScenarioId;
+      })(),
+      investmentProfileId: (() => {
+        const raw = params.get(PARAM_KEYS.investmentProfile);
+        return raw !== null && raw in SHORT_TO_PROFILE
+          ? SHORT_TO_PROFILE[raw]
+          : defaults.calculation.investmentProfileId;
+      })(),
+      monthlyContributionOverride: (() => {
+        const raw = params.get(PARAM_KEYS.monthlyContribution);
+        if (raw === null) return null;
+        const parsed = Number(raw);
+        return Number.isFinite(parsed)
+          ? Math.max(0, Math.min(10000, parsed))
+          : null;
+      })(),
+      drawdownYears: (() => {
+        const raw = params.get(PARAM_KEYS.drawdownYears);
+        if (raw === null) return null;
+        const parsed = Number(raw);
+        return Number.isFinite(parsed)
+          ? Math.max(5, Math.min(40, Math.round(parsed)))
+          : null;
+      })(),
     },
     display: {
       displayMode,

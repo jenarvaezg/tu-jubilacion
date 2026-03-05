@@ -1,13 +1,17 @@
-import { useReducer, useEffect, useCallback, useRef } from 'react';
-import type { AppState, AppAction } from './types.ts';
-import { DEFAULT_STATE } from './defaults.ts';
-import { decodeStateFromUrl, encodeStateToUrl, hasUrlParams } from './url-codec.ts';
+import { useReducer, useEffect, useCallback, useRef } from "react";
+import type { AppState, AppAction } from "./types.ts";
+import { DEFAULT_STATE } from "./defaults.ts";
+import {
+  decodeStateFromUrl,
+  encodeStateToUrl,
+  hasUrlParams,
+} from "./url-codec.ts";
 import {
   DEFAULT_PERSONAL_SITUATIONS,
   type PersonalSituations,
-} from '../engine/types.ts';
+} from "../engine/types.ts";
 
-const STORAGE_KEY = 'tu-jubilacion:state:v1';
+const STORAGE_KEY = "tu-jubilacion:state:v1";
 
 function withPersonalSituations(state: AppState) {
   return {
@@ -20,7 +24,7 @@ function withPersonalSituations(state: AppState) {
 
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
-    case 'SET_AGE': {
+    case "SET_AGE": {
       const age = Math.max(18, Math.min(66, Math.round(action.payload)));
       return {
         ...state,
@@ -33,7 +37,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
         },
       };
     }
-    case 'SET_SALARY':
+    case "SET_SALARY":
       return {
         ...state,
         calculation: {
@@ -44,7 +48,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           },
         },
       };
-    case 'SET_SALARY_TYPE':
+    case "SET_SALARY_TYPE":
       return {
         ...state,
         calculation: {
@@ -55,7 +59,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           },
         },
       };
-    case 'SET_PAGAS_EXTRA':
+    case "SET_PAGAS_EXTRA":
       return {
         ...state,
         calculation: {
@@ -66,7 +70,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           },
         },
       };
-    case 'SET_CCAA':
+    case "SET_CCAA":
       return {
         ...state,
         calculation: {
@@ -77,7 +81,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           },
         },
       };
-    case 'SET_YEARS_WORKED': {
+    case "SET_YEARS_WORKED": {
       const yearsWorked = Math.max(0, Math.min(50, Math.round(action.payload)));
       return {
         ...state,
@@ -91,19 +95,25 @@ function appReducer(state: AppState, action: AppAction): AppState {
         },
       };
     }
-    case 'SET_RETIREMENT_AGE':
+    case "SET_RETIREMENT_AGE":
       return {
         ...state,
         calculation: {
           ...state.calculation,
           profile: {
             ...state.calculation.profile,
-            desiredRetirementAge: Math.max(63, Math.min(70, Math.round(action.payload))),
+            desiredRetirementAge: Math.max(
+              63,
+              Math.min(70, Math.round(action.payload)),
+            ),
           },
         },
       };
-    case 'SET_CHILDREN_COUNT': {
-      const childrenCount = Math.max(0, Math.min(4, Math.round(action.payload)));
+    case "SET_CHILDREN_COUNT": {
+      const childrenCount = Math.max(
+        0,
+        Math.min(4, Math.round(action.payload)),
+      );
       return {
         ...state,
         calculation: {
@@ -118,7 +128,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
         },
       };
     }
-    case 'SET_DISABILITY_LEVEL':
+    case "SET_DISABILITY_LEVEL":
       return {
         ...state,
         calculation: {
@@ -132,7 +142,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           },
         },
       };
-    case 'SET_HAZARDOUS_JOB':
+    case "SET_HAZARDOUS_JOB":
       return {
         ...state,
         calculation: {
@@ -146,7 +156,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           },
         },
       };
-    case 'SET_INVOLUNTARY_EARLY_RETIREMENT':
+    case "SET_INVOLUNTARY_EARLY_RETIREMENT":
       return {
         ...state,
         calculation: {
@@ -160,7 +170,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           },
         },
       };
-    case 'SET_FOREIGN_CONTRIBUTION_YEARS': {
+    case "SET_FOREIGN_CONTRIBUTION_YEARS": {
       const foreignContributionYears = Math.max(
         0,
         Math.min(20, Math.round(action.payload)),
@@ -179,7 +189,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
         },
       };
     }
-    case 'SET_DISPLAY_MODE':
+    case "SET_DISPLAY_MODE":
       return {
         ...state,
         display: {
@@ -187,7 +197,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           displayMode: action.payload,
         },
       };
-    case 'SET_IPC_RATE':
+    case "SET_IPC_RATE":
       return {
         ...state,
         calculation: {
@@ -195,15 +205,15 @@ function appReducer(state: AppState, action: AppAction): AppState {
           ipcRate: action.payload,
         },
       };
-    case 'SET_GREECE_HAIRCUT':
+    case "SET_GREECE_HAIRCUT":
       return {
         ...state,
         calculation: {
           ...state.calculation,
-          greeceHaircutRate: Math.max(0.10, Math.min(0.50, action.payload)),
+          greeceHaircutRate: Math.max(0.1, Math.min(0.5, action.payload)),
         },
       };
-    case 'SET_NOTIONAL_SCENARIO':
+    case "SET_NOTIONAL_SCENARIO":
       return {
         ...state,
         calculation: {
@@ -211,7 +221,45 @@ function appReducer(state: AppState, action: AppAction): AppState {
           notionalGrowthScenario: action.payload,
         },
       };
-    case 'TOGGLE_DETAIL':
+    case "SET_COMPARISON_SCENARIO":
+      return {
+        ...state,
+        calculation: {
+          ...state.calculation,
+          comparisonScenarioId: action.payload,
+        },
+      };
+    case "SET_INVESTMENT_PROFILE":
+      return {
+        ...state,
+        calculation: {
+          ...state.calculation,
+          investmentProfileId: action.payload,
+        },
+      };
+    case "SET_MONTHLY_CONTRIBUTION":
+      return {
+        ...state,
+        calculation: {
+          ...state.calculation,
+          monthlyContributionOverride:
+            action.payload !== null
+              ? Math.max(0, Math.min(10000, action.payload))
+              : null,
+        },
+      };
+    case "SET_DRAWDOWN_YEARS":
+      return {
+        ...state,
+        calculation: {
+          ...state.calculation,
+          drawdownYears:
+            action.payload !== null
+              ? Math.max(5, Math.min(40, Math.round(action.payload)))
+              : null,
+        },
+      };
+    case "TOGGLE_DETAIL":
       return {
         ...state,
         display: {
@@ -219,7 +267,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           showDetail: !state.display.showDetail,
         },
       };
-    case 'LOAD_FROM_URL': {
+    case "LOAD_FROM_URL": {
       const partial = action.payload;
       return {
         calculation: partial.calculation
@@ -236,7 +284,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
 }
 
 function getInitialState(): AppState {
-  if (typeof window === 'undefined') return DEFAULT_STATE;
+  if (typeof window === "undefined") return DEFAULT_STATE;
   const search = window.location.search;
   if (hasUrlParams(search)) {
     return decodeStateFromUrl(search);
@@ -264,7 +312,7 @@ export function useAppState() {
     debounceRef.current = setTimeout(() => {
       const url = encodeStateToUrl(state);
       const newUrl = window.location.pathname + url;
-      window.history.replaceState(null, '', newUrl);
+      window.history.replaceState(null, "", newUrl);
       try {
         window.localStorage.setItem(STORAGE_KEY, url);
       } catch {
