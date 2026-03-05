@@ -20,7 +20,7 @@ export const DEFAULT_STATE: AppState = {
     ipcRate: 0.02,
   },
   display: {
-    displayMode: 'real',
+    displayMode: 'nominal',
     showDetail: false,
   },
 } as const;
