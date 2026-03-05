@@ -39,6 +39,7 @@ export function GapSummary({
                 <CurrencyDisplay
                   amount={gap.gapMonthly}
                   className="text-red-500 text-2xl md:text-3xl"
+                  suffix=""
                 />
               </span>{" "}
               al mes

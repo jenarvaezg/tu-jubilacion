@@ -27,6 +27,7 @@ export interface SavingsCalculationResult {
   readonly portfolioTimeline: readonly PortfolioYearlyProjection[];
   readonly comparisonTimeline: readonly ComparisonYearlyPoint[];
   readonly drawdownYears: number;
+  readonly derivedDrawdownYears: number;
   readonly error: string | null;
 }
 
@@ -45,6 +46,7 @@ export function useSavingsCalculation(params: {
           portfolioTimeline: [],
           comparisonTimeline: [],
           drawdownYears: 0,
+          derivedDrawdownYears: 0,
           error: null,
         };
       }
@@ -54,6 +56,15 @@ export function useSavingsCalculation(params: {
         inputs.comparisonScenarioId,
       );
 
+      const currentYear = new Date().getFullYear();
+      const { profile, ipcRate, investmentProfileId } = inputs;
+
+      const derivedDrawdownYears = deriveDrawdownYears(
+        profile.desiredRetirementAge,
+        profile.age,
+        currentYear,
+      );
+
       if (gap === null) {
         return {
           gap: null,
@@ -61,20 +72,12 @@ export function useSavingsCalculation(params: {
           portfolioTimeline: [],
           comparisonTimeline: [],
           drawdownYears: 0,
+          derivedDrawdownYears,
           error: null,
         };
       }
 
-      const currentYear = new Date().getFullYear();
-      const { profile, ipcRate, investmentProfileId } = inputs;
-
-      const drawdownYears =
-        inputs.drawdownYears ??
-        deriveDrawdownYears(
-          profile.desiredRetirementAge,
-          profile.age,
-          currentYear,
-        );
+      const drawdownYears = inputs.drawdownYears ?? derivedDrawdownYears;
 
       const investmentProfile = INVESTMENT_PROFILES[investmentProfileId];
       const allocation = investmentProfile.isGlidePath
@@ -117,6 +120,7 @@ export function useSavingsCalculation(params: {
         portfolioTimeline,
         comparisonTimeline,
         drawdownYears,
+        derivedDrawdownYears,
         error: null,
       };
     } catch (err) {
@@ -128,6 +132,7 @@ export function useSavingsCalculation(params: {
         portfolioTimeline: [],
         comparisonTimeline: [],
         drawdownYears: 0,
+        derivedDrawdownYears: 0,
         error: message,
       };
     }

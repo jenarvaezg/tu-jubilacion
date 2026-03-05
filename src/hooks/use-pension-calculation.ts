@@ -54,5 +54,14 @@ export function usePensionCalculation(
         err instanceof Error ? err.message : "Error en el calculo";
       return { results: [], error: message };
     }
-  }, [inputs]);
+    // Pension-relevant fields only — savings/investment params excluded to avoid
+    // unnecessary recalculation when only savings controls change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    inputs.profile,
+    inputs.ipcRate,
+    inputs.salaryGrowthRate,
+    inputs.greeceHaircutRate,
+    inputs.notionalGrowthScenario,
+  ]);
 }

@@ -88,6 +88,11 @@ function App() {
           investmentProfileId={state.calculation.investmentProfileId}
           retirementAge={state.calculation.profile.desiredRetirementAge}
           displayMode={state.display.displayMode}
+          monthlyContributionOverride={
+            state.calculation.monthlyContributionOverride
+          }
+          drawdownYearsOverride={state.calculation.drawdownYears}
+          derivedDrawdownYears={savingsCalc.derivedDrawdownYears}
           dispatch={dispatch}
         />
 

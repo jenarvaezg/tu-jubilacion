@@ -20,16 +20,18 @@ describe("ASSET_CLASS_RETURNS", () => {
     expect(ASSET_CLASS_RETURNS.equity.expectedRealReturn).toBeLessThanOrEqual(
       0.1,
     );
-    expect(
-      ASSET_CLASS_RETURNS.bonds.expectedRealReturn,
-    ).toBeGreaterThanOrEqual(0);
+    expect(ASSET_CLASS_RETURNS.bonds.expectedRealReturn).toBeGreaterThanOrEqual(
+      0,
+    );
     expect(ASSET_CLASS_RETURNS.bonds.expectedRealReturn).toBeLessThanOrEqual(
       0.05,
     );
-    expect(ASSET_CLASS_RETURNS.deposits.expectedRealReturn).toBeGreaterThanOrEqual(0);
     expect(
       ASSET_CLASS_RETURNS.deposits.expectedRealReturn,
-    ).toBeLessThanOrEqual(0.02);
+    ).toBeGreaterThanOrEqual(0);
+    expect(ASSET_CLASS_RETURNS.deposits.expectedRealReturn).toBeLessThanOrEqual(
+      0.02,
+    );
   });
 
   it("equity return is higher than bonds and deposits", () => {
@@ -53,7 +55,7 @@ describe("INVESTMENT_PROFILES", () => {
   });
 
   it("all static profile allocations sum to 1.0", () => {
-    for (const [id, profile] of Object.entries(INVESTMENT_PROFILES)) {
+    for (const [, profile] of Object.entries(INVESTMENT_PROFILES)) {
       if (profile.isGlidePath) continue;
       const { equity, bonds, deposits } = profile.allocation;
       const sum = equity + bonds + deposits;

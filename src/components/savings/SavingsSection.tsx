@@ -5,6 +5,8 @@ import type { ScenarioId } from "../../engine/types.ts";
 import type { InvestmentProfileId } from "../../engine/savings/types.ts";
 import type { AppAction } from "../../state/types.ts";
 import { GapSummary } from "./GapSummary.tsx";
+import { ContributionOverrideControl } from "./ContributionOverrideControl.tsx";
+import { DrawdownYearsControl } from "./DrawdownYearsControl.tsx";
 import { InvestmentProfileSelector } from "./InvestmentProfileSelector.tsx";
 import { SavingsResult } from "./SavingsResult.tsx";
 import { ComparisonChart } from "./ComparisonChart.tsx";
@@ -19,6 +21,9 @@ interface SavingsSectionProps {
   readonly investmentProfileId: InvestmentProfileId;
   readonly retirementAge: number;
   readonly displayMode: "real" | "nominal";
+  readonly monthlyContributionOverride: number | null;
+  readonly drawdownYearsOverride: number | null;
+  readonly derivedDrawdownYears: number;
   readonly dispatch: React.Dispatch<AppAction>;
 }
 
@@ -30,6 +35,9 @@ export function SavingsSection({
   investmentProfileId,
   retirementAge,
   displayMode,
+  monthlyContributionOverride,
+  drawdownYearsOverride,
+  derivedDrawdownYears,
   dispatch,
 }: SavingsSectionProps) {
   const { gap, savings } = savingsCalc;
@@ -50,6 +58,19 @@ export function SavingsSection({
       <GapSummary
         gap={gap}
         comparisonScenarioId={comparisonScenarioId}
+        dispatch={dispatch}
+      />
+
+      <ContributionOverrideControl
+        currentContribution={savings.monthlyContribution}
+        isOverride={monthlyContributionOverride !== null}
+        dispatch={dispatch}
+      />
+
+      <DrawdownYearsControl
+        drawdownYears={savingsCalc.drawdownYears}
+        derivedDefault={derivedDrawdownYears}
+        isOverride={drawdownYearsOverride !== null}
         dispatch={dispatch}
       />
 

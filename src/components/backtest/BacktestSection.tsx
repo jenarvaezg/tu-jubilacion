@@ -5,6 +5,17 @@ import { AssetClassSelector } from "./AssetClassSelector";
 import { SpaghettiChart } from "./SpaghettiChart";
 import { BacktestSummaryCard } from "./BacktestSummaryCard";
 
+const SERIES_ATTRIBUTION: Record<HistoricalSeriesId, string> = {
+  sp500:
+    "Fuente: Aswath Damodaran (NYU Stern), datos 1928-2024, retornos reales ajustados por inflacion USA (CPI)",
+  "msci-world":
+    "Fuente: MSCI World Gross Total Return Index (USD), 1970-2024, deflactado por CPI USA. Datos via Damodaran (NYU Stern)",
+  tbond:
+    "Fuente: Aswath Damodaran (NYU Stern), datos 1928-2024, retornos reales ajustados por inflacion USA (CPI)",
+  tbill:
+    "Fuente: Aswath Damodaran (NYU Stern), datos 1928-2024, retornos reales ajustados por inflacion USA (CPI)",
+};
+
 interface BacktestSectionProps {
   readonly monthlyContribution: number;
   readonly yearsOfAccumulation: number;
@@ -17,13 +28,22 @@ export function BacktestSection({
   drawdownYears,
 }: BacktestSectionProps) {
   const [seriesId, setSeriesId] = useState<HistoricalSeriesId>("sp500");
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
 
-  const { summary } = useBacktestCalculation({
+  const { summary, error } = useBacktestCalculation({
     monthlyContribution,
     yearsOfAccumulation,
     drawdownYears,
     seriesId,
   });
+
+  if (error !== null) {
+    return (
+      <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+        <p className="text-sm text-red-700">{error}</p>
+      </div>
+    );
+  }
 
   if (summary === null) return null;
 
@@ -38,20 +58,44 @@ export function BacktestSection({
         </span>
       </div>
 
-      <AssetClassSelector
-        selectedSeriesId={seriesId}
-        onSelect={setSeriesId}
-      />
+      <AssetClassSelector selectedSeriesId={seriesId} onSelect={setSeriesId} />
 
       <SpaghettiChart summary={summary} />
 
       <BacktestSummaryCard summary={summary} />
 
-      <p className="text-xs text-gray-500 leading-relaxed">
-        Datos historicos reales (ajustados por inflacion) en USD de Damodaran
-        (NYU Stern). Rendimientos pasados no garantizan resultados futuros. Los
-        retornos no incluyen comisiones ni impuestos.
-      </p>
+      <div className="rounded-lg border border-amber-300 bg-amber-50 p-4">
+        <button
+          type="button"
+          className="flex w-full items-center justify-between text-left"
+          onClick={() => setDisclaimerOpen(!disclaimerOpen)}
+        >
+          <p className="text-xs font-semibold text-amber-800">
+            Rendimientos pasados no garantizan resultados futuros
+          </p>
+          <span className="text-amber-600 text-xs ml-2">
+            {disclaimerOpen ? "▲" : "▼"}
+          </span>
+        </button>
+        {disclaimerOpen && (
+          <div className="mt-3 flex flex-col gap-2 text-xs text-amber-800 leading-relaxed">
+            <p>
+              Los datos historicos estan denominados en USD (fuente: Damodaran,
+              NYU Stern).
+            </p>
+            <p>
+              La simulacion usa rentabilidades anuales. No refleja volatilidad
+              intra-anual.
+            </p>
+            <p>
+              No incluye comisiones, impuestos ni conversion de divisa EUR/USD.
+            </p>
+            <p className="mt-1 text-[11px] text-amber-700 italic">
+              {SERIES_ATTRIBUTION[seriesId]}
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

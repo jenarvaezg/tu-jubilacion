@@ -21,6 +21,7 @@ function SpaghettiTooltipContent({
   active,
   payload,
   label,
+  totalYears,
 }: {
   active?: boolean;
   payload?: Array<{
@@ -30,6 +31,7 @@ function SpaghettiTooltipContent({
     dataKey: string;
   }>;
   label?: number;
+  totalYears?: number;
 }) {
   if (!active || !payload || payload.length === 0) return null;
 
@@ -48,9 +50,14 @@ function SpaghettiTooltipContent({
 
   if (highlighted.length === 0) return null;
 
+  const yearDisplay =
+    label !== undefined && totalYears !== undefined
+      ? `Ano ${label + 1} de ${totalYears}`
+      : `Ano ${label}`;
+
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-lg">
-      <p className="mb-2 text-xs font-medium text-gray-500">Año {label}</p>
+      <p className="mb-2 text-xs font-medium text-gray-500">{yearDisplay}</p>
       {highlighted.map((entry) => (
         <div key={entry.dataKey} className="flex items-center gap-2 text-sm">
           <span
@@ -142,7 +149,13 @@ export function SpaghettiChart({ summary }: SpaghettiChartProps) {
                 fontSize: 12,
               }}
             />
-            <Tooltip content={<SpaghettiTooltipContent />} />
+            <Tooltip
+              content={
+                <SpaghettiTooltipContent
+                  totalYears={summary.yearsOfAccumulation}
+                />
+              }
+            />
             {backgroundKeys.map((key) => (
               <Line
                 key={key}

@@ -9,6 +9,7 @@ import { computeBacktestSummary } from "../engine/backtest/statistics";
 
 export interface BacktestCalculationResult {
   readonly summary: BacktestSummary | null;
+  readonly error: string | null;
 }
 
 export function useBacktestCalculation(params: {
@@ -21,28 +22,34 @@ export function useBacktestCalculation(params: {
     params;
 
   return useMemo(() => {
-    if (
-      monthlyContribution <= 0 ||
-      yearsOfAccumulation <= 0 ||
-      drawdownYears <= 0
-    ) {
-      return { summary: null };
+    try {
+      if (
+        monthlyContribution <= 0 ||
+        yearsOfAccumulation <= 0 ||
+        drawdownYears <= 0
+      ) {
+        return { summary: null, error: null };
+      }
+
+      const series = HISTORICAL_SERIES[seriesId];
+      const backtestParams = {
+        monthlyContribution,
+        yearsOfAccumulation,
+        drawdownYears,
+        seriesId,
+      };
+
+      const cohorts = runBacktest(backtestParams, series);
+      if (cohorts.length === 0) {
+        return { summary: null, error: null };
+      }
+
+      const summary = computeBacktestSummary(cohorts, backtestParams);
+      return { summary, error: null };
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Error en el calculo del backtest";
+      return { summary: null, error: message };
     }
-
-    const series = HISTORICAL_SERIES[seriesId];
-    const backtestParams = {
-      monthlyContribution,
-      yearsOfAccumulation,
-      drawdownYears,
-      seriesId,
-    };
-
-    const cohorts = runBacktest(backtestParams, series);
-    if (cohorts.length === 0) {
-      return { summary: null };
-    }
-
-    const summary = computeBacktestSummary(cohorts, backtestParams);
-    return { summary };
   }, [monthlyContribution, yearsOfAccumulation, drawdownYears, seriesId]);
 }

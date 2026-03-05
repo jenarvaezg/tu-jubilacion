@@ -88,6 +88,16 @@ describe("sampleCohorts", () => {
     expect(sampled[0].startYear).toBe(2000);
     expect(sampled[1].startYear).toBe(2019);
   });
+
+  it("never exceeds 25 lines for chart rendering", () => {
+    const largeCohorts = Array.from({ length: 80 }, (_, i) =>
+      makeCohort(1940 + i, (i + 1) * 5000),
+    );
+    const sampled = sampleCohorts(largeCohorts, 25);
+    expect(sampled.length).toBeLessThanOrEqual(25);
+    expect(sampled[0].startYear).toBe(1940);
+    expect(sampled[sampled.length - 1].startYear).toBe(2019);
+  });
 });
 
 describe("computeBacktestSummary", () => {
