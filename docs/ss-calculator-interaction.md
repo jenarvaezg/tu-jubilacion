@@ -99,6 +99,7 @@ En `BC_08`:
 Notas:
 
 - El flujo anónimo de `ProsaInternetAnonimo` no expone directamente todos los bloques visuales de la UI "Tu cotización" (por ejemplo, `valor deflactado` o `complemento por demora` como campos separados).
+- En las ejecuciones del 5 de marzo de 2026, `porcentajeAplicable` se mantuvo en `100.0` en casos de jubilación anticipada y demorada dentro de `ACBR0001`.
 - Para demorada, el complemento puede derivarse con:
   - `complemento = pensionInicial * (porcentajeAplicable - 100) / 100` (si `% > 100`).
 

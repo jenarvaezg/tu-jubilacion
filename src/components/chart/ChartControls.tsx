@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
 import type { AppAction } from "../../state/types.ts";
 
 interface ChartControlsProps {
   readonly displayMode: "real" | "nominal";
   readonly ipcRate: number;
-  readonly greeceHaircutRate: number;
   readonly notionalGrowthScenario: "historic" | "ageing-report";
   readonly dispatch: React.Dispatch<AppAction>;
 }
@@ -19,7 +17,6 @@ const IPC_OPTIONS = [
 export function ChartControls({
   displayMode,
   ipcRate,
-  greeceHaircutRate,
   notionalGrowthScenario,
   dispatch,
 }: ChartControlsProps) {
@@ -30,22 +27,46 @@ export function ChartControls({
     exampleNominal / Math.pow(1 + ipcRate, yearsAhead),
   );
   const ipcPct = (ipcRate * 100).toFixed(1).replace(".", ",");
-  const haircutPct = Math.round(greeceHaircutRate * 100);
 
   return (
     <div className="flex flex-col gap-4">
-      {displayMode === 'nominal' && (
+      {displayMode === "nominal" && (
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
           <div className="flex gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                <path d="M12 9v4" />
+                <path d="M12 17h.01" />
+              </svg>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-amber-900">Atención: Ilusión monetaria</h3>
+              <h3 className="text-sm font-bold text-amber-900">
+                Atención: Ilusión monetaria
+              </h3>
               <p className="mt-1 text-sm text-amber-800 leading-relaxed">
-                Estás viendo euros nominales. Debido a la inflación ({ipcPct}%), el dinero valdrá mucho menos en el futuro. 
-                <span className="font-bold"> {exampleNominal.toLocaleString("es-ES")}€</span> en {targetYear} equivaldrán a solo 
-                <span className="font-bold underline decoration-amber-500/50"> ~{exampleReal.toLocaleString("es-ES")}€</span> de hoy.
+                Estás viendo euros nominales. Debido a la inflación ({ipcPct}%),
+                el dinero valdrá mucho menos en el futuro.
+                <span className="font-bold">
+                  {" "}
+                  {exampleNominal.toLocaleString("es-ES")}€
+                </span>{" "}
+                en {targetYear} equivaldrán a solo
+                <span className="font-bold underline decoration-amber-500/50">
+                  {" "}
+                  ~{exampleReal.toLocaleString("es-ES")}€
+                </span>{" "}
+                de hoy.
               </p>
             </div>
           </div>
@@ -61,7 +82,9 @@ export function ChartControls({
             <div className="flex overflow-hidden rounded-lg border border-gray-200 p-1 bg-gray-50">
               <button
                 type="button"
-                onClick={() => dispatch({ type: "SET_DISPLAY_MODE", payload: "nominal" })}
+                onClick={() =>
+                  dispatch({ type: "SET_DISPLAY_MODE", payload: "nominal" })
+                }
                 className={`px-4 py-1.5 text-xs font-bold transition-all rounded-md ${
                   displayMode === "nominal"
                     ? "bg-white text-gray-900 shadow-sm border border-gray-100"
@@ -72,7 +95,9 @@ export function ChartControls({
               </button>
               <button
                 type="button"
-                onClick={() => dispatch({ type: "SET_DISPLAY_MODE", payload: "real" })}
+                onClick={() =>
+                  dispatch({ type: "SET_DISPLAY_MODE", payload: "real" })
+                }
                 className={`px-4 py-1.5 text-xs font-bold transition-all rounded-md ${
                   displayMode === "real"
                     ? "bg-white text-gray-900 shadow-sm border border-gray-100"
@@ -85,13 +110,21 @@ export function ChartControls({
           </div>
 
           <div className="flex items-center gap-3">
-            <label htmlFor="ipc-select" className="text-sm font-bold text-gray-700 uppercase tracking-wider text-[10px]">
+            <label
+              htmlFor="ipc-select"
+              className="text-sm font-bold text-gray-700 uppercase tracking-wider text-[10px]"
+            >
               Inflación (IPC):
             </label>
             <select
               id="ipc-select"
               value={ipcRate}
-              onChange={(e) => dispatch({ type: "SET_IPC_RATE", payload: Number(e.target.value) })}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_IPC_RATE",
+                  payload: Number(e.target.value),
+                })
+              }
               className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
             >
               {IPC_OPTIONS.map((opt) => (
@@ -105,7 +138,10 @@ export function ChartControls({
 
         <div className="flex flex-wrap items-center gap-6">
           <div className="flex items-center gap-3">
-            <label htmlFor="notional-scenario-select" className="text-sm font-bold text-gray-700 uppercase tracking-wider text-[10px]">
+            <label
+              htmlFor="notional-scenario-select"
+              className="text-sm font-bold text-gray-700 uppercase tracking-wider text-[10px]"
+            >
               Escenario FEDEA:
             </label>
             <select
@@ -114,7 +150,10 @@ export function ChartControls({
               onChange={(e) =>
                 dispatch({
                   type: "SET_NOTIONAL_SCENARIO",
-                  payload: e.target.value === "ageing-report" ? "ageing-report" : "historic",
+                  payload:
+                    e.target.value === "ageing-report"
+                      ? "ageing-report"
+                      : "historic",
                 })
               }
               className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold focus:ring-2 focus:ring-blue-500/20 focus:outline-none"

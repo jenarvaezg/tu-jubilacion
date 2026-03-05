@@ -38,7 +38,6 @@ function App() {
         <ChartControls
           displayMode={state.display.displayMode}
           ipcRate={state.calculation.ipcRate}
-          greeceHaircutRate={state.calculation.greeceHaircutRate}
           notionalGrowthScenario={state.calculation.notionalGrowthScenario}
           dispatch={dispatch}
         />

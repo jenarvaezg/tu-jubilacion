@@ -68,6 +68,7 @@ export function calculateNotionalAccounts(
     retirementAge: profile.desiredRetirementAge,
     realSalaryGrowthRate: cfg.salaryGrowthRate,
     currentYear: cfg.currentYear,
+    ipcRate: cfg.ipcRate,
   });
 
   // Step 3: Accumulate notional capital (all in REAL terms)

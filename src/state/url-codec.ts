@@ -1,43 +1,40 @@
-import {
-  DEFAULT_PERSONAL_SITUATIONS,
-  type CcaaCode,
-} from '../engine/types.ts';
-import type { AppState } from './types.ts';
-import { DEFAULT_STATE } from './defaults.ts';
+import { DEFAULT_PERSONAL_SITUATIONS, type CcaaCode } from "../engine/types.ts";
+import type { AppState } from "./types.ts";
+import { DEFAULT_STATE } from "./defaults.ts";
 
 // Compact URL param keys for minimal URL length
 const PARAM_KEYS = {
-  age: 'a',
-  salary: 's',
-  salaryType: 't',
-  pagasExtra: 'px',
-  ccaa: 'c',
-  yearsWorked: 'y',
-  retirementAge: 'r',
-  displayMode: 'd',
-  ipcRate: 'ipc',
-  greeceHaircut: 'h',
-  notionalScenario: 'ns',
-  salaryGrowth: 'sg',
-  showDetail: 'sd',
-  childrenCount: 'ch',
-  disabilityLevel: 'dl',
-  hazardousJob: 'hz',
-  involuntaryEarly: 'ie',
-  foreignYears: 'fy',
+  age: "a",
+  salary: "s",
+  salaryType: "t",
+  pagasExtra: "px",
+  ccaa: "c",
+  yearsWorked: "y",
+  retirementAge: "r",
+  displayMode: "d",
+  ipcRate: "ipc",
+  greeceHaircut: "h",
+  notionalScenario: "ns",
+  salaryGrowth: "sg",
+  showDetail: "sd",
+  childrenCount: "ch",
+  disabilityLevel: "dl",
+  hazardousJob: "hz",
+  involuntaryEarly: "ie",
+  foreignYears: "fy",
 } as const;
 
 const CCAA_SHORT: Record<CcaaCode, string> = {
-  'madrid': 'mad',
-  'catalunya': 'cat',
-  'andalucia': 'and',
-  'valencia': 'val',
-  'pais-vasco': 'pvs',
-  'other': 'oth',
+  madrid: "mad",
+  catalunya: "cat",
+  andalucia: "and",
+  valencia: "val",
+  "pais-vasco": "pvs",
+  other: "oth",
 };
 
 const SHORT_TO_CCAA: Record<string, CcaaCode> = Object.fromEntries(
-  Object.entries(CCAA_SHORT).map(([k, v]) => [v, k as CcaaCode])
+  Object.entries(CCAA_SHORT).map(([k, v]) => [v, k as CcaaCode]),
 ) as Record<string, CcaaCode>;
 
 const VALID_CCAA_CODES = new Set<string>(Object.keys(CCAA_SHORT));
@@ -63,10 +60,10 @@ export function encodeStateToUrl(state: AppState): string {
     params.set(PARAM_KEYS.salary, String(profile.monthlySalary));
   }
   if (profile.salaryType !== defaults.calculation.profile.salaryType) {
-    params.set(PARAM_KEYS.salaryType, profile.salaryType === 'net' ? 'n' : 'g');
+    params.set(PARAM_KEYS.salaryType, profile.salaryType === "net" ? "n" : "g");
   }
   if (profile.pagasExtra !== defaults.calculation.profile.pagasExtra) {
-    params.set(PARAM_KEYS.pagasExtra, profile.pagasExtra ? '1' : '0');
+    params.set(PARAM_KEYS.pagasExtra, profile.pagasExtra ? "1" : "0");
   }
   if (profile.ccaa !== defaults.calculation.profile.ccaa) {
     params.set(PARAM_KEYS.ccaa, CCAA_SHORT[profile.ccaa]);
@@ -74,41 +71,64 @@ export function encodeStateToUrl(state: AppState): string {
   if (profile.yearsWorked !== defaults.calculation.profile.yearsWorked) {
     params.set(PARAM_KEYS.yearsWorked, String(profile.yearsWorked));
   }
-  if (profile.desiredRetirementAge !== defaults.calculation.profile.desiredRetirementAge) {
+  if (
+    profile.desiredRetirementAge !==
+    defaults.calculation.profile.desiredRetirementAge
+  ) {
     params.set(PARAM_KEYS.retirementAge, String(profile.desiredRetirementAge));
   }
   if (state.display.displayMode !== defaults.display.displayMode) {
-    params.set(PARAM_KEYS.displayMode, state.display.displayMode === 'real' ? 'r' : 'n');
+    params.set(
+      PARAM_KEYS.displayMode,
+      state.display.displayMode === "real" ? "r" : "n",
+    );
   }
   if (state.calculation.ipcRate !== defaults.calculation.ipcRate) {
     params.set(PARAM_KEYS.ipcRate, String(state.calculation.ipcRate * 100));
   }
-  if (state.calculation.greeceHaircutRate !== defaults.calculation.greeceHaircutRate) {
-    params.set(PARAM_KEYS.greeceHaircut, String(state.calculation.greeceHaircutRate * 100));
+  if (
+    state.calculation.greeceHaircutRate !==
+    defaults.calculation.greeceHaircutRate
+  ) {
+    params.set(
+      PARAM_KEYS.greeceHaircut,
+      String(state.calculation.greeceHaircutRate * 100),
+    );
   }
-  if (state.calculation.notionalGrowthScenario !== defaults.calculation.notionalGrowthScenario) {
-    params.set(PARAM_KEYS.notionalScenario, state.calculation.notionalGrowthScenario === 'historic' ? 'h' : 'a');
+  if (
+    state.calculation.notionalGrowthScenario !==
+    defaults.calculation.notionalGrowthScenario
+  ) {
+    params.set(
+      PARAM_KEYS.notionalScenario,
+      state.calculation.notionalGrowthScenario === "historic" ? "h" : "a",
+    );
   }
-  if (state.calculation.salaryGrowthRate !== defaults.calculation.salaryGrowthRate) {
-    params.set(PARAM_KEYS.salaryGrowth, String(state.calculation.salaryGrowthRate * 100));
+  if (
+    state.calculation.salaryGrowthRate !== defaults.calculation.salaryGrowthRate
+  ) {
+    params.set(
+      PARAM_KEYS.salaryGrowth,
+      String(state.calculation.salaryGrowthRate * 100),
+    );
   }
   if (state.display.showDetail !== defaults.display.showDetail) {
-    params.set(PARAM_KEYS.showDetail, state.display.showDetail ? '1' : '0');
+    params.set(PARAM_KEYS.showDetail, state.display.showDetail ? "1" : "0");
   }
   if (situations.childrenCount !== defaultSituations.childrenCount) {
     params.set(PARAM_KEYS.childrenCount, String(situations.childrenCount));
   }
   if (situations.disabilityLevel !== defaultSituations.disabilityLevel) {
     const dlCode =
-      situations.disabilityLevel === '65'
-        ? '6'
-        : situations.disabilityLevel === '33'
-          ? '3'
-          : 'n';
+      situations.disabilityLevel === "65"
+        ? "6"
+        : situations.disabilityLevel === "33"
+          ? "3"
+          : "n";
     params.set(PARAM_KEYS.disabilityLevel, dlCode);
   }
   if (situations.hazardousJob !== defaultSituations.hazardousJob) {
-    params.set(PARAM_KEYS.hazardousJob, situations.hazardousJob ? '1' : '0');
+    params.set(PARAM_KEYS.hazardousJob, situations.hazardousJob ? "1" : "0");
   }
   if (
     situations.involuntaryEarlyRetirement !==
@@ -116,11 +136,12 @@ export function encodeStateToUrl(state: AppState): string {
   ) {
     params.set(
       PARAM_KEYS.involuntaryEarly,
-      situations.involuntaryEarlyRetirement ? '1' : '0',
+      situations.involuntaryEarlyRetirement ? "1" : "0",
     );
   }
   if (
-    situations.foreignContributionYears !== defaultSituations.foreignContributionYears
+    situations.foreignContributionYears !==
+    defaultSituations.foreignContributionYears
   ) {
     params.set(
       PARAM_KEYS.foreignYears,
@@ -129,7 +150,7 @@ export function encodeStateToUrl(state: AppState): string {
   }
 
   const queryString = params.toString();
-  return queryString ? `?${queryString}` : '';
+  return queryString ? `?${queryString}` : "";
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -150,58 +171,94 @@ export function decodeStateFromUrl(search: string): AppState {
     DEFAULT_PERSONAL_SITUATIONS;
 
   const age = clamp(
-    Math.round(parseFiniteNumber(params.get(PARAM_KEYS.age), defaults.calculation.profile.age)),
+    Math.round(
+      parseFiniteNumber(
+        params.get(PARAM_KEYS.age),
+        defaults.calculation.profile.age,
+      ),
+    ),
     18,
-    66
+    66,
   );
 
   const salary = clamp(
-    parseFiniteNumber(params.get(PARAM_KEYS.salary), defaults.calculation.profile.monthlySalary),
+    parseFiniteNumber(
+      params.get(PARAM_KEYS.salary),
+      defaults.calculation.profile.monthlySalary,
+    ),
     0,
-    50000
+    50000,
   );
 
   const salaryTypeRaw = params.get(PARAM_KEYS.salaryType);
-  const salaryType = salaryTypeRaw === 'g' ? 'gross' as const : 'net' as const;
+  const salaryType =
+    salaryTypeRaw === "g" ? ("gross" as const) : ("net" as const);
 
   const pagasExtraRaw = params.get(PARAM_KEYS.pagasExtra);
-  const pagasExtra = pagasExtraRaw === '0' ? false : defaults.calculation.profile.pagasExtra;
+  const pagasExtra =
+    pagasExtraRaw === "0" ? false : defaults.calculation.profile.pagasExtra;
 
   const ccaaRaw = params.get(PARAM_KEYS.ccaa);
   const ccaaFromShort = ccaaRaw !== null ? SHORT_TO_CCAA[ccaaRaw] : undefined;
-  const ccaa: CcaaCode = ccaaFromShort !== undefined && isValidCcaa(ccaaFromShort)
-    ? ccaaFromShort
-    : defaults.calculation.profile.ccaa;
+  const ccaa: CcaaCode =
+    ccaaFromShort !== undefined && isValidCcaa(ccaaFromShort)
+      ? ccaaFromShort
+      : defaults.calculation.profile.ccaa;
 
   const yearsWorked = clamp(
-    Math.round(parseFiniteNumber(params.get(PARAM_KEYS.yearsWorked), defaults.calculation.profile.yearsWorked)),
+    Math.round(
+      parseFiniteNumber(
+        params.get(PARAM_KEYS.yearsWorked),
+        defaults.calculation.profile.yearsWorked,
+      ),
+    ),
     0,
-    50
+    50,
   );
 
   const retirementAge = clamp(
-    Math.round(parseFiniteNumber(params.get(PARAM_KEYS.retirementAge), defaults.calculation.profile.desiredRetirementAge)),
+    Math.round(
+      parseFiniteNumber(
+        params.get(PARAM_KEYS.retirementAge),
+        defaults.calculation.profile.desiredRetirementAge,
+      ),
+    ),
     63,
-    70
+    70,
   );
 
   const displayModeRaw = params.get(PARAM_KEYS.displayMode);
-  const displayMode = displayModeRaw === 'n' ? 'nominal' as const : 'real' as const;
+  const displayMode =
+    displayModeRaw === "r"
+      ? ("real" as const)
+      : displayModeRaw === "n"
+        ? ("nominal" as const)
+        : defaults.display.displayMode;
 
-  const ipcRateRaw = parseFiniteNumber(params.get(PARAM_KEYS.ipcRate), defaults.calculation.ipcRate * 100);
+  const ipcRateRaw = parseFiniteNumber(
+    params.get(PARAM_KEYS.ipcRate),
+    defaults.calculation.ipcRate * 100,
+  );
   const ipcRate = clamp(ipcRateRaw / 100, 0.005, 0.05);
 
-  const greeceHaircutRaw = parseFiniteNumber(params.get(PARAM_KEYS.greeceHaircut), defaults.calculation.greeceHaircutRate * 100);
-  const greeceHaircutRate = clamp(greeceHaircutRaw / 100, 0.10, 0.50);
+  const greeceHaircutRaw = parseFiniteNumber(
+    params.get(PARAM_KEYS.greeceHaircut),
+    defaults.calculation.greeceHaircutRate * 100,
+  );
+  const greeceHaircutRate = clamp(greeceHaircutRaw / 100, 0.1, 0.5);
 
   const nsRaw = params.get(PARAM_KEYS.notionalScenario);
-  const notionalGrowthScenario = nsRaw === 'a' ? 'ageing-report' as const : 'historic' as const;
+  const notionalGrowthScenario =
+    nsRaw === "a" ? ("ageing-report" as const) : ("historic" as const);
 
-  const sgRaw = parseFiniteNumber(params.get(PARAM_KEYS.salaryGrowth), defaults.calculation.salaryGrowthRate * 100);
+  const sgRaw = parseFiniteNumber(
+    params.get(PARAM_KEYS.salaryGrowth),
+    defaults.calculation.salaryGrowthRate * 100,
+  );
   const salaryGrowthRate = clamp(sgRaw / 100, 0, 0.05);
 
   const sdRaw = params.get(PARAM_KEYS.showDetail);
-  const showDetail = sdRaw === '1';
+  const showDetail = sdRaw === "1";
 
   const childrenCount = clamp(
     Math.round(
@@ -216,15 +273,15 @@ export function decodeStateFromUrl(search: string): AppState {
 
   const disabilityRaw = params.get(PARAM_KEYS.disabilityLevel);
   const disabilityLevel =
-    disabilityRaw === '6'
-      ? '65'
-      : disabilityRaw === '3'
-        ? '33'
+    disabilityRaw === "6"
+      ? "65"
+      : disabilityRaw === "3"
+        ? "33"
         : defaultSituations.disabilityLevel;
 
-  const hazardousJob = params.get(PARAM_KEYS.hazardousJob) === '1';
+  const hazardousJob = params.get(PARAM_KEYS.hazardousJob) === "1";
   const involuntaryEarlyRetirement =
-    params.get(PARAM_KEYS.involuntaryEarly) === '1';
+    params.get(PARAM_KEYS.involuntaryEarly) === "1";
   const foreignContributionYears = clamp(
     Math.round(
       parseFiniteNumber(

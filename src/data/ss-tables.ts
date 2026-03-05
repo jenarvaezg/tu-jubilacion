@@ -32,10 +32,11 @@ export const SS_RULES: SSRules = {
   paymentsPerYear: 14,
 
   // Base reguladora (cohortes futuras): 324 mejores bases de las últimas 348,
-  // prorrateadas a 14 pagas con divisor 396.
-  // Referencia: explicación mostrada por el simulador oficial Importass.
+  // divididas entre 378 (= 324 * 14 / 12, prorrateo a 14 pagas).
+  // Referencia: Ley 27/2011 art. 4, confirmado por el simulador oficial SS (ACBR0001).
   regulatoryBaseMonths: 324,
-  regulatoryBaseDivisor: 396,
+  regulatoryBaseWindow: 348,
+  regulatoryBaseDivisor: 378,
 
   // Escala de coeficientes (carreras largas, calibrada con criterio Importass)
   // 15 años (180 meses) = 50%

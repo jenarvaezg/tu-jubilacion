@@ -14,7 +14,11 @@ import {
   calculateIRPF,
   monthlyToAnnualGross,
 } from "../salary";
-import { projectBases, getLastNMonthlyBases } from "../projection";
+import {
+  projectBases,
+  getLastNMonthlyBases,
+  actualizeBases,
+} from "../projection";
 import { generateTimeline } from "../pension-timeline";
 
 interface CurrentLawConfig {
@@ -36,7 +40,7 @@ const DEFAULT_CONFIG: CurrentLawConfig = {
  * 1. Derive gross salary (if net provided)
  * 2. Compute base de cotización
  * 3. Project bases forward to retirement
- * 4. Compute base reguladora (324 months / 396, calibrated for future cohorts)
+ * 4. Compute base reguladora (best 324 of 348 months, CPI-actualized, / 378)
  * 5. Apply coefficient scale based on years contributed
  * 6. Apply early/late retirement adjustments
  * 7. Cap at pension max/min
@@ -58,13 +62,14 @@ export function calculateCurrentLaw(
   // Step 2: Base de cotización
   const currentBase = grossToBaseCotizacion(monthlyGross);
 
-  // Step 3: Project bases forward
+  // Step 3: Project bases forward (base limits grow at IPC rate)
   const projected = projectBases({
     currentBase,
     currentAge: profile.age,
     retirementAge: profile.desiredRetirementAge,
     realSalaryGrowthRate: cfg.salaryGrowthRate,
     currentYear: cfg.currentYear,
+    ipcRate: cfg.ipcRate,
   });
 
   // Total contribution career at retirement (months precision).
@@ -74,7 +79,10 @@ export function calculateCurrentLaw(
     profile.monthsContributed,
     profile.yearsWorked * 12,
   );
-  const futureMonthsContributed = Math.max(0, Math.round(yearsToRetirement * 12));
+  const futureMonthsContributed = Math.max(
+    0,
+    Math.round(yearsToRetirement * 12),
+  );
   const foreignMonthsContributed =
     personalSituations.foreignContributionYears * 12;
   const totalMonthsContributed =
@@ -84,19 +92,29 @@ export function calculateCurrentLaw(
   const totalYearsContributed = totalMonthsContributed / 12;
 
   // Step 4: Base reguladora
-  const lastMonthlyBases = getLastNMonthlyBases(
+  // Get last M monthly bases (348 month window)
+  const windowBases = getLastNMonthlyBases(
     projected,
     currentMonthsContributed / 12,
+    SS_RULES.regulatoryBaseWindow,
+  );
+  // Apply CPI actualization and select best N (324) of M (348)
+  const bestActualizedBases = actualizeBases(
+    windowBases,
+    cfg.ipcRate,
     SS_RULES.regulatoryBaseMonths,
   );
-  const sumBases = lastMonthlyBases.reduce((acc, b) => acc + b, 0);
+  const sumBases = bestActualizedBases.reduce((acc, b) => acc + b, 0);
   const baseReguladora = sumBases / SS_RULES.regulatoryBaseDivisor;
 
   // Step 5: Coefficient by years contributed
   const coefficient = computeCoefficient(totalMonthsContributed);
 
   // Step 6: Early/late retirement adjustment
-  const legalAge = getLegalRetirementAge(totalYearsContributed, personalSituations);
+  const legalAge = getLegalRetirementAge(
+    totalYearsContributed,
+    personalSituations,
+  );
   const ageAdjustment = computeAgeAdjustment(
     profile.desiredRetirementAge,
     legalAge,
@@ -107,16 +125,18 @@ export function calculateCurrentLaw(
   // Step 7: Monthly pension (one of 14 pagas)
   let monthlyPension = baseReguladora * coefficient * ageAdjustment;
 
-  // Keep legal minimum floor.
-  // We intentionally do not apply a static max cap here because using
-  // today's cap for cohorts retiring in 2050+ severely underestimates
-  // results versus the official simulator.
-  monthlyPension = Math.max(monthlyPension, SS_RULES.pensionMinMonthly);
+  // Project pension min/max caps forward at IPC rate.
+  // Using today's static caps for cohorts retiring in 2050+ would be wrong
+  // (too low). The government adjusts caps annually, roughly tracking IPC.
+  const projectedPensionMax =
+    SS_RULES.pensionMaxMonthly * Math.pow(1 + cfg.ipcRate, yearsToRetirement);
+  const projectedPensionMin =
+    SS_RULES.pensionMinMonthly * Math.pow(1 + cfg.ipcRate, yearsToRetirement);
+  monthlyPension = Math.min(monthlyPension, projectedPensionMax);
+  monthlyPension = Math.max(monthlyPension, projectedPensionMin);
 
   // Complemento por hijos (modelo simplificado del complemento por brecha de genero).
-  monthlyPension += computeChildrenComplement(
-    personalSituations.childrenCount,
-  );
+  monthlyPension += computeChildrenComplement(personalSituations.childrenCount);
 
   // Annual pension (14 pagas)
   const annualPension = monthlyPension * SS_RULES.paymentsPerYear;
@@ -167,8 +187,8 @@ function getLegalRetirementAge(
 ): number {
   const baseAge =
     yearsContributed >= SS_RULES.reducedRetirementYearsRequired
-    ? SS_RULES.reducedRetirementAge
-    : SS_RULES.legalRetirementAge;
+      ? SS_RULES.reducedRetirementAge
+      : SS_RULES.legalRetirementAge;
 
   const reduction = getSpecialLegalAgeReduction(situations);
   return Math.max(60, baseAge - reduction);

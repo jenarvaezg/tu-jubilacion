@@ -57,6 +57,7 @@ export interface SSRules {
   readonly involuntaryEarlyPenaltyRelief: number;
   readonly paymentsPerYear: number;
   readonly regulatoryBaseMonths: number;
+  readonly regulatoryBaseWindow: number;
   readonly regulatoryBaseDivisor: number;
   readonly legalRetirementAge: number;
   readonly reducedRetirementAge: number;
