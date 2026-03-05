@@ -12,9 +12,10 @@ export const SS_RULES: SSRules = {
     accessDate: "2025-01-15",
   },
 
-  // Bases de cotización 2025 (Orden PJC/178/2025, BOE 26-feb-2025)
+  // Bases de cotización: min 1.381,20€ y max 5.101,20€
+  // Ajustado según validación con el simulador oficial Importass (mar-2026).
   baseMinMonthly: 1381.2,
-  baseMaxMonthly: 4909.5,
+  baseMaxMonthly: 5101.2,
 
   // Tipos de cotización
   workerContributionRate: 0.0647,

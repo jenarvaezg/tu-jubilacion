@@ -10,8 +10,8 @@ describe("SS Tables spot-checks", () => {
     expect(SS_RULES.baseMinMonthly).toBe(1381.2);
   });
 
-  it("base máxima mensual is 4909.50", () => {
-    expect(SS_RULES.baseMaxMonthly).toBe(4909.5);
+  it("base máxima mensual is 5101.20", () => {
+    expect(SS_RULES.baseMaxMonthly).toBe(5101.2);
   });
 
   it("worker contribution rate is 6.47%", () => {

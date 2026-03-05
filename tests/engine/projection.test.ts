@@ -58,7 +58,7 @@ describe("projectBases", () => {
     });
     // High base that will exceed max after growth
     for (const proj of result) {
-      expect(proj.monthlyBase).toBeLessThanOrEqual(4909.5);
+      expect(proj.monthlyBase).toBeLessThanOrEqual(5101.2);
     }
   });
 });

@@ -12,7 +12,7 @@ describe("grossToBaseCotizacion", () => {
   });
 
   it("clamps to base máxima when gross exceeds maximum", () => {
-    expect(grossToBaseCotizacion(6000)).toBe(4909.5);
+    expect(grossToBaseCotizacion(6000)).toBe(5101.2);
   });
 
   it("returns gross when within range", () => {
@@ -24,7 +24,7 @@ describe("grossToBaseCotizacion", () => {
   });
 
   it("returns exact base max at boundary", () => {
-    expect(grossToBaseCotizacion(4909.5)).toBe(4909.5);
+    expect(grossToBaseCotizacion(5101.2)).toBe(5101.2);
   });
 });
 

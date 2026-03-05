@@ -110,7 +110,7 @@ describe("Golden Profile B - High income, Catalunya, base máxima ceiling", () =
   const result = calculateCurrentLaw(PROFILE_B);
 
   it("base reguladora is capped by base máxima", () => {
-    // 4000 gross is below base max (4909.50), so base = 4000
+    // 4000 gross is below base max (5101.20), so base = 4000
     // With growth over 22 years, later bases will approach/hit max
     expect(result.baseReguladora).toBeGreaterThan(3000);
     expect(result.baseReguladora).toBeLessThan(5000);
