@@ -1,104 +1,92 @@
+// @vitest-environment jsdom
 import { describe, it, expect } from "vitest";
-import { calculatePensionGap } from "../../src/engine/savings/gap";
-import {
-  calculateSavings,
-  deriveDrawdownYears,
-} from "../../src/engine/savings/portfolio";
+import { renderHook } from "@testing-library/react";
+import { useSavingsCalculation } from "../../src/hooks/use-savings-calculation";
+import { DEFAULT_STATE } from "../../src/state/defaults";
 import type { ScenarioResult } from "../../src/engine/types";
 
-function makeScenarioResult(
-  scenarioId: string,
+function makeResult(
+  scenarioId: ScenarioResult["scenarioId"],
   monthlyPension: number,
 ): ScenarioResult {
   return {
     scenarioId,
-    scenarioLabel: scenarioId,
+    scenarioName: scenarioId,
     monthlyPension,
-    replacementRate: monthlyPension / 2000,
-    yearlyTimeline: [],
-  } as ScenarioResult;
+    annualPension: monthlyPension * 14,
+    baseReguladora: monthlyPension * 1.1,
+    replacementRate: 0.7,
+    replacementRateNet: 0.75,
+    timeline: [],
+  };
 }
 
-describe("savings hook logic", () => {
-  describe("calculatePensionGap", () => {
-    it("returns null when comparison scenario not found", () => {
-      const results = [makeScenarioResult("current-law", 1200)];
-      const gap = calculatePensionGap(results, "notional-accounts");
-      expect(gap).toBeNull();
-    });
+describe("useSavingsCalculation", () => {
+  const pensionResults: ScenarioResult[] = [
+    makeResult("current-law", 1500),
+    makeResult("notional-accounts", 1200),
+    makeResult("sustainability-2013", 1300),
+    makeResult("eu-convergence", 1250),
+    makeResult("greece-haircut", 1100),
+  ];
 
-    it("returns gap when baseline > comparison", () => {
-      const results = [
-        makeScenarioResult("current-law", 1200),
-        makeScenarioResult("notional-accounts", 800),
-      ];
-      const gap = calculatePensionGap(results, "notional-accounts");
-      expect(gap).not.toBeNull();
-      expect(gap!.gapMonthly).toBe(400);
-    });
+  it("derives the lifestyle target from the current salary", () => {
+    const { result } = renderHook(() =>
+      useSavingsCalculation({
+        pensionResults,
+        inputs: DEFAULT_STATE.calculation,
+      }),
+    );
 
-    it("returns zero gap when comparison >= baseline", () => {
-      const results = [
-        makeScenarioResult("current-law", 800),
-        makeScenarioResult("notional-accounts", 1000),
-      ];
-      const gap = calculatePensionGap(results, "notional-accounts");
-      expect(gap).not.toBeNull();
-      expect(gap!.gapMonthly).toBeLessThanOrEqual(0);
-    });
+    expect(result.current.error).toBeNull();
+    expect(result.current.gap).not.toBeNull();
+    expect(result.current.gap?.targetMonthlyIncome).toBeCloseTo(
+      (2000 * 14) / 12,
+      2,
+    );
+    expect(result.current.gap?.comparisonGapMonthly).toBeGreaterThan(
+      result.current.gap?.currentLawGapMonthly ?? 0,
+    );
   });
 
-  describe("deriveDrawdownYears", () => {
-    it("derives positive drawdown years for typical profile", () => {
-      const years = deriveDrawdownYears(67, 35, 2026);
-      expect(years).toBeGreaterThan(0);
-    });
+  it("reduces the required contribution when current savings exist", () => {
+    const { result: noBase } = renderHook(() =>
+      useSavingsCalculation({
+        pensionResults,
+        inputs: {
+          ...DEFAULT_STATE.calculation,
+          currentSavingsBalance: 0,
+        },
+      }),
+    );
 
-    it("increases with younger current age (more life expectancy)", () => {
-      const young = deriveDrawdownYears(67, 25, 2026);
-      const old = deriveDrawdownYears(67, 55, 2026);
-      expect(young).toBeGreaterThanOrEqual(old);
-    });
+    const { result: withBase } = renderHook(() =>
+      useSavingsCalculation({
+        pensionResults,
+        inputs: {
+          ...DEFAULT_STATE.calculation,
+          currentSavingsBalance: 100000,
+        },
+      }),
+    );
+
+    expect(withBase.current.savings?.monthlyContribution).toBeLessThan(
+      noBase.current.savings?.monthlyContribution ?? Number.POSITIVE_INFINITY,
+    );
+    expect(withBase.current.portfolioTimeline[0]?.portfolioValueReal).toBe(100000);
   });
 
-  describe("calculateSavings", () => {
-    it("returns override amount when provided", () => {
-      const result = calculateSavings({
-        gapMonthly: 500,
-        weightedRealReturn: 0.04,
-        currentAge: 35,
-        retirementAge: 67,
-        drawdownYears: 20,
-        profileId: "moderate",
-        monthlyContributionOverride: 300,
-      });
-      expect(result.monthlyContribution).toBe(300);
-    });
+  it("respects a manual monthly contribution override", () => {
+    const { result } = renderHook(() =>
+      useSavingsCalculation({
+        pensionResults,
+        inputs: {
+          ...DEFAULT_STATE.calculation,
+          monthlyContributionOverride: 450,
+        },
+      }),
+    );
 
-    it("calculates positive contribution for positive gap", () => {
-      const result = calculateSavings({
-        gapMonthly: 500,
-        weightedRealReturn: 0.04,
-        currentAge: 35,
-        retirementAge: 67,
-        drawdownYears: 20,
-        profileId: "moderate",
-        monthlyContributionOverride: null,
-      });
-      expect(result.monthlyContribution).toBeGreaterThan(0);
-    });
-
-    it("returns zero contribution for zero gap", () => {
-      const result = calculateSavings({
-        gapMonthly: 0,
-        weightedRealReturn: 0.04,
-        currentAge: 35,
-        retirementAge: 67,
-        drawdownYears: 20,
-        profileId: "moderate",
-        monthlyContributionOverride: null,
-      });
-      expect(result.monthlyContribution).toBe(0);
-    });
+    expect(result.current.savings?.monthlyContribution).toBe(450);
   });
 });

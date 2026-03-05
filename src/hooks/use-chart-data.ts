@@ -17,7 +17,7 @@ export const SCENARIO_COLORS: Record<ScenarioId, string> = {
 
 export const SCENARIO_LABELS: Record<ScenarioId, string> = {
   "current-law": "Legislacion vigente",
-  "notional-accounts": "Cuentas nocionales (FEDEA)",
+  "notional-accounts": "Cuentas nocionales",
   "sustainability-2013": "Factor sostenibilidad 2013",
   "eu-convergence": "Convergencia UE (60%)",
   "greece-haircut": "Recorte tipo Grecia",

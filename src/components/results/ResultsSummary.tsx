@@ -12,35 +12,40 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
   if (results.length === 0) return null;
 
   const baselineResult = results.find((r) => r.scenarioId === "current-law");
-  const notionalResult = results.find(
-    (r) => r.scenarioId === "notional-accounts",
-  );
+  const reformResults = results.filter((r) => r.scenarioId !== "current-law");
+  const publicFloorResult =
+    reformResults.reduce<ScenarioResult | null>((lowest, candidate) => {
+      if (lowest === null) return candidate;
+      return candidate.monthlyPension < lowest.monthlyPension ? candidate : lowest;
+    }, null) ?? baselineResult ?? null;
 
   const baselinePension = baselineResult?.monthlyPension ?? 0;
-  const notionalPension = notionalResult?.monthlyPension ?? 0;
-  const lossAmount = baselinePension - notionalPension;
-  const lossPercent = baselinePension > 0 ? lossAmount / baselinePension : 0;
+  const publicFloor = publicFloorResult?.monthlyPension ?? baselinePension;
+  const publicRangeDropPercent =
+    baselinePension > 0 ? (baselinePension - publicFloor) / baselinePension : 0;
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Hero Shock Section */}
       <div className="overflow-hidden rounded-2xl bg-gray-900 text-white shadow-xl">
         <div className="flex flex-col md:flex-row">
           <div className="flex-1 p-8">
             <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400">
-              Tu Realidad Económica
+              Tu plan no debe depender de una sola cifra
             </h2>
             <p className="mt-4 text-3xl font-extrabold leading-tight">
-              Bajo cuentas nocionales (modelo Suecia/FEDEA), cobrarás un{" "}
-              <span className="text-red-500">
-                {formatPercent(lossPercent)} menos
-              </span>{" "}
-              de pensión.
+              El sistema actual tendra que reformarse. La pension publica es una
+              base util, pero no una promesa cerrada para toda tu jubilacion.
+            </p>
+            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-300">
+              En los escenarios modelados, tu ingreso publico de jubilacion se
+              mueve entre un suelo prudente y la referencia legal de hoy. La
+              pregunta importante no es que reforma exacta vendra, sino que
+              parte de tus ingresos deberias construir por tu cuenta.
             </p>
             <div className="mt-8 flex flex-wrap gap-8">
               <div>
-                <p className="text-xs font-medium text-gray-400 uppercase">
-                  Sistema Actual
+                <p className="text-xs font-medium uppercase text-gray-400">
+                  Referencia legal hoy
                 </p>
                 <CurrencyDisplay
                   amount={baselinePension}
@@ -64,27 +69,37 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
                 </svg>
               </div>
               <div>
-                <p className="text-xs font-medium text-red-400 uppercase tracking-tighter">
-                  Pensión "Real" Probable
+                <p className="text-xs font-medium uppercase tracking-tighter text-amber-300">
+                  Suelo prudente del rango
                 </p>
                 <CurrencyDisplay
-                  amount={notionalPension}
-                  className="text-2xl font-extrabold text-red-500"
+                  amount={publicFloor}
+                  className="text-2xl font-extrabold text-amber-300"
                 />
+                <p className="mt-1 text-[11px] text-gray-400">
+                  {publicFloorResult?.scenarioName ?? "Escenario modelado"}
+                </p>
               </div>
             </div>
           </div>
-          <div className="bg-red-950/30 p-8 md:w-64 flex flex-col justify-center border-l border-white/5">
-            <p className="text-xs font-bold uppercase text-red-400">
-              Pérdida mensual
+          <div className="flex flex-col justify-center border-l border-white/5 bg-blue-950/30 p-8 md:w-72">
+            <p className="text-xs font-bold uppercase text-blue-300">
+              Objetivo de planificacion
             </p>
-            <CurrencyDisplay
-              amount={lossAmount}
-              className="mt-1 text-3xl font-black text-white"
-            />
-            <p className="mt-2 text-xs text-gray-400 leading-relaxed italic">
-              "Esta es la brecha que el Estado no podrá cubrir. Tu ahorro
-              privado es la única solución."
+            <p className="mt-2 text-2xl font-black leading-tight text-white">
+              Usa la pension publica como base, no como plan completo.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-gray-300">
+              Si la reforma se parece al suelo del rango modelado, tu ingreso
+              publico podria caer hasta un{" "}
+              <span className="font-bold text-blue-200">
+                {formatPercent(publicRangeDropPercent)}
+              </span>{" "}
+              frente a la ley actual.
+            </p>
+            <p className="mt-2 text-xs leading-relaxed text-gray-400 italic">
+              Tu ahorro privado es el mecanismo para sostener ingresos durante
+              toda la jubilacion, no solo para llegar al dia de retiro.
             </p>
           </div>
         </div>
@@ -92,18 +107,17 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
 
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between border-b border-gray-200 pb-2">
-          <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">
-            Análisis Multi-Escenario
+          <h2 className="text-xl font-black uppercase tracking-tight italic text-gray-900">
+            Analisis multi-escenario
           </h2>
-          <span className="text-[10px] font-bold text-gray-400 uppercase">
-            Comparativa de Reformas
+          <span className="text-[10px] font-bold uppercase text-gray-400">
+            Rango de planificacion
           </span>
         </div>
-        <p className="text-sm text-gray-600 leading-relaxed">
-          Nadie sabe qué reforma vendrá, pero podemos simular las más probables.
-          Cada escenario muestra cuánto cobrarías bajo un modelo distinto de
-          pensiones: desde la ley actual hasta reformas que ya se aplican en
-          otros países europeos.
+        <p className="text-sm leading-relaxed text-gray-600">
+          Nadie sabe que reforma exacta llegara. Estos escenarios no intentan
+          adivinar el futuro con precision, sino acotar un rango plausible de
+          ingresos publicos con el que conviene planificar tu jubilacion.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -118,20 +132,19 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
         </div>
       </div>
 
-      {/* Editorial Blurb */}
       <div className="rounded-xl border-l-4 border-gray-900 bg-white p-6 shadow-sm">
-        <p className="text-sm font-bold text-gray-900 uppercase tracking-widest text-[10px] mb-2">
-          Tesis Editorial
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-900">
+          Enfoque de la herramienta
         </p>
-        <p className="text-gray-700 leading-relaxed italic">
-          El sistema actual es insostenible. Con un Factor de Equidad Actuarial
-          de 1,62, los españoles reciben un 62% más de lo que aportan. Cualquier
-          reforma realista (como las cuentas nocionales que propone FEDEA)
-          ajustará la pensión a tu contribución real.
+        <p className="leading-relaxed text-gray-700 italic">
+          El sistema actual es dificil de sostener sin cambios. Por eso la
+          pregunta importante no es "que pension exacta me tocara", sino "que
+          parte de mis ingresos de jubilacion puedo considerar publica y que
+          parte tengo que construir yo".
           <span className="font-bold">
             {" "}
-            La diferencia entre la línea azul y la roja es el riesgo que estás
-            asumiendo hoy al no invertir.
+            La app usa varias reformas plausibles para que planifiques con
+            margen de seguridad, no para convertir una de ellas en villano.
           </span>
         </p>
       </div>

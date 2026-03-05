@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { calculatePensionGap } from "../../../src/engine/savings/gap";
+import { calculateRetirementIncomeGap } from "../../../src/engine/savings/gap";
 import type { ScenarioResult } from "../../../src/engine/types";
 
 function makeResult(
@@ -18,7 +18,7 @@ function makeResult(
   };
 }
 
-describe("calculatePensionGap", () => {
+describe("calculateRetirementIncomeGap", () => {
   const results: ScenarioResult[] = [
     makeResult("current-law", 1500),
     makeResult("notional-accounts", 1300),
@@ -26,49 +26,51 @@ describe("calculatePensionGap", () => {
     makeResult("greece-haircut", 1050),
   ];
 
-  it("calculates gap between current-law and notional-accounts", () => {
-    const gap = calculatePensionGap(results, "notional-accounts");
+  it("calculates the lifestyle gap under current law and reform", () => {
+    const gap = calculateRetirementIncomeGap(results, "notional-accounts", 2000);
+
     expect(gap).not.toBeNull();
-    expect(gap!.baselineMonthly).toBe(1500);
+    expect(gap!.targetMonthlyIncome).toBe(2000);
+    expect(gap!.currentLawMonthly).toBe(1500);
     expect(gap!.comparisonMonthly).toBe(1300);
-    expect(gap!.gapMonthly).toBe(200);
-    expect(gap!.gapAnnual).toBe(200 * 14);
-    expect(gap!.gapPercent).toBeCloseTo(200 / 1500, 4);
+    expect(gap!.currentLawGapMonthly).toBe(500);
+    expect(gap!.comparisonGapMonthly).toBe(700);
+    expect(gap!.additionalGapMonthly).toBe(200);
+    expect(gap!.currentLawCoverageRate).toBeCloseTo(0.75, 4);
+    expect(gap!.comparisonCoverageRate).toBeCloseTo(0.65, 4);
   });
 
-  it("calculates gap against eu-convergence", () => {
-    const gap = calculatePensionGap(results, "eu-convergence");
+  it("returns zero additional gap when comparing current law to itself", () => {
+    const gap = calculateRetirementIncomeGap(results, "current-law", 2000);
+
     expect(gap).not.toBeNull();
-    expect(gap!.gapMonthly).toBe(400);
-    expect(gap!.comparisonScenarioId).toBe("eu-convergence");
+    expect(gap!.currentLawGapMonthly).toBe(500);
+    expect(gap!.comparisonGapMonthly).toBe(500);
+    expect(gap!.additionalGapMonthly).toBe(0);
   });
 
-  it("returns zero gap when comparing current-law to itself", () => {
-    const gap = calculatePensionGap(results, "current-law");
+  it("caps gaps at zero when the pension already covers the target", () => {
+    const gap = calculateRetirementIncomeGap(results, "notional-accounts", 1200);
+
     expect(gap).not.toBeNull();
-    expect(gap!.gapMonthly).toBe(0);
-    expect(gap!.gapPercent).toBe(0);
+    expect(gap!.currentLawGapMonthly).toBe(0);
+    expect(gap!.comparisonGapMonthly).toBe(0);
+    expect(gap!.currentLawCoverageRate).toBe(1);
+    expect(gap!.comparisonCoverageRate).toBe(1);
   });
 
-  it("returns null when baseline is missing", () => {
+  it("returns null when current law is missing", () => {
     const noBaseline = results.filter((r) => r.scenarioId !== "current-law");
-    const gap = calculatePensionGap(noBaseline, "notional-accounts");
+    const gap = calculateRetirementIncomeGap(noBaseline, "notional-accounts", 2000);
     expect(gap).toBeNull();
   });
 
-  it("returns null when comparison scenario is missing", () => {
-    const gap = calculatePensionGap(results, "sustainability-2013");
+  it("returns null when the comparison scenario is missing", () => {
+    const gap = calculateRetirementIncomeGap(
+      results,
+      "sustainability-2013",
+      2000,
+    );
     expect(gap).toBeNull();
-  });
-
-  it("handles negative gap (comparison higher than baseline)", () => {
-    const highComparison = [
-      makeResult("current-law", 1000),
-      makeResult("notional-accounts", 1200),
-    ];
-    const gap = calculatePensionGap(highComparison, "notional-accounts");
-    expect(gap).not.toBeNull();
-    expect(gap!.gapMonthly).toBe(-200);
-    expect(gap!.gapPercent).toBeCloseTo(-0.2, 4);
   });
 });

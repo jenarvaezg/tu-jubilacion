@@ -17,12 +17,14 @@ const SERIES_ATTRIBUTION: Record<HistoricalSeriesId, string> = {
 };
 
 interface BacktestSectionProps {
+  readonly currentSavingsBalance: number;
   readonly monthlyContribution: number;
   readonly yearsOfAccumulation: number;
   readonly drawdownYears: number;
 }
 
 export function BacktestSection({
+  currentSavingsBalance,
   monthlyContribution,
   yearsOfAccumulation,
   drawdownYears,
@@ -31,6 +33,7 @@ export function BacktestSection({
   const [disclaimerOpen, setDisclaimerOpen] = useState(false);
 
   const { summary, error } = useBacktestCalculation({
+    initialBalance: currentSavingsBalance,
     monthlyContribution,
     yearsOfAccumulation,
     drawdownYears,
@@ -65,33 +68,43 @@ export function BacktestSection({
       <BacktestSummaryCard summary={summary} />
 
       <div className="rounded-lg border border-amber-300 bg-amber-50 p-4">
+        <div className="flex flex-col gap-2 text-xs text-amber-800 leading-relaxed">
+          <p className="font-semibold text-amber-900">
+            Rendimientos pasados no garantizan resultados futuros
+          </p>
+          <p>
+            Series historicas en USD. La simulacion capitaliza con
+            rentabilidades anuales y no refleja volatilidad intra-anual.
+          </p>
+          {currentSavingsBalance > 0 && (
+            <p>
+              Incluye tu ahorro actual como capital inicial desde el que arranca
+              cada cohorte.
+            </p>
+          )}
+        </div>
         <button
           type="button"
-          className="flex w-full items-center justify-between text-left"
+          className="mt-3 flex w-full items-center justify-between border-t border-amber-200 pt-3 text-left"
+          aria-expanded={disclaimerOpen}
           onClick={() => setDisclaimerOpen(!disclaimerOpen)}
         >
           <p className="text-xs font-semibold text-amber-800">
-            Rendimientos pasados no garantizan resultados futuros
+            Ver fuentes y limites
           </p>
-          <span className="text-amber-600 text-xs ml-2">
+          <span className="ml-2 text-xs text-amber-600">
             {disclaimerOpen ? "▲" : "▼"}
           </span>
         </button>
         {disclaimerOpen && (
           <div className="mt-3 flex flex-col gap-2 text-xs text-amber-800 leading-relaxed">
-            <p>
-              Los datos historicos estan denominados en USD (fuente: Damodaran,
-              NYU Stern).
-            </p>
-            <p>
-              La simulacion usa rentabilidades anuales. No refleja volatilidad
-              intra-anual.
-            </p>
+            <p>{SERIES_ATTRIBUTION[seriesId]}</p>
             <p>
               No incluye comisiones, impuestos ni conversion de divisa EUR/USD.
             </p>
-            <p className="mt-1 text-[11px] text-amber-700 italic">
-              {SERIES_ATTRIBUTION[seriesId]}
+            <p className="text-[11px] italic text-amber-700">
+              Se muestra el patrimonio en euros reales para compararlo con el
+              resto de la app, pero la serie subyacente es siempre USD real.
             </p>
           </div>
         )}

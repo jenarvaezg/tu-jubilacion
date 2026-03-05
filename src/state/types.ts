@@ -14,6 +14,7 @@ export interface CalculationInputs {
   readonly ipcRate: number;
   readonly comparisonScenarioId: ScenarioId;
   readonly investmentProfileId: InvestmentProfileId;
+  readonly currentSavingsBalance: number;
   readonly monthlyContributionOverride: number | null;
   readonly drawdownYears: number | null;
 }
@@ -58,6 +59,10 @@ export type AppAction =
   | {
       readonly type: "SET_INVESTMENT_PROFILE";
       readonly payload: InvestmentProfileId;
+    }
+  | {
+      readonly type: "SET_CURRENT_SAVINGS_BALANCE";
+      readonly payload: number;
     }
   | {
       readonly type: "SET_MONTHLY_CONTRIBUTION";

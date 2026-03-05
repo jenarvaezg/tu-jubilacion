@@ -2,14 +2,14 @@ export function SavingsEducation() {
   return (
     <div className="rounded-xl border-l-4 border-emerald-700 bg-white p-6 shadow-sm">
       <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest mb-2">
-        Por que invertir
+        El objetivo no es acertar la reforma
       </p>
       <p className="text-gray-700 leading-relaxed">
-        Incluso con la volatilidad, la probabilidad de acabar mejor con fondos
-        indexados globales que con depositos a 20+ anos es del{" "}
-        <span className="font-bold">~95%</span>. El interes compuesto hace que
-        pequenas diferencias en rentabilidad se conviertan en enormes diferencias
-        de capital con el tiempo.
+        El objetivo es sostener ingresos durante toda la jubilacion. Incluso
+        con volatilidad, la probabilidad de acumular mas patrimonio con fondos
+        indexados globales que con depositos a 20+ anos es de aproximadamente{" "}
+        <span className="font-bold">~95%</span>. Pequenas diferencias de
+        rentabilidad se convierten en grandes diferencias de renta futura.
       </p>
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         <div className="rounded-lg bg-green-50 p-3">
@@ -37,7 +37,7 @@ export function SavingsEducation() {
       <p className="mt-4 text-xs text-gray-400 italic">
         Fuentes: Damodaran (S&P 500 1928-2024), MSCI World (~1970+), BCE.
         Rentabilidades pasadas no garantizan resultados futuros. Esto no
-        constituye asesoramiento financiero.
+        constituye asesoramiento financiero ni sustituye un plan personalizado.
       </p>
     </div>
   );

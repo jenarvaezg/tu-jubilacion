@@ -55,7 +55,7 @@ describe("INVESTMENT_PROFILES", () => {
   });
 
   it("all static profile allocations sum to 1.0", () => {
-    for (const [, profile] of Object.entries(INVESTMENT_PROFILES)) {
+    for (const profile of Object.values(INVESTMENT_PROFILES)) {
       if (profile.isGlidePath) continue;
       const { equity, bonds, deposits } = profile.allocation;
       const sum = equity + bonds + deposits;

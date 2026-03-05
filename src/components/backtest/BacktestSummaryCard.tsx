@@ -11,8 +11,14 @@ const fmt = new Intl.NumberFormat("es-ES", {
 });
 
 export function BacktestSummaryCard({ summary }: BacktestSummaryCardProps) {
-  const { best, worst, median, percentileAboveDeposits, totalCohorts } =
-    summary;
+  const {
+    best,
+    worst,
+    median,
+    percentileAboveDeposits,
+    totalCohorts,
+    initialBalance,
+  } = summary;
 
   const rows = [
     {
@@ -69,6 +75,11 @@ export function BacktestSummaryCard({ summary }: BacktestSummaryCardProps) {
         </span>
       </div>
       <p className="text-xs text-gray-400">
+        {initialBalance > 0 && (
+          <>
+            Capital inicial proyectado: {fmt.format(initialBalance)}.{" "}
+          </>
+        )}
         Basado en {totalCohorts} cohortes historicas de{" "}
         {summary.yearsOfAccumulation} años de acumulacion
       </p>

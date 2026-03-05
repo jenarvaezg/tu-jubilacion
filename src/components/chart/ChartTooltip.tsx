@@ -99,7 +99,7 @@ export function ChartTooltip({
                     style={{ backgroundColor: "#059669" }}
                   />
                   <span className="text-xs font-semibold text-emerald-700">
-                    Pension + ahorro
+                    Ingreso total
                   </span>
                 </div>
                 <span className="text-xs font-semibold tabular-nums text-gray-800">

@@ -53,7 +53,7 @@ function SpaghettiTooltipContent({
   const yearDisplay =
     label !== undefined && totalYears !== undefined
       ? `Ano ${label + 1} de ${totalYears}`
-      : `Ano ${label}`;
+      : `Ano ${label !== undefined ? label + 1 : "-"}`;
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-lg">
@@ -129,7 +129,7 @@ export function SpaghettiChart({ summary }: SpaghettiChartProps) {
             <XAxis
               dataKey="yearIndex"
               label={{
-                value: "Año de acumulacion",
+                value: "Anos desde el inicio",
                 position: "insideBottom",
                 offset: -8,
                 fontSize: 12,

@@ -142,7 +142,7 @@ export function ChartControls({
               htmlFor="notional-scenario-select"
               className="text-sm font-bold text-gray-700 uppercase tracking-wider text-[10px]"
             >
-              Escenario FEDEA:
+              Variante nocional:
             </label>
             <select
               id="notional-scenario-select"

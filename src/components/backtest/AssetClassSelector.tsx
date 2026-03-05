@@ -55,6 +55,7 @@ export function AssetClassSelector({
             <button
               key={id}
               type="button"
+              aria-pressed={isActive}
               className={`rounded-lg border-2 p-3 text-left transition-all hover:shadow-md ${colorClass}`}
               onClick={() => onSelect(id)}
             >

@@ -237,6 +237,17 @@ function appReducer(state: AppState, action: AppAction): AppState {
           investmentProfileId: action.payload,
         },
       };
+    case "SET_CURRENT_SAVINGS_BALANCE":
+      return {
+        ...state,
+        calculation: {
+          ...state.calculation,
+          currentSavingsBalance: Math.max(
+            0,
+            Math.min(10000000, action.payload),
+          ),
+        },
+      };
     case "SET_MONTHLY_CONTRIBUTION":
       return {
         ...state,

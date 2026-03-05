@@ -22,6 +22,7 @@ export function DrawdownYearsControl({
         <div className="mt-1 flex items-center gap-3">
           <input
             type="range"
+            aria-label="Anos de retirada del ahorro"
             min={5}
             max={40}
             step={1}

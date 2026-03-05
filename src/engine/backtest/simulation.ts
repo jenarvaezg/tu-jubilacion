@@ -18,6 +18,7 @@ import { computeGeometricMean } from "./statistics";
 export function simulateCohort(params: {
   readonly startIndex: number;
   readonly returns: readonly HistoricalReturnYear[];
+  readonly initialBalance: number;
   readonly monthlyContribution: number;
   readonly yearsOfAccumulation: number;
   readonly drawdownYears: number;
@@ -26,6 +27,7 @@ export function simulateCohort(params: {
   const {
     startIndex,
     returns,
+    initialBalance,
     monthlyContribution,
     yearsOfAccumulation,
     drawdownYears,
@@ -33,11 +35,14 @@ export function simulateCohort(params: {
   } = params;
 
   const annualContribution = monthlyContribution * 12;
+  const normalizedInitialBalance = Math.max(0, initialBalance);
   const trajectory: CohortYearPoint[] = [];
-  let portfolio = 0;
+  let portfolio = normalizedInitialBalance;
 
-  // Year 0: no returns yet, no contributions yet
-  trajectory.push({ yearIndex: 0, portfolioValueReal: 0 });
+  trajectory.push({
+    yearIndex: 0,
+    portfolioValueReal: Math.round(normalizedInitialBalance * 100) / 100,
+  });
 
   for (let i = 0; i < yearsOfAccumulation; i++) {
     const yearReturn = returns[startIndex + i].return;
@@ -72,13 +77,19 @@ export function runBacktest(
   params: BacktestParams,
   series: HistoricalReturnSeries,
 ): readonly CohortResult[] {
-  const { monthlyContribution, yearsOfAccumulation, drawdownYears } = params;
+  const {
+    initialBalance,
+    monthlyContribution,
+    yearsOfAccumulation,
+    drawdownYears,
+  } = params;
   const returns = series.data;
 
   if (
     returns.length === 0 ||
     yearsOfAccumulation <= 0 ||
-    monthlyContribution <= 0
+    drawdownYears <= 0 ||
+    (monthlyContribution <= 0 && initialBalance <= 0)
   ) {
     return [];
   }
@@ -87,7 +98,6 @@ export function runBacktest(
     return [];
   }
 
-  // Compute drawdown return from series geometric mean
   const returnValues = returns.map((r) => r.return);
   const geoMean = computeGeometricMean(returnValues);
   const drawdownReturn = Math.max(0, geoMean * 0.5);
@@ -100,6 +110,7 @@ export function runBacktest(
       simulateCohort({
         startIndex: i,
         returns,
+        initialBalance,
         monthlyContribution,
         yearsOfAccumulation,
         drawdownYears,

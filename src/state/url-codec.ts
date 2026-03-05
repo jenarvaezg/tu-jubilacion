@@ -29,6 +29,7 @@ const PARAM_KEYS = {
   foreignYears: "fy",
   comparisonScenario: "cs",
   investmentProfile: "ip",
+  currentSavingsBalance: "sb",
   monthlyContribution: "mc",
   drawdownYears: "dy",
 } as const;
@@ -201,6 +202,15 @@ export function encodeStateToUrl(state: AppState): string {
     params.set(
       PARAM_KEYS.investmentProfile,
       PROFILE_SHORT[state.calculation.investmentProfileId],
+    );
+  }
+  if (
+    state.calculation.currentSavingsBalance !==
+    defaults.calculation.currentSavingsBalance
+  ) {
+    params.set(
+      PARAM_KEYS.currentSavingsBalance,
+      String(Math.round(state.calculation.currentSavingsBalance)),
     );
   }
   if (state.calculation.monthlyContributionOverride !== null) {
@@ -394,6 +404,14 @@ export function decodeStateFromUrl(search: string): AppState {
         return raw !== null && raw in SHORT_TO_PROFILE
           ? SHORT_TO_PROFILE[raw]
           : defaults.calculation.investmentProfileId;
+      })(),
+      currentSavingsBalance: (() => {
+        const raw = params.get(PARAM_KEYS.currentSavingsBalance);
+        if (raw === null) return defaults.calculation.currentSavingsBalance;
+        const parsed = Number(raw);
+        return Number.isFinite(parsed)
+          ? Math.max(0, Math.min(10000000, Math.round(parsed)))
+          : defaults.calculation.currentSavingsBalance;
       })(),
       monthlyContributionOverride: (() => {
         const raw = params.get(PARAM_KEYS.monthlyContribution);

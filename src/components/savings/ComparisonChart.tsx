@@ -62,12 +62,16 @@ export function ComparisonChart({ data, displayMode }: ComparisonChartProps) {
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-          Invertir vs depositos
+          Como construyes tu complemento privado
         </h3>
         <span className="text-[10px] text-gray-400 uppercase">
           En {label}
         </span>
       </div>
+      <p className="text-xs leading-relaxed text-gray-500">
+        Mismo ahorro actual y misma aportacion mensual, proyectados con
+        distintas rentabilidades reales a largo plazo.
+      </p>
       <div className="rounded-xl bg-white p-4 shadow-sm border border-gray-100">
         <ResponsiveContainer width="100%" height={280}>
           <AreaChart

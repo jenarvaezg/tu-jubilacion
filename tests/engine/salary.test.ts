@@ -4,6 +4,8 @@ import {
   netToGross,
   grossToBaseCotizacion,
   monthlyToAnnualGross,
+  grossToNetAnnual,
+  deriveMonthlyLifestyleTarget,
 } from "../../src/engine/salary";
 
 describe("grossToBaseCotizacion", () => {
@@ -144,5 +146,31 @@ describe("netToGross", () => {
     const computedNetAnnual = annualGross - ss - irpf.tax;
     const computedNetMonthly = computedNetAnnual / 14;
     expect(computedNetMonthly).toBeCloseTo(netInput, 0);
+  });
+});
+
+describe("deriveMonthlyLifestyleTarget", () => {
+  it("normalizes 14 net payments to a 12-month lifestyle target", () => {
+    const target = deriveMonthlyLifestyleTarget({
+      monthlySalary: 2000,
+      salaryType: "net",
+      ccaa: "madrid",
+      pagasExtra: true,
+    });
+
+    expect(target).toBeCloseTo((2000 * 14) / 12, 2);
+  });
+
+  it("derives the same target from a gross annual net conversion", () => {
+    const grossMonthly = 2500;
+    const annualNet = grossToNetAnnual(grossMonthly * 14, "madrid");
+    const target = deriveMonthlyLifestyleTarget({
+      monthlySalary: grossMonthly,
+      salaryType: "gross",
+      ccaa: "madrid",
+      pagasExtra: true,
+    });
+
+    expect(target).toBeCloseTo(annualNet / 12, 2);
   });
 });

@@ -1,12 +1,13 @@
 // Invest-vs-deposits comparison timeline generator.
-// Shows same monthly contribution across three asset classes.
+// Applies the same monthly contribution and current savings base to each asset class.
 import type { ComparisonYearlyPoint } from "./types";
 import type { AssetClassId, AssetClassReturns } from "./types";
-import { futureValueMonthly } from "./portfolio";
+import { futureValueLumpSum, futureValueMonthly } from "./portfolio";
 import { realToNominal } from "../inflation";
 
 export function generateComparisonTimeline(params: {
   readonly monthlyContribution: number;
+  readonly currentSavingsBalance: number;
   readonly currentAge: number;
   readonly retirementAge: number;
   readonly assetReturns: Record<AssetClassId, AssetClassReturns>;
@@ -15,6 +16,7 @@ export function generateComparisonTimeline(params: {
 }): readonly ComparisonYearlyPoint[] {
   const {
     monthlyContribution,
+    currentSavingsBalance,
     currentAge,
     retirementAge,
     assetReturns,
@@ -23,27 +25,46 @@ export function generateComparisonTimeline(params: {
   } = params;
 
   const points: ComparisonYearlyPoint[] = [];
+  const normalizedCurrentSavings = Math.max(0, currentSavingsBalance);
 
   for (let age = currentAge; age <= retirementAge; age++) {
     const year = currentYear + (age - currentAge);
     const yearsInvested = age - currentAge;
     const yearsFromNow = yearsInvested;
 
-    const equityReal = futureValueMonthly(
-      monthlyContribution,
-      assetReturns.equity.expectedRealReturn,
-      yearsInvested,
-    );
-    const bondsReal = futureValueMonthly(
-      monthlyContribution,
-      assetReturns.bonds.expectedRealReturn,
-      yearsInvested,
-    );
-    const depositsReal = futureValueMonthly(
-      monthlyContribution,
-      assetReturns.deposits.expectedRealReturn,
-      yearsInvested,
-    );
+    const equityReal =
+      futureValueLumpSum(
+        normalizedCurrentSavings,
+        assetReturns.equity.expectedRealReturn,
+        yearsInvested,
+      ) +
+      futureValueMonthly(
+        monthlyContribution,
+        assetReturns.equity.expectedRealReturn,
+        yearsInvested,
+      );
+    const bondsReal =
+      futureValueLumpSum(
+        normalizedCurrentSavings,
+        assetReturns.bonds.expectedRealReturn,
+        yearsInvested,
+      ) +
+      futureValueMonthly(
+        monthlyContribution,
+        assetReturns.bonds.expectedRealReturn,
+        yearsInvested,
+      );
+    const depositsReal =
+      futureValueLumpSum(
+        normalizedCurrentSavings,
+        assetReturns.deposits.expectedRealReturn,
+        yearsInvested,
+      ) +
+      futureValueMonthly(
+        monthlyContribution,
+        assetReturns.deposits.expectedRealReturn,
+        yearsInvested,
+      );
 
     points.push({
       age,

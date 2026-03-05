@@ -1,5 +1,6 @@
-export { calculatePensionGap } from "./gap";
+export { calculateRetirementIncomeGap } from "./gap";
 export {
+  futureValueLumpSum,
   futureValueMonthly,
   monthlyIncomeFromPortfolio,
   requiredMonthlySavings,
@@ -14,7 +15,7 @@ export type {
   InvestmentProfileId,
   InvestmentAllocation,
   InvestmentProfile,
-  PensionGap,
+  RetirementIncomeGap,
   SavingsResult,
   PortfolioYearlyProjection,
   ComparisonYearlyPoint,

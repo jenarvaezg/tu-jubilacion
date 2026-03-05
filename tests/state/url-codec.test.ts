@@ -40,6 +40,11 @@ describe("url-codec", () => {
           greeceHaircutRate: 0.4,
           notionalGrowthScenario: "ageing-report",
           ipcRate: 0.025,
+          comparisonScenarioId: "eu-convergence",
+          investmentProfileId: "aggressive",
+          currentSavingsBalance: 45000,
+          monthlyContributionOverride: 350,
+          drawdownYears: 28,
         },
         display: {
           displayMode: "nominal",
@@ -80,6 +85,11 @@ describe("url-codec", () => {
       expect(decoded.calculation.notionalGrowthScenario).toBe("ageing-report");
       expect(decoded.calculation.ipcRate).toBeCloseTo(0.025, 4);
       expect(decoded.calculation.salaryGrowthRate).toBe(0.02);
+      expect(decoded.calculation.comparisonScenarioId).toBe("eu-convergence");
+      expect(decoded.calculation.investmentProfileId).toBe("aggressive");
+      expect(decoded.calculation.currentSavingsBalance).toBe(45000);
+      expect(decoded.calculation.monthlyContributionOverride).toBe(350);
+      expect(decoded.calculation.drawdownYears).toBe(28);
       expect(decoded.display.displayMode).toBe("nominal");
       expect(decoded.display.showDetail).toBe(true);
     });
@@ -305,6 +315,20 @@ describe("url-codec", () => {
       }
     });
 
+    it("round-trips currentSavingsBalance", () => {
+      const state: AppState = {
+        ...DEFAULT_STATE,
+        calculation: {
+          ...DEFAULT_STATE.calculation,
+          currentSavingsBalance: 125000,
+        },
+      };
+      const encoded = encodeStateToUrl(state);
+      expect(encoded).toContain("sb=125000");
+      const decoded = decodeStateFromUrl(encoded);
+      expect(decoded.calculation.currentSavingsBalance).toBe(125000);
+    });
+
     it("monthlyContributionOverride null does not appear in URL", () => {
       const state: AppState = {
         ...DEFAULT_STATE,
@@ -329,6 +353,11 @@ describe("url-codec", () => {
       expect(encoded).not.toContain("dy=");
     });
 
+    it("currentSavingsBalance default does not appear in URL", () => {
+      const encoded = encodeStateToUrl(DEFAULT_STATE);
+      expect(encoded).not.toContain("sb=");
+    });
+
     it("clamps monthlyContribution to 0-10000", () => {
       const low = decodeStateFromUrl("?mc=-50");
       expect(low.calculation.monthlyContributionOverride).toBe(0);
@@ -343,6 +372,14 @@ describe("url-codec", () => {
 
       const high = decodeStateFromUrl("?dy=100");
       expect(high.calculation.drawdownYears).toBe(40);
+    });
+
+    it("clamps currentSavingsBalance to 0-10000000", () => {
+      const low = decodeStateFromUrl("?sb=-100");
+      expect(low.calculation.currentSavingsBalance).toBe(0);
+
+      const high = decodeStateFromUrl("?sb=999999999");
+      expect(high.calculation.currentSavingsBalance).toBe(10000000);
     });
 
     it("invalid mc returns null", () => {

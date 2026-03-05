@@ -8,15 +8,15 @@ import { formatPercent } from "../../utils/format.ts";
 
 const SCENARIO_DESCRIPTIONS: Record<ScenarioId, string> = {
   "current-law":
-    "Lo que cobrarías si no cambia nada. Se calcula con la fórmula actual de la Seguridad Social: media de tus mejores bases de cotización, ajustada por años trabajados y edad de jubilación.",
+    "La referencia legal de hoy. Sirve como punto de partida util, pero no debe leerse como una promesa estable a 20 o 30 anos vista.",
   "notional-accounts":
-    "Sistema tipo Suecia propuesto por FEDEA: tu pensión se calcula en función de lo que realmente has cotizado a lo largo de tu vida, ajustado por la esperanza de vida de tu generación. Más justo y sostenible, pero las pensiones iniciales son más bajas.",
+    "Una familia de reformas usada en paises como Suecia o Italia. La usamos como referencia plausible de ajuste entre cotizaciones, pension y esperanza de vida; no como prediccion obligatoria.",
   "sustainability-2013":
-    "Reforma de Rajoy (2013), derogada en 2021. Reducía la pensión inicial si la esperanza de vida aumentaba y limitaba la subida anual al 0,25% (muy por debajo de la inflación). Tu pensión perdía poder adquisitivo cada año.",
+    "Ejemplo de reforma parametrica: reduce la pension inicial si aumenta la esperanza de vida y limita la revalorizacion anual. Muestra como un ajuste puede recortar poder adquisitivo sin rehacer todo el sistema.",
   "eu-convergence":
-    "¿Qué pasaría si España convergiera a la media europea? Hoy, un jubilado español cobra ~80% de su último sueldo bruto. La media de la UE es ~60%. Este escenario aplica ese 60% directamente.",
+    "Escenario de convergencia a tasas de reemplazo mas parecidas a la media europea. No describe una reforma concreta, sino un punto de referencia prudente para planificar.",
   "greece-haircut":
-    "Lo que ocurrió en Grecia durante la crisis de deuda (2010-2015): las pensiones se recortaron hasta un 40% de un día para otro para evitar la quiebra del Estado. Aquí simulamos un recorte del 30%.",
+    "Escenario de estres severo inspirado en recortes extraordinarios de crisis. No es la hipotesis central, pero ayuda a medir cuanto dependerias de una pension publica muy recortada.",
 };
 
 interface ScenarioCardProps {
@@ -71,12 +71,12 @@ export function ScenarioCard({
         )}
       </div>
 
-      <p className="mt-2 text-xs text-gray-500 leading-relaxed">
+      <p className="mt-2 text-xs leading-relaxed text-gray-500">
         {SCENARIO_DESCRIPTIONS[result.scenarioId as ScenarioId]}
       </p>
 
       <div className="mt-2">
-        <p className="text-sm text-gray-600">Tu pensión será de</p>
+        <p className="text-sm text-gray-600">Ingreso publico estimado</p>
         <CurrencyDisplay
           amount={result.monthlyPension}
           className="text-xl text-gray-900"

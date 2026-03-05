@@ -45,6 +45,7 @@ export function ContributionOverrideControl({
           <div className="mt-1 flex items-center gap-2">
             <input
               type="number"
+              aria-label="Aportacion mensual personalizada"
               min={0}
               max={10000}
               step={10}

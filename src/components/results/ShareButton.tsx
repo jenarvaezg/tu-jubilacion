@@ -12,24 +12,23 @@ function buildShareText(
   url: string,
 ): string {
   const currentLaw = results.find((r) => r.scenarioId === "current-law");
-  const notional = results.find((r) => r.scenarioId === "notional-accounts");
-  const eu = results.find((r) => r.scenarioId === "eu-convergence");
+  const reformResults = results.filter((r) => r.scenarioId !== "current-law");
+  const floorResult = reformResults.reduce<ScenarioResult | null>(
+    (lowest, candidate) => {
+      if (lowest === null) return candidate;
+      return candidate.monthlyPension < lowest.monthlyPension ? candidate : lowest;
+    },
+    null,
+  );
 
   const lines: string[] = [];
 
-  if (currentLaw) {
+  if (currentLaw && floorResult) {
     lines.push(
-      `Bajo el sistema actual cobrare ${formatCurrency(currentLaw.monthlyPension)}/mes de pension.`,
+      `Mi ingreso publico de jubilacion se mueve entre ${formatCurrency(floorResult.monthlyPension)} y ${formatCurrency(currentLaw.monthlyPension)}/mes segun como se reforme el sistema.`,
     );
-  }
-  if (notional) {
     lines.push(
-      `Bajo cuentas nocionales (FEDEA): ${formatCurrency(notional.monthlyPension)}.`,
-    );
-  }
-  if (eu) {
-    lines.push(
-      `Si el sistema converge a la media UE: ${formatCurrency(eu.monthlyPension)}.`,
+      "La clave no es acertar la reforma exacta, sino planificar ahorro para mantener tu nivel de vida durante toda la jubilacion.",
     );
   }
   lines.push(`Descubre cuanto cobraras tu -> ${url}`);
@@ -93,7 +92,7 @@ export function ShareButton({ getShareUrl, results }: ShareButtonProps) {
               d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
             />
           </svg>
-          Compartir resultados
+          Compartir plan
         </>
       )}
     </button>

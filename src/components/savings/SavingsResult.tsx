@@ -1,6 +1,6 @@
 import type { SavingsResult as SavingsResultType } from "../../engine/savings/types.ts";
 import { CurrencyDisplay } from "../shared/CurrencyDisplay.tsx";
-import { formatPercent } from "../../utils/format.ts";
+import { formatCurrency, formatPercent } from "../../utils/format.ts";
 
 interface SavingsResultProps {
   readonly savings: SavingsResultType;
@@ -9,20 +9,36 @@ interface SavingsResultProps {
 export function SavingsResult({ savings }: SavingsResultProps) {
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-        Cuanto necesitas ahorrar
+      <h3 className="text-sm font-bold uppercase tracking-wide text-gray-700">
+        Hoja de ruta de ahorro
       </h3>
 
-      <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-4 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
         <div>
-          <p className="text-xs text-gray-500">Ahorro mensual necesario</p>
+          <p className="text-xs text-gray-500">Ahorro actual reservado</p>
+          <CurrencyDisplay
+            amount={savings.currentSavingsBalance}
+            className="text-2xl font-extrabold text-gray-900"
+            suffix=""
+          />
+        </div>
+        <div>
+          <p className="text-xs text-gray-500">Aportacion mensual desde hoy</p>
           <CurrencyDisplay
             amount={savings.monthlyContribution}
             className="text-2xl font-extrabold text-gray-900"
           />
         </div>
         <div>
-          <p className="text-xs text-gray-500">Capital acumulado</p>
+          <p className="text-xs text-gray-500">Ahorro actual al jubilarte</p>
+          <CurrencyDisplay
+            amount={savings.currentSavingsAtRetirement}
+            className="text-xl font-bold text-gray-900"
+            suffix=""
+          />
+        </div>
+        <div>
+          <p className="text-xs text-gray-500">Capital total estimado</p>
           <CurrencyDisplay
             amount={savings.portfolioAtRetirement}
             className="text-xl font-bold text-gray-900"
@@ -30,7 +46,7 @@ export function SavingsResult({ savings }: SavingsResultProps) {
           />
         </div>
         <div>
-          <p className="text-xs text-gray-500">Renta mensual adicional</p>
+          <p className="text-xs text-gray-500">Complemento mensual privado</p>
           <CurrencyDisplay
             amount={savings.monthlyIncomeFromPortfolio}
             className="text-xl font-bold text-green-700"
@@ -38,25 +54,21 @@ export function SavingsResult({ savings }: SavingsResultProps) {
         </div>
         <div>
           <p className="text-xs text-gray-500">Rentabilidad esperada</p>
-          <p className="text-xl font-bold text-gray-900 tabular-nums">
+          <p className="text-xl font-bold tabular-nums text-gray-900">
             {formatPercent(savings.weightedRealReturn)} real
           </p>
         </div>
       </div>
 
       <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-400">
-        <span>
-          {savings.yearsOfAccumulation} anos de ahorro
-        </span>
-        <span>
-          Total aportado: {new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(savings.totalContributed)}
-        </span>
+        <span>{savings.yearsOfAccumulation} anos de ahorro por delante</span>
+        <span>Nuevas aportaciones: {formatCurrency(savings.totalContributed)}</span>
       </div>
 
-      <p className="mt-3 text-xs text-gray-400 italic leading-relaxed">
-        Estimacion basada en rentabilidad historica media. Los resultados reales
-        pueden variar significativamente. Esto no constituye asesoramiento
-        financiero.
+      <p className="mt-3 text-xs italic leading-relaxed text-gray-400">
+        El capital que ya tienes acumulado reduce la aportacion necesaria desde
+        hoy. Estimacion basada en rentabilidad historica media; los resultados
+        reales pueden variar significativamente.
       </p>
     </div>
   );

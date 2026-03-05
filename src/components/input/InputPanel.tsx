@@ -21,8 +21,13 @@ export function InputPanel({ state, dispatch }: InputPanelProps) {
   return (
     <div className="flex flex-col gap-5 rounded-xl bg-white p-5 shadow-sm border border-gray-100">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-gray-900">Configura tu perfil</h2>
+        <h2 className="text-lg font-bold text-gray-900">Tu punto de partida</h2>
       </div>
+      <p className="text-sm leading-relaxed text-gray-600">
+        Usamos tu sueldo actual como referencia de nivel de vida y estimamos
+        qué parte podría cubrir la pensión pública si el sistema acaba
+        reformándose.
+      </p>
 
       <AgeInput
         value={profile.age}

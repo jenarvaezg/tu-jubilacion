@@ -21,15 +21,16 @@
 
 ## Goal
 
-Herramienta web de concienciacion financiera ("Tu Jubilacion") que muestra a los espanoles cuanto cobraran realmente de pension publica bajo diferentes escenarios de reforma, y cuanto necesitan ahorrar/invertir para compensar la diferencia.
+Herramienta web de concienciacion financiera ("Tu Jubilacion") que muestra a los espanoles un rango plausible de ingresos publicos de jubilacion bajo distintos escenarios de reforma, y cuanto ahorro/inversion privada necesitan para mantener su nivel de vida durante toda la jubilacion.
 
-**Tesis editorial:** El sistema de pensiones espanol es insostenible (FdEA = 1.62, deficit ~2% PIB). Los usuarios deben entender que su pension sera significativamente menor de lo que esperan, y que invertir (incluso con riesgo) es mejor que depositos/cuentas remuneradas para cubrir la brecha.
+**Tesis editorial:** El sistema de pensiones espanol es dificilmente sostenible en su configuracion actual (FdEA = 1.62, deficit ~2% PIB). Los usuarios deben entender que la formula vigente no es una promesa estable a largo plazo, que habra reformas y que su plan debe centrarse en ingresos totales de jubilacion, no en una cifra publica unica. La inversion diversificada es, en horizontes largos, una herramienta mejor que depositos/cuentas remuneradas para construir ese complemento privado.
 
 **Narrativa del producto:**
-1. **SHOCK**: "Tu pension sera un 12-40% menor de lo que piensas"
-2. **EDUCACION**: "El sistema actual es insostenible — aqui esta por que"
-3. **ACCION**: "Si ahorras X euros/mes invirtiendo, compensas la diferencia"
-4. **EVIDENCIA**: "Historicamente, RV global ha dado ~5% real. Depositos: ~0% real"
+1. **CONTEXTO**: "La pension publica actual no es una promesa estable"
+2. **INCERTIDUMBRE**: "Habra reformas, pero nadie sabe la exacta"
+3. **PLANIFICACION**: "La pension publica es una base; tu objetivo es sostener ingresos"
+4. **ACCION**: "Si ahorras e inviertes X euros/mes, puedes proteger tu nivel de vida"
+5. **EVIDENCIA**: "Historicamente, RV global ha dado ~5% real. Depositos: ~0% real"
 
 ## Constraints
 
@@ -44,7 +45,7 @@ Herramienta web de concienciacion financiera ("Tu Jubilacion") que muestra a los
 - i18n ES (principal), EN (secundario, post-MVP)
 
 ### UX: Dos capas
-- **Capa simple** (default): numero gordo, grafico claro, explicaciones en lenguaje llano. "Tu pension", "cuanto cobras", "cuanto cobraras". Sin jerga financiera.
+- **Capa simple** (default): numero gordo, grafico claro, explicaciones en lenguaje llano. "Base publica", "ingreso total de jubilacion", "complemento privado". Sin jerga financiera.
 - **Capa detalle** (expandible): formulas, parametros, fuentes academicas, desglose de calculo. Para usuarios informados. Estilo desplegables de cuentas-publicas.
 
 ## Fases de Desarrollo
@@ -147,9 +148,8 @@ Grafico temporal con multiples lineas:
 
 **Resultado viral compartible:**
 ```
-"Bajo el sistema actual cobrare 1.500 euros/mes de pension.
- Bajo cuentas nocionales (FEDEA): 1.320 euros.
- Si el sistema converge a la media UE: 1.140 euros.
+"Mi ingreso publico de jubilacion se mueve entre 1.140 y 1.500 euros/mes segun como se reforme el sistema.
+ La clave no es acertar la reforma exacta, sino planificar ahorro para mantener tu nivel de vida.
  Descubre cuanto cobraras tu → [link]"
 ```
 
@@ -157,14 +157,19 @@ Grafico temporal con multiples lineas:
 - Que es el FdEA y por que importa (1.62 = recibes 62% mas de lo cotizado)
 - Deficit contributivo SS (~2% PIB)
 - Proyeccion gasto pensiones al 2050 (6% PIB si no se reforma)
-- Por que las cuentas nocionales son la alternativa mas seria (Suecia, Italia, Polonia)
+- Que tipos de reformas son plausibles (nocionales, parametricas, convergencia UE, recortes de estres)
 - Link al paper de FEDEA
 
 ### FASE 2: "Cuanto Necesitas Ahorrar"
 
-Partiendo de la brecha entre escenarios:
-- brecha_mensual = pension_actual - pension_escenario_elegido
-- Calculo inverso: cuanto ahorrar al mes para generar esa renta mensual
+Partiendo del nivel de vida actual del usuario y de un escenario de pension publica elegido:
+- objetivo_ingreso_jubilacion = ingreso_neto_anual_actual / 12
+- brecha_ley_actual = max(0, objetivo_ingreso_jubilacion - pension_actual)
+- brecha_escenario = max(0, objetivo_ingreso_jubilacion - pension_escenario_elegido)
+- esfuerzo_extra_reforma = brecha_escenario - brecha_ley_actual
+- Calculo inverso: cuanto ahorrar al mes para generar el complemento privado necesario
+- Input adicional: **ahorro actual ya reservado para jubilacion**, que actua como capital inicial del plan
+- Objetivo de comunicacion: que el usuario piense en ingresos totales de jubilacion y nivel de vida, no en "llegar" a una sola cifra de pension
 - Dos modos:
   a) **Tasa fija** (simple): rentabilidad real esperada parametrica (default 5% RV, 1% RF, 0% depositos)
   b) **Cohortes historicas** (avanzado): todas las ventanas historicas posibles
@@ -189,30 +194,25 @@ Partiendo de la brecha entre escenarios:
 - Datos: Damodaran (S&P 500, T-Bonds, T-Bills 1928-2024) + MSCI World (~1970+)
 - Todos ajustados a terminos reales
 
-### FASE 4: Extras
+### FASE 4: Consolidacion
 
-- **Cierre/hardening pendiente de Fase 2**
-  - UI explicita para alternar entre modo auto-calculado y override manual de aportacion mensual
-  - Control visible de anos de drawdown/desacumulacion con reset al valor derivado por defecto
-  - Tooltip especifico del grafico combinado que incluya la linea "pension + ahorro"
-  - Aislar los recalculos: cambios de ahorro/inversion no deben volver a ejecutar el motor de pension
-  - Cobertura de tests de hooks/URL codec de ahorro y lint/typecheck verdes tambien sobre `tests/`
-  - Pulido de copy y unidades en la UI de ahorro para evitar duplicidades del tipo "EUR/mes al mes"
+- Integracion, estabilizacion y validacion de las Fases 2 y 3.
+- Estado actual del repo: esta fase queda absorbida por el trabajo ya realizado en ahorro, backtesting, persistencia, copy y test coverage.
 
-- **Cierre/hardening pendiente de Fase 3**
-  - Disclaimer visible tipo callout sobre USD/EUR y nota explicita de que la simulacion usa rentabilidades anuales
-  - Tooltip del spaghetti chart con contexto correcto de cohorte e indice temporal, sin presentar `yearIndex` como ano calendario
-  - Atribucion de fuentes ajustada por serie, especialmente para `MSCI World`
-  - Tests de hook/UI para selector de serie, disclaimer visible y limite maximo de 25 lineas en el chart
-  - Alinear el contrato del hook de backtesting con el patron de ahorro (`summary` + `error`) si se mantiene como API publica
+### FASE 5: Extras y Evolucion
 
-- Plan de pensiones vs indexados (fiscalidad simplificada)
-- Quiz estilo tu-ipc para generar perfil automaticamente
-- Captura de imagen para redes
-- Escenarios de reforma parametricos (el usuario ajusta: edad jubilacion, tasa reemplazo, revalorizacion)
-- Comparador entre CCAA
-- PWA offline
-- i18n EN
+- **Pendientes inmediatos de producto**
+  - Override manual del nivel de vida objetivo en jubilacion, sin depender solo del ingreso actual derivado
+  - Split del ahorro actual por tipo de activo para proyectar capitalizaciones con mas realismo
+
+- **Extras de producto pendientes**
+  - Plan de pensiones vs indexados (fiscalidad simplificada)
+  - Quiz estilo tu-ipc para generar perfil automaticamente
+  - Captura de imagen para redes
+  - Editor parametrico de reformas (edad de jubilacion, tasa de reemplazo, revalorizacion y demas supuestos)
+  - Comparador entre CCAA
+  - PWA offline
+  - i18n EN
 
 ## Non-Goals
 - No es un robo-advisor ni da recomendaciones personalizadas.
@@ -221,7 +221,7 @@ Partiendo de la brecha entre escenarios:
 - No gestiona carteras ni conecta con brokers.
 - No requiere backend.
 - No modela herencias, seguros de vida ni inmobiliario.
-- No es neutral editorialmente: tiene una tesis (invertir > depositos, el sistema es insostenible).
+- No es neutral editorialmente: tiene una tesis (el sistema actual se reformara; hay que planificar con ingresos totales y la inversion diversificada suele batir a depositos en horizontes largos).
 
 ## Acceptance Criteria
 
@@ -234,10 +234,10 @@ Partiendo de la brecha entre escenarios:
 - [ ] Escenario 4 (convergencia UE) aplica tasa reemplazo ~60%.
 - [ ] Escenario 5 (recorte Grecia) aplica haircut con slider.
 - [ ] Hero chart: grafico temporal edad vs pension mensual con los 5 escenarios superpuestos.
-- [ ] Capa simple: explicaciones en lenguaje llano, sin jerga.
+- [ ] Capa simple: explicaciones en lenguaje llano, sin jerga, centradas en base publica + ingreso total + complemento privado.
 - [ ] Capa detalle: expandible con formulas, parametros, fuentes.
 - [ ] Seccion educativa sobre sostenibilidad (FdEA, deficit, proyecciones).
-- [ ] Compartir resultados via URL parametrizada.
+- [ ] Compartir resultados via URL parametrizada con copy orientado a rango de ingresos e incertidumbre de reforma.
 - [ ] Responsive mobile-first.
 - [ ] Toggle euros reales (default) / nominales con escenarios de IPC (1.5%, 2%, 2.5%, 3%).
 - [ ] Tooltip educativo al cambiar: "X€ en 20XX equivalen a Y€ de hoy".
@@ -245,17 +245,30 @@ Partiendo de la brecha entre escenarios:
 - [ ] Disclaimer legal: "Estimacion educativa, no constituye asesoramiento financiero."
 
 ### Fase 2
-- [ ] Calculo de brecha mensual entre escenarios.
-- [ ] Calculadora inversa: cuanto ahorrar para compensar.
-- [ ] UI para override manual de aportacion mensual, con opcion clara para volver al modo automatico.
-- [ ] UI para ajustar anos de drawdown/desacumulacion o restaurar el valor derivado desde esperanza de vida.
-- [ ] Comparador invertir vs depositos con chart temporal.
-- [ ] Perfiles de inversion predefinidos.
-- [ ] Hero chart combinado: pension + cartera = ingreso total.
-- [ ] Tooltip del hero chart combinado muestra tambien la serie "pension + ahorro".
-- [ ] Parametros de ahorro comparten URL y persisten en localStorage sin perder round-trip.
-- [ ] Cambios en parametros de ahorro no fuerzan recalculo completo de los escenarios de pension.
-- [ ] Tests de hooks de ahorro/combinacion y verificacion de lint completan el cierre de la fase.
+- [x] Calculo del nivel de vida objetivo a partir del ingreso neto anual actual, normalizado a 12 meses.
+- [x] Calculo de complemento privado mensual bajo ley actual y bajo un escenario de planificacion.
+- [x] Mostrar el esfuerzo adicional necesario si una reforma reduce la pension publica frente a ley actual.
+- [x] Input de ahorro actual reservado para jubilacion.
+- [x] Calculadora inversa: cuanto ahorrar para compensar, usando el ahorro actual como capital inicial.
+- [x] UI para override manual de aportacion mensual, con opcion clara para volver al modo automatico.
+- [x] UI para ajustar anos de drawdown/desacumulacion o restaurar el valor derivado desde esperanza de vida.
+- [x] Comparador invertir vs depositos con chart temporal.
+- [x] Perfiles de inversion predefinidos.
+- [x] Hero chart combinado: pension + cartera = ingreso total.
+- [x] Tooltip del hero chart combinado muestra tambien la serie "pension + ahorro".
+- [x] Parametros de ahorro comparten URL y persisten en localStorage sin perder round-trip.
+- [x] Cambios en parametros de ahorro no fuerzan recalculo completo de los escenarios de pension.
+- [x] Tests de hooks de ahorro/combinacion y verificacion de lint completan el cierre de la fase.
+
+### Fase 3
+- [x] Cohortes historicas completas para S&P 500, MSCI World, T-Bonds y T-Bills.
+- [x] Spaghetti chart mostrando ventanas temporales historicas.
+- [x] Resumen best / worst / median por estrategia.
+- [x] Disclaimer visible sobre USD/EUR y sobre el uso de rentabilidades anuales.
+- [x] Atribucion de fuentes ajustada por serie, incluyendo MSCI World.
+- [x] Hook de backtesting alineado con patron `summary + error`.
+- [x] Tests de hook/UI para selector de serie, disclaimer y limite maximo de lineas.
+- [x] Integracion del ahorro actual como capital inicial tambien en backtesting.
 
 ## Assumptions Exposed & Resolved
 | Assumption | Challenge | Resolution |
@@ -263,7 +276,7 @@ Partiendo de la brecha entre escenarios:
 | Los usuarios conocen su cotizacion | La gente no sabe cuanto cotiza | Derivar base de cotizacion del salario neto/bruto |
 | El sistema actual es sostenible | FdEA = 1.62, deficit 2% PIB | Mostrar multiples escenarios de reforma como educacion |
 | Los depositos son "seguros" | Seguros nominalmente, pierden poder adquisitivo | Mostrar evidencia historica: invertir > depositos a largo plazo |
-| La herramienta debe ser neutral | La realidad tiene datos | Tesis editorial clara con datos academicos (FEDEA, AIReF, Eurostat) |
+| La herramienta debe ser neutral | La realidad tiene datos | Tesis editorial clara: el sistema actual se reformara y el usuario debe planificar ingresos vitalicios con datos academicos (FEDEA, AIReF, Eurostat) |
 | Se necesita backend | Proyectos previos del autor | SPA estatica, localStorage, zero backend |
 | El backtesting es el core | La pension es el diferenciador | Pension multi-escenario como MVP, inversiones como fase 2 |
 

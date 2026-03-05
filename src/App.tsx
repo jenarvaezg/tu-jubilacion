@@ -86,6 +86,7 @@ function App() {
           combinedChartData={combinedChartData}
           comparisonScenarioId={state.calculation.comparisonScenarioId}
           investmentProfileId={state.calculation.investmentProfileId}
+          currentSavingsBalance={state.calculation.currentSavingsBalance}
           retirementAge={state.calculation.profile.desiredRetirementAge}
           displayMode={state.display.displayMode}
           monthlyContributionOverride={
@@ -98,6 +99,7 @@ function App() {
 
         {savingsCalc.savings !== null && (
           <BacktestSection
+            currentSavingsBalance={state.calculation.currentSavingsBalance}
             monthlyContribution={savingsCalc.savings.monthlyContribution}
             yearsOfAccumulation={savingsCalc.savings.yearsOfAccumulation}
             drawdownYears={savingsCalc.drawdownYears}

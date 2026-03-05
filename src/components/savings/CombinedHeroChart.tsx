@@ -40,10 +40,10 @@ export function CombinedHeroChart({
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-          Pension + ahorro = ingreso total
+          Ingreso total de jubilacion
         </h3>
         <span className="text-[10px] text-gray-400 uppercase">
-          Proyeccion combinada
+          Base publica + complemento privado
         </span>
       </div>
       <div className="rounded-xl bg-white p-4 shadow-sm border border-gray-100">
@@ -110,7 +110,7 @@ export function CombinedHeroChart({
               dot={false}
               activeDot={{ r: 5 }}
               connectNulls={false}
-              name="Pension + ahorro"
+              name="Ingreso total"
             />
           </LineChart>
         </ResponsiveContainer>
@@ -126,7 +126,7 @@ export function CombinedHeroChart({
               {id === "current-law"
                 ? "Ley actual"
                 : id === "notional-accounts"
-                  ? "FEDEA"
+                  ? "Nocional"
                   : id === "sustainability-2013"
                     ? "Sost. 2013"
                     : id === "eu-convergence"
@@ -138,7 +138,7 @@ export function CombinedHeroChart({
         <div className="flex items-center gap-1.5">
           <span className="h-0.5 w-4 border-t-2 border-dashed border-emerald-600" />
           <span className="font-semibold text-emerald-700">
-            Pension + ahorro
+            Ingreso total
           </span>
         </div>
       </div>

@@ -1,6 +1,6 @@
 // Salary pipeline: net-to-gross conversion, IRPF calculation, base cotización
 // All functions are pure with zero side effects.
-import type { CcaaCode, IRPFResult } from "./types";
+import type { CcaaCode, IRPFResult, UserProfile } from "./types";
 import { IRPF_TABLES } from "../data/irpf-tables";
 import { SS_RULES } from "../data/ss-tables";
 
@@ -74,7 +74,10 @@ function computeWorkIncomeDeduction(
       // Interpolated deduction
       const prevUpTo = i > 0 ? brackets[i - 1].upTo : 0;
       const excess = netWorkIncome - prevUpTo;
-      return Math.max(0, bracket.deduction - bracket.marginalReduction * excess);
+      return Math.max(
+        0,
+        bracket.deduction - bracket.marginalReduction * excess,
+      );
     }
   }
   // Fallback: last bracket deduction
@@ -87,7 +90,11 @@ function computeWorkIncomeDeduction(
  */
 function applyBrackets(
   amount: number,
-  brackets: readonly { readonly from: number; readonly to: number; readonly marginalRate: number }[],
+  brackets: readonly {
+    readonly from: number;
+    readonly to: number;
+    readonly marginalRate: number;
+  }[],
 ): number {
   let tax = 0;
   let remaining = amount;
@@ -178,10 +185,29 @@ export function netToGross(
 /**
  * Given annual gross, compute annual net (after IRPF and SS worker contribution).
  */
-function grossToNetAnnual(grossAnnual: number, ccaa: CcaaCode): number {
+export function grossToNetAnnual(grossAnnual: number, ccaa: CcaaCode): number {
   const ssWorker = grossAnnual * SS_RULES.workerContributionRate;
   const irpf = calculateIRPF(grossAnnual, ccaa);
   return grossAnnual - ssWorker - irpf.tax;
+}
+
+/**
+ * Derive the user's current monthly lifestyle budget on a 12-month basis.
+ * This normalizes both 12- and 14-payment salaries to a comparable monthly
+ * spending target for retirement planning.
+ */
+export function deriveMonthlyLifestyleTarget(
+  profile: Pick<UserProfile, "monthlySalary" | "salaryType" | "ccaa" | "pagasExtra">,
+): number {
+  const annualNet =
+    profile.salaryType === "net"
+      ? profile.monthlySalary * (profile.pagasExtra ? 14 : 12)
+      : grossToNetAnnual(
+          monthlyToAnnualGross(profile.monthlySalary, profile.pagasExtra),
+          profile.ccaa,
+        );
+
+  return Math.round((annualNet / 12) * 100) / 100;
 }
 
 /**

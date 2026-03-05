@@ -6,6 +6,20 @@ import { realToNominal } from "../inflation";
 import { getLifeExpectancy65 } from "../../data/life-expectancy";
 
 /**
+ * Future value of a lump sum at a fixed annual real return.
+ */
+export function futureValueLumpSum(
+  principal: number,
+  annualRealReturn: number,
+  years: number,
+): number {
+  if (principal <= 0) return 0;
+  if (years <= 0) return principal;
+  if (annualRealReturn === 0) return principal;
+  return principal * Math.pow(1 + annualRealReturn, years);
+}
+
+/**
  * Future value of monthly contributions at a fixed annual real return.
  * Standard FV of ordinary annuity: PMT * [((1+r)^n - 1) / r]
  * where r = monthly rate, n = total months.
@@ -30,8 +44,6 @@ export function futureValueMonthly(
  * Monthly income from a portfolio using PMT annuity formula.
  * Computes the level monthly payment that exhausts the portfolio over drawdownYears
  * at realReturnDuringDrawdown.
- *
- * PMT = PV * r / (1 - (1+r)^-n)
  */
 export function monthlyIncomeFromPortfolio(
   portfolioValue: number,
@@ -39,8 +51,9 @@ export function monthlyIncomeFromPortfolio(
   realReturnDuringDrawdown: number,
 ): number {
   if (portfolioValue <= 0 || drawdownYears <= 0) return 0;
-  if (realReturnDuringDrawdown === 0)
+  if (realReturnDuringDrawdown === 0) {
     return portfolioValue / (drawdownYears * 12);
+  }
 
   const monthlyRate = Math.pow(1 + realReturnDuringDrawdown, 1 / 12) - 1;
   const months = Math.round(drawdownYears * 12);
@@ -49,10 +62,29 @@ export function monthlyIncomeFromPortfolio(
   );
 }
 
+function requiredPortfolioForIncome(
+  targetMonthlyIncome: number,
+  drawdownYears: number,
+  drawdownRealReturn: number,
+): number {
+  if (targetMonthlyIncome <= 0 || drawdownYears <= 0) return 0;
+
+  if (drawdownRealReturn === 0) {
+    return targetMonthlyIncome * drawdownYears * 12;
+  }
+
+  const monthlyDrawdownRate = Math.pow(1 + drawdownRealReturn, 1 / 12) - 1;
+  const drawdownMonths = Math.round(drawdownYears * 12);
+  return (
+    (targetMonthlyIncome *
+      (1 - Math.pow(1 + monthlyDrawdownRate, -drawdownMonths))) /
+    monthlyDrawdownRate
+  );
+}
+
 /**
  * Required monthly savings to generate a target monthly income during drawdown.
- * Inverts: find the contribution that accumulates enough to fund targetMonthlyIncome
- * over drawdownYears at drawdownReturn, given yearsOfAccumulation at accumulationReturn.
+ * Existing savings reduce the contribution needed from today onwards.
  */
 export function requiredMonthlySavings(
   targetMonthlyIncome: number,
@@ -60,6 +92,7 @@ export function requiredMonthlySavings(
   drawdownYears: number,
   annualRealReturn: number,
   drawdownRealReturn: number,
+  currentSavingsBalance: number = 0,
 ): number {
   if (
     targetMonthlyIncome <= 0 ||
@@ -69,29 +102,33 @@ export function requiredMonthlySavings(
     return 0;
   }
 
-  // Step 1: How much portfolio is needed to produce targetMonthlyIncome?
-  // PV = PMT * (1 - (1+r)^-n) / r
-  let requiredPortfolio: number;
-  if (drawdownRealReturn === 0) {
-    requiredPortfolio = targetMonthlyIncome * drawdownYears * 12;
-  } else {
-    const monthlyDrawdownRate = Math.pow(1 + drawdownRealReturn, 1 / 12) - 1;
-    const drawdownMonths = Math.round(drawdownYears * 12);
-    requiredPortfolio =
-      (targetMonthlyIncome *
-        (1 - Math.pow(1 + monthlyDrawdownRate, -drawdownMonths))) /
-      monthlyDrawdownRate;
-  }
+  const requiredPortfolio = requiredPortfolioForIncome(
+    targetMonthlyIncome,
+    drawdownYears,
+    drawdownRealReturn,
+  );
 
-  // Step 2: What monthly contribution produces that portfolio?
+  const currentSavingsAtRetirement = futureValueLumpSum(
+    Math.max(0, currentSavingsBalance),
+    annualRealReturn,
+    yearsOfAccumulation,
+  );
+
+  const remainingPortfolioNeeded = Math.max(
+    0,
+    requiredPortfolio - currentSavingsAtRetirement,
+  );
+
+  if (remainingPortfolioNeeded === 0) return 0;
+
   if (annualRealReturn === 0) {
-    return requiredPortfolio / (yearsOfAccumulation * 12);
+    return remainingPortfolioNeeded / (yearsOfAccumulation * 12);
   }
 
   const monthlyAccRate = Math.pow(1 + annualRealReturn, 1 / 12) - 1;
   const accMonths = Math.round(yearsOfAccumulation * 12);
   return (
-    requiredPortfolio *
+    remainingPortfolioNeeded *
     (monthlyAccRate / (Math.pow(1 + monthlyAccRate, accMonths) - 1))
   );
 }
@@ -107,16 +144,16 @@ export function deriveDrawdownYears(
 ): number {
   const retirementYear = currentYear + (retirementAge - currentAge);
   const le65 = getLifeExpectancy65(retirementYear);
-  // Life expectancy at 65 + adjustment for retirement age
   const drawdown = le65 + (65 - retirementAge);
   return Math.max(5, Math.round(drawdown));
 }
 
 /**
- * Full savings calculation for a given gap and investment profile.
+ * Full savings calculation for a given private-income requirement and investment profile.
  */
 export function calculateSavings(params: {
-  readonly gapMonthly: number;
+  readonly requiredMonthlyIncome: number;
+  readonly currentSavingsBalance: number;
   readonly weightedRealReturn: number;
   readonly currentAge: number;
   readonly retirementAge: number;
@@ -125,7 +162,8 @@ export function calculateSavings(params: {
   readonly monthlyContributionOverride: number | null;
 }): SavingsResult {
   const {
-    gapMonthly,
+    requiredMonthlyIncome,
+    currentSavingsBalance,
     weightedRealReturn,
     currentAge,
     retirementAge,
@@ -135,15 +173,16 @@ export function calculateSavings(params: {
   } = params;
 
   const yearsOfAccumulation = Math.max(0, retirementAge - currentAge);
-  // Use a more conservative return during drawdown (closer to bonds)
   const drawdownReturn = Math.max(0, weightedRealReturn * 0.5);
+  const normalizedCurrentSavings = Math.max(0, currentSavingsBalance);
 
   const autoContribution = requiredMonthlySavings(
-    Math.max(0, gapMonthly),
+    Math.max(0, requiredMonthlyIncome),
     yearsOfAccumulation,
     drawdownYears,
     weightedRealReturn,
     drawdownReturn,
+    normalizedCurrentSavings,
   );
 
   const monthlyContribution =
@@ -151,11 +190,18 @@ export function calculateSavings(params: {
       ? monthlyContributionOverride
       : autoContribution;
 
-  const portfolioAtRetirement = futureValueMonthly(
+  const currentSavingsAtRetirement = futureValueLumpSum(
+    normalizedCurrentSavings,
+    weightedRealReturn,
+    yearsOfAccumulation,
+  );
+  const newContributionsAtRetirement = futureValueMonthly(
     monthlyContribution,
     weightedRealReturn,
     yearsOfAccumulation,
   );
+  const portfolioAtRetirement =
+    currentSavingsAtRetirement + newContributionsAtRetirement;
 
   const monthlyIncome = monthlyIncomeFromPortfolio(
     portfolioAtRetirement,
@@ -167,6 +213,9 @@ export function calculateSavings(params: {
     monthlyContribution: Math.round(monthlyContribution * 100) / 100,
     totalContributed:
       Math.round(monthlyContribution * yearsOfAccumulation * 12 * 100) / 100,
+    currentSavingsBalance: Math.round(normalizedCurrentSavings * 100) / 100,
+    currentSavingsAtRetirement:
+      Math.round(currentSavingsAtRetirement * 100) / 100,
     portfolioAtRetirement: Math.round(portfolioAtRetirement * 100) / 100,
     monthlyIncomeFromPortfolio: Math.round(monthlyIncome * 100) / 100,
     yearsOfAccumulation,
@@ -177,11 +226,12 @@ export function calculateSavings(params: {
 
 /**
  * Generate portfolio timeline from current age to retirement + drawdown.
- * During accumulation: portfolio grows via contributions + returns.
- * During drawdown: portfolio is consumed via monthly withdrawals.
+ * During accumulation: existing capital and contributions compound.
+ * During drawdown: the full portfolio is consumed via monthly withdrawals.
  */
 export function generatePortfolioTimeline(params: {
   readonly monthlyContribution: number;
+  readonly currentSavingsBalance: number;
   readonly weightedRealReturn: number;
   readonly currentAge: number;
   readonly retirementAge: number;
@@ -191,6 +241,7 @@ export function generatePortfolioTimeline(params: {
 }): readonly PortfolioYearlyProjection[] {
   const {
     monthlyContribution,
+    currentSavingsBalance,
     weightedRealReturn,
     currentAge,
     retirementAge,
@@ -199,16 +250,24 @@ export function generatePortfolioTimeline(params: {
     currentYear,
   } = params;
 
+  const yearsOfAccumulation = Math.max(0, retirementAge - currentAge);
   const maxAge = retirementAge + drawdownYears;
   const drawdownReturn = Math.max(0, weightedRealReturn * 0.5);
+  const normalizedCurrentSavings = Math.max(0, currentSavingsBalance);
   const projections: PortfolioYearlyProjection[] = [];
 
-  // Portfolio at retirement (in real terms)
-  const portfolioAtRetirement = futureValueMonthly(
+  const currentSavingsAtRetirement = futureValueLumpSum(
+    normalizedCurrentSavings,
+    weightedRealReturn,
+    yearsOfAccumulation,
+  );
+  const contributionsAtRetirement = futureValueMonthly(
     monthlyContribution,
     weightedRealReturn,
-    Math.max(0, retirementAge - currentAge),
+    yearsOfAccumulation,
   );
+  const portfolioAtRetirement =
+    currentSavingsAtRetirement + contributionsAtRetirement;
 
   const monthlyDrawdown = monthlyIncomeFromPortfolio(
     portfolioAtRetirement,
@@ -224,21 +283,25 @@ export function generatePortfolioTimeline(params: {
     let monthlyIncomeReal: number;
 
     if (age < retirementAge) {
-      // Accumulation phase
-      portfolioReal = futureValueMonthly(
-        monthlyContribution,
-        weightedRealReturn,
-        age - currentAge,
-      );
+      const yearsInvested = age - currentAge;
+      portfolioReal =
+        futureValueLumpSum(
+          normalizedCurrentSavings,
+          weightedRealReturn,
+          yearsInvested,
+        ) +
+        futureValueMonthly(
+          monthlyContribution,
+          weightedRealReturn,
+          yearsInvested,
+        );
       monthlyIncomeReal = 0;
     } else {
-      // Drawdown phase
       const yearsIntoDrawdown = age - retirementAge;
       if (yearsIntoDrawdown >= drawdownYears) {
         portfolioReal = 0;
         monthlyIncomeReal = 0;
       } else {
-        // Remaining portfolio = PV of remaining annuity payments
         const remainingYears = drawdownYears - yearsIntoDrawdown;
         if (drawdownReturn === 0) {
           portfolioReal = monthlyDrawdown * remainingYears * 12;

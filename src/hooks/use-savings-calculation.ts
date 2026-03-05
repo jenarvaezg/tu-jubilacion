@@ -2,12 +2,12 @@ import { useMemo } from "react";
 import type { ScenarioResult } from "../engine/types.ts";
 import type { CalculationInputs } from "../state/types.ts";
 import type {
-  PensionGap,
+  RetirementIncomeGap,
   SavingsResult,
   PortfolioYearlyProjection,
   ComparisonYearlyPoint,
 } from "../engine/savings/types.ts";
-import { calculatePensionGap } from "../engine/savings/gap.ts";
+import { calculateRetirementIncomeGap } from "../engine/savings/gap.ts";
 import {
   calculateSavings,
   deriveDrawdownYears,
@@ -20,9 +20,10 @@ import {
   getGlidePathAllocation,
   getWeightedReturn,
 } from "../data/investment-profiles.ts";
+import { deriveMonthlyLifestyleTarget } from "../engine/salary.ts";
 
 export interface SavingsCalculationResult {
-  readonly gap: PensionGap | null;
+  readonly gap: RetirementIncomeGap | null;
   readonly savings: SavingsResult | null;
   readonly portfolioTimeline: readonly PortfolioYearlyProjection[];
   readonly comparisonTimeline: readonly ComparisonYearlyPoint[];
@@ -51,13 +52,20 @@ export function useSavingsCalculation(params: {
         };
       }
 
-      const gap = calculatePensionGap(
+      const currentYear = new Date().getFullYear();
+      const {
+        profile,
+        ipcRate,
+        investmentProfileId,
+        currentSavingsBalance,
+      } = inputs;
+
+      const targetMonthlyIncome = deriveMonthlyLifestyleTarget(profile);
+      const gap = calculateRetirementIncomeGap(
         pensionResults,
         inputs.comparisonScenarioId,
+        targetMonthlyIncome,
       );
-
-      const currentYear = new Date().getFullYear();
-      const { profile, ipcRate, investmentProfileId } = inputs;
 
       const derivedDrawdownYears = deriveDrawdownYears(
         profile.desiredRetirementAge,
@@ -86,7 +94,8 @@ export function useSavingsCalculation(params: {
       const weightedReturn = getWeightedReturn(allocation);
 
       const savings = calculateSavings({
-        gapMonthly: gap.gapMonthly,
+        requiredMonthlyIncome: gap.comparisonGapMonthly,
+        currentSavingsBalance,
         weightedRealReturn: weightedReturn,
         currentAge: profile.age,
         retirementAge: profile.desiredRetirementAge,
@@ -97,6 +106,7 @@ export function useSavingsCalculation(params: {
 
       const portfolioTimeline = generatePortfolioTimeline({
         monthlyContribution: savings.monthlyContribution,
+        currentSavingsBalance,
         weightedRealReturn: weightedReturn,
         currentAge: profile.age,
         retirementAge: profile.desiredRetirementAge,
@@ -107,6 +117,7 @@ export function useSavingsCalculation(params: {
 
       const comparisonTimeline = generateComparisonTimeline({
         monthlyContribution: savings.monthlyContribution,
+        currentSavingsBalance,
         currentAge: profile.age,
         retirementAge: profile.desiredRetirementAge,
         assetReturns: ASSET_CLASS_RETURNS,

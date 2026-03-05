@@ -20,6 +20,7 @@ export const DEFAULT_STATE: AppState = {
     ipcRate: 0.02,
     comparisonScenarioId: "notional-accounts",
     investmentProfileId: "moderate",
+    currentSavingsBalance: 0,
     monthlyContributionOverride: null,
     drawdownYears: null,
   },

@@ -9,7 +9,7 @@ export function Header() {
             </div>
             <div>
               <h1 className="text-lg font-bold text-gray-900 leading-tight">Tu Jubilacion</h1>
-              <p className="text-xs text-gray-500">Calculadora de pension publica</p>
+              <p className="text-xs text-gray-500">Planifica tus ingresos de jubilacion</p>
             </div>
           </div>
           <span className="hidden sm:inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">

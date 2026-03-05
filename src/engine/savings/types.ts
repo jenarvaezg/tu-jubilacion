@@ -36,14 +36,17 @@ export interface InvestmentProfile {
   readonly isGlidePath: boolean;
 }
 
-// ── Gap Calculation ──────────────────────────────────────────────
+// ── Retirement Income Gap ────────────────────────────────────────
 
-export interface PensionGap {
-  readonly baselineMonthly: number;
+export interface RetirementIncomeGap {
+  readonly targetMonthlyIncome: number;
+  readonly currentLawMonthly: number;
   readonly comparisonMonthly: number;
-  readonly gapMonthly: number;
-  readonly gapAnnual: number;
-  readonly gapPercent: number;
+  readonly currentLawGapMonthly: number;
+  readonly comparisonGapMonthly: number;
+  readonly additionalGapMonthly: number;
+  readonly currentLawCoverageRate: number;
+  readonly comparisonCoverageRate: number;
   readonly comparisonScenarioId: ScenarioId;
 }
 
@@ -52,6 +55,8 @@ export interface PensionGap {
 export interface SavingsResult {
   readonly monthlyContribution: number;
   readonly totalContributed: number;
+  readonly currentSavingsBalance: number;
+  readonly currentSavingsAtRetirement: number;
   readonly portfolioAtRetirement: number;
   readonly monthlyIncomeFromPortfolio: number;
   readonly yearsOfAccumulation: number;
