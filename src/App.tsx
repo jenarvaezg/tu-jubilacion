@@ -16,6 +16,7 @@ function App() {
   const chartData = useChartData({
     results,
     displayMode: state.display.displayMode,
+    currentAge: state.calculation.profile.age,
   });
 
   return (
@@ -37,6 +38,8 @@ function App() {
         <ChartControls
           displayMode={state.display.displayMode}
           ipcRate={state.calculation.ipcRate}
+          greeceHaircutRate={state.calculation.greeceHaircutRate}
+          notionalGrowthScenario={state.calculation.notionalGrowthScenario}
           dispatch={dispatch}
         />
 

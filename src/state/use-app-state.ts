@@ -3,6 +3,8 @@ import type { AppState, AppAction } from './types.ts';
 import { DEFAULT_STATE } from './defaults.ts';
 import { decodeStateFromUrl, encodeStateToUrl, hasUrlParams } from './url-codec.ts';
 
+const STORAGE_KEY = 'tu-jubilacion:state:v1';
+
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case 'SET_AGE': {
@@ -149,6 +151,14 @@ function getInitialState(): AppState {
   if (hasUrlParams(search)) {
     return decodeStateFromUrl(search);
   }
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (stored !== null) {
+      return decodeStateFromUrl(stored);
+    }
+  } catch {
+    // localStorage may be unavailable (private mode, blocked storage, etc.)
+  }
   return DEFAULT_STATE;
 }
 
@@ -165,6 +175,11 @@ export function useAppState() {
       const url = encodeStateToUrl(state);
       const newUrl = window.location.pathname + url;
       window.history.replaceState(null, '', newUrl);
+      try {
+        window.localStorage.setItem(STORAGE_KEY, url);
+      } catch {
+        // Ignore storage write failures; URL remains the source of truth.
+      }
     }, 300);
 
     return () => {

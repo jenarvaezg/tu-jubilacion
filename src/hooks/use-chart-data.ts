@@ -4,11 +4,7 @@ import type { ScenarioResult, ScenarioId } from "../engine/types.ts";
 export interface ChartDataPoint {
   readonly age: number;
   readonly year: number;
-  readonly "current-law"?: number;
-  readonly "notional-accounts"?: number;
-  readonly "sustainability-2013"?: number;
-  readonly "eu-convergence"?: number;
-  readonly "greece-haircut"?: number;
+  readonly [key: string]: number | undefined;
 }
 
 export const SCENARIO_COLORS: Record<ScenarioId, string> = {
@@ -27,63 +23,74 @@ export const SCENARIO_LABELS: Record<ScenarioId, string> = {
   "greece-haircut": "Recorte tipo Grecia",
 };
 
+const MAX_CHART_AGE = 90;
+const SCENARIO_IDS: readonly ScenarioId[] = [
+  "current-law",
+  "notional-accounts",
+  "sustainability-2013",
+  "eu-convergence",
+  "greece-haircut",
+];
+
+export function realKey(scenarioId: ScenarioId): string {
+  return `${scenarioId}__real`;
+}
+
+export function nominalKey(scenarioId: ScenarioId): string {
+  return `${scenarioId}__nominal`;
+}
+
 interface UseChartDataParams {
   readonly results: readonly ScenarioResult[];
   readonly displayMode: "real" | "nominal";
+  readonly currentAge: number;
 }
 
-export function useChartData({
+export function buildChartData({
   results,
   displayMode,
+  currentAge,
 }: UseChartDataParams): readonly ChartDataPoint[] {
-  return useMemo(() => {
-    if (results.length === 0) return [];
+  if (results.length === 0) return [];
 
-    // Collect all unique ages across all timelines
-    const ageSet = new Set<number>();
-    for (const result of results) {
-      for (const point of result.timeline) {
-        ageSet.add(point.age);
+  const chartStartAge = Math.max(18, Math.min(currentAge, MAX_CHART_AGE));
+  const ages = Array.from(
+    { length: MAX_CHART_AGE - chartStartAge + 1 },
+    (_, i) => chartStartAge + i,
+  );
+
+  const lookups = new Map<ScenarioId, Map<number, { real: number; nominal: number; year: number }>>();
+  for (const result of results) {
+    const map = new Map<number, { real: number; nominal: number; year: number }>();
+    for (const entry of result.timeline) {
+      map.set(entry.age, {
+        real: entry.monthlyPensionReal,
+        nominal: entry.monthlyPensionNominal,
+        year: entry.year,
+      });
+    }
+    lookups.set(result.scenarioId, map);
+  }
+
+  return ages.map((age) => {
+    const point: Record<string, number | undefined> = { age, year: 0 };
+    for (const scenarioId of SCENARIO_IDS) {
+      const entry = lookups.get(scenarioId)?.get(age);
+      if (entry !== undefined) {
+        point[scenarioId] = displayMode === "real" ? entry.real : entry.nominal;
+        point[realKey(scenarioId)] = entry.real;
+        point[nominalKey(scenarioId)] = entry.nominal;
+        point.year = entry.year;
       }
     }
+    return point as ChartDataPoint;
+  });
+}
 
-    const ages = Array.from(ageSet).sort((a, b) => a - b);
-
-    // Build lookup maps for each scenario
-    const lookups = new Map<
-      ScenarioId,
-      Map<number, { real: number; nominal: number }>
-    >();
-    for (const result of results) {
-      const map = new Map<number, { real: number; nominal: number }>();
-      for (const point of result.timeline) {
-        map.set(point.age, {
-          real: point.monthlyPensionReal,
-          nominal: point.monthlyPensionNominal,
-        });
-      }
-      lookups.set(result.scenarioId, map);
-    }
-
-    return ages.map((age) => {
-      const point: Record<string, number | undefined> = { age, year: 0 };
-
-      for (const result of results) {
-        const lookup = lookups.get(result.scenarioId);
-        const entry = lookup?.get(age);
-        if (entry !== undefined) {
-          point[result.scenarioId] =
-            displayMode === "real" ? entry.real : entry.nominal;
-          if (point.year === 0) {
-            const timelineEntry = result.timeline.find((t) => t.age === age);
-            if (timelineEntry) {
-              point.year = timelineEntry.year;
-            }
-          }
-        }
-      }
-
-      return point as unknown as ChartDataPoint;
-    });
-  }, [results, displayMode]);
+export function useChartData(params: UseChartDataParams): readonly ChartDataPoint[] {
+  const { results, displayMode, currentAge } = params;
+  return useMemo(
+    () => buildChartData({ results, displayMode, currentAge }),
+    [results, displayMode, currentAge],
+  );
 }

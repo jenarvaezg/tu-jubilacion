@@ -64,12 +64,24 @@ export function HeroChart({ data, retirementAge, displayMode }: HeroChartProps) 
               content={<ChartTooltip displayMode={displayMode} />}
             />
             <ReferenceLine
+              x={63}
+              stroke="#9ca3af"
+              strokeDasharray="3 3"
+              label={{ value: '63 (anticipada)', position: 'top', fontSize: 10, fill: '#6b7280' }}
+            />
+            <ReferenceLine
               x={67}
               stroke="#6b7280"
               strokeDasharray="4 4"
               label={{ value: '67 (legal)', position: 'top', fontSize: 10, fill: '#6b7280' }}
             />
-            {retirementAge !== 67 && (
+            <ReferenceLine
+              x={70}
+              stroke="#9ca3af"
+              strokeDasharray="3 3"
+              label={{ value: '70 (demorada)', position: 'top', fontSize: 10, fill: '#6b7280' }}
+            />
+            {retirementAge !== 63 && retirementAge !== 67 && retirementAge !== 70 && (
               <ReferenceLine
                 x={retirementAge}
                 stroke="#1e40af"
@@ -86,7 +98,7 @@ export function HeroChart({ data, retirementAge, displayMode }: HeroChartProps) 
                 strokeWidth={scenarioId === 'current-law' ? 2.5 : 1.5}
                 dot={false}
                 activeDot={{ r: 4 }}
-                connectNulls
+                connectNulls={false}
               />
             ))}
           </LineChart>
