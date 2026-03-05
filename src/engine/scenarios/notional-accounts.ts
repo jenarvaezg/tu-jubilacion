@@ -27,7 +27,7 @@ const DEFAULT_CONFIG: NotionalConfig = {
   contributionRate: FEDEA_PARAMS.contributionRate,
   notionalGrowthScenario: "historic",
   ipcRate: 0.02,
-  salaryGrowthRate: 0.01,
+  salaryGrowthRate: 0,
   currentYear: 2025,
 };
 

@@ -1,0 +1,71 @@
+import { describe, expect, it } from "vitest";
+import { calculateCurrentLaw } from "../../../src/engine/scenarios/current-law";
+import type { UserProfile } from "../../../src/engine/types";
+
+// Casos reales aportados por usuario (simulador oficial Importass).
+// Se compara contra el "valor deflactado" (euros de hoy).
+
+const BASE_PROFILE: UserProfile = {
+  age: 32,
+  monthlySalary: 5101,
+  salaryType: "gross",
+  pagasExtra: true,
+  ccaa: "madrid",
+  yearsWorked: 10,
+  monthsContributed: 123, // 3.734 dias ~ 10.26 anos
+  desiredRetirementAge: 65,
+};
+
+const OFFICIAL_CONFIG = {
+  currentYear: 2026,
+  ipcRate: 0.02,
+  salaryGrowthRate: 0,
+};
+
+function expectClosePct(actual: number, expected: number, maxPctError: number): void {
+  const pctError = Math.abs(actual - expected) / expected;
+  expect(pctError).toBeLessThanOrEqual(maxPctError);
+}
+
+describe("Importass parity (current law, deflated values)", () => {
+  it("base maxima + edad ordinaria", () => {
+    const result = calculateCurrentLaw(
+      { ...BASE_PROFILE, monthlySalary: 5101, desiredRetirementAge: 65 },
+      OFFICIAL_CONFIG,
+    );
+    expectClosePct(result.monthlyPension, 4173.95, 0.03);
+  });
+
+  it("base intermedia + edad ordinaria", () => {
+    const result = calculateCurrentLaw(
+      { ...BASE_PROFILE, monthlySalary: 3000, desiredRetirementAge: 65 },
+      OFFICIAL_CONFIG,
+    );
+    expectClosePct(result.monthlyPension, 2454.69, 0.03);
+  });
+
+  it("base baja + edad ordinaria", () => {
+    const result = calculateCurrentLaw(
+      { ...BASE_PROFILE, monthlySalary: 1599.6, desiredRetirementAge: 65 },
+      OFFICIAL_CONFIG,
+    );
+    expectClosePct(result.monthlyPension, 1308.86, 0.03);
+  });
+
+  it("base maxima + 1 ano de demora", () => {
+    const result = calculateCurrentLaw(
+      { ...BASE_PROFILE, monthlySalary: 5101, desiredRetirementAge: 66 },
+      OFFICIAL_CONFIG,
+    );
+    // En este caso se compara contra el total (con complemento por demora).
+    expectClosePct(result.monthlyPension, 4340.92, 0.03);
+  });
+
+  it("base maxima + 1 ano de anticipada", () => {
+    const result = calculateCurrentLaw(
+      { ...BASE_PROFILE, monthlySalary: 5101, desiredRetirementAge: 64 },
+      OFFICIAL_CONFIG,
+    );
+    expectClosePct(result.monthlyPension, 3965.25, 0.03);
+  });
+});

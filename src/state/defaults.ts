@@ -12,7 +12,7 @@ export const DEFAULT_STATE: AppState = {
       monthsContributed: 156,
       desiredRetirementAge: 67,
     },
-    salaryGrowthRate: 0.01,
+    salaryGrowthRate: 0,
     greeceHaircutRate: 0.30,
     notionalGrowthScenario: 'historic',
     ipcRate: 0.02,

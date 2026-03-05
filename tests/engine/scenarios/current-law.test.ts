@@ -29,8 +29,7 @@ describe("calculateCurrentLaw", () => {
     expect(result.timeline.length).toBeGreaterThan(0);
   });
 
-  it("pension is capped at max pension", () => {
-    // Very high salary should hit pension max
+  it("high salary profile produces finite pension for future cohort", () => {
     const result = calculateCurrentLaw(
       makeProfile({
         monthlySalary: 8000,
@@ -41,7 +40,8 @@ describe("calculateCurrentLaw", () => {
         desiredRetirementAge: 67,
       }),
     );
-    expect(result.monthlyPension).toBeLessThanOrEqual(3175.04);
+    expect(Number.isFinite(result.monthlyPension)).toBe(true);
+    expect(result.monthlyPension).toBeGreaterThan(3175.04);
   });
 
   it("zero years contributed (below 15) gives zero pension", () => {

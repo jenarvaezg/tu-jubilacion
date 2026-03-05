@@ -55,7 +55,7 @@ export function projectBases(params: {
 
 /**
  * Get the last N monthly bases from projected bases.
- * Used to compute base reguladora (last 300 months / 25 years).
+ * Used to compute base reguladora (324 months in current calibration).
  *
  * @param projectedBases - All projected yearly bases
  * @param yearsWorked - Total years already worked

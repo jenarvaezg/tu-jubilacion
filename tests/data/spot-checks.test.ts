@@ -22,9 +22,9 @@ describe("SS Tables spot-checks", () => {
     expect(SS_RULES.paymentsPerYear).toBe(14);
   });
 
-  it("regulatory base is 300 months / 350", () => {
-    expect(SS_RULES.regulatoryBaseMonths).toBe(300);
-    expect(SS_RULES.regulatoryBaseDivisor).toBe(350);
+  it("regulatory base is 324 months / 396", () => {
+    expect(SS_RULES.regulatoryBaseMonths).toBe(324);
+    expect(SS_RULES.regulatoryBaseDivisor).toBe(396);
   });
 
   it("legal retirement age is 67", () => {

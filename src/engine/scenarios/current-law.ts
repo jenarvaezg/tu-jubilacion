@@ -20,7 +20,7 @@ interface CurrentLawConfig {
 
 const DEFAULT_CONFIG: CurrentLawConfig = {
   ipcRate: 0.02,
-  salaryGrowthRate: 0.01,
+  salaryGrowthRate: 0,
   currentYear: 2025,
 };
 
@@ -31,7 +31,7 @@ const DEFAULT_CONFIG: CurrentLawConfig = {
  * 1. Derive gross salary (if net provided)
  * 2. Compute base de cotización
  * 3. Project bases forward to retirement
- * 4. Compute base reguladora (last 300 months / 350)
+ * 4. Compute base reguladora (324 months / 396, calibrated for future cohorts)
  * 5. Apply coefficient scale based on years contributed
  * 6. Apply early/late retirement adjustments
  * 7. Cap at pension max/min
@@ -89,8 +89,10 @@ export function calculateCurrentLaw(
   // Step 7: Monthly pension (one of 14 pagas)
   let monthlyPension = baseReguladora * coefficient * ageAdjustment;
 
-  // Cap at max/min
-  monthlyPension = Math.min(monthlyPension, SS_RULES.pensionMaxMonthly);
+  // Keep legal minimum floor.
+  // We intentionally do not apply a static max cap here because using
+  // today's cap for cohorts retiring in 2050+ severely underestimates
+  // results versus the official simulator.
   monthlyPension = Math.max(monthlyPension, SS_RULES.pensionMinMonthly);
 
   // Annual pension (14 pagas)

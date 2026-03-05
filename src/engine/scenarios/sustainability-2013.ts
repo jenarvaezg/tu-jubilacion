@@ -15,7 +15,7 @@ interface SustainabilityConfig {
 
 const DEFAULT_CONFIG: SustainabilityConfig = {
   ipcRate: 0.02,
-  salaryGrowthRate: 0.01,
+  salaryGrowthRate: 0,
   currentYear: 2025,
   referenceYear: 2024,
   revalorizationRate: 0.0025, // Fixed 0.25% annual revalorization

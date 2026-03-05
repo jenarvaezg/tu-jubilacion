@@ -6,10 +6,10 @@ export function MethodologyPanel() {
     <div className="flex flex-col gap-4">
       <FormulaBlock
         title="Escenario 1: Legislacion vigente"
-        formula={`Base reguladora = Suma bases ultimos 300 meses / 350
+        formula={`Base reguladora = Suma 324 mejores bases de las ultimas 348 / 396
 Porcentaje = f(anos cotizados): 15a=50%, +0.21%/mes (49m), +0.19%/mes (160m)
 Pension = Base reguladora x Porcentaje x Factor edad`}
-        explanation="Calculo segun la normativa actual de la Seguridad Social. Las bases de cotizacion se proyectan con un crecimiento salarial real del 1% anual."
+        explanation="Calculo segun la normativa actual de la Seguridad Social. En modo base, proyectamos la cotizacion futura en terminos reales constantes."
       />
 
       <FormulaBlock

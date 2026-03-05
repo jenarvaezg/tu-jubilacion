@@ -23,49 +23,51 @@ export const SS_RULES: SSRules = {
 
   paymentsPerYear: 14,
 
-  // Base reguladora: media últimos 25 años (300 meses) entre 350
-  regulatoryBaseMonths: 300,
-  regulatoryBaseDivisor: 350,
+  // Base reguladora (cohortes futuras): 324 mejores bases de las últimas 348,
+  // prorrateadas a 14 pagas con divisor 396.
+  // Referencia: explicación mostrada por el simulador oficial Importass.
+  regulatoryBaseMonths: 324,
+  regulatoryBaseDivisor: 396,
 
-  // Escala de coeficientes (LGSS art. 210)
+  // Escala de coeficientes (carreras largas, calibrada con criterio Importass)
   // 15 años (180 meses) = 50%
-  // Meses 181-229 (primeros 49 adicionales): +0.21% por mes
-  // Meses 230-389 (siguientes 160): +0.19% por mes
-  // Máximo: 438 meses (36.5 años) = 100%
+  // Meses 181-229 (49 meses): +0,21% por mes
+  // Meses 230-444 (215 meses): +0,1847906977% por mes
+  // Máximo: 444 meses (37 años) = 100%
   coefficientScale: [
     { fromMonth: 1, toMonth: 180, ratePerMonth: 0 }, // base: 50% at 180 months
     { fromMonth: 181, toMonth: 229, ratePerMonth: 0.0021 },
-    { fromMonth: 230, toMonth: 389, ratePerMonth: 0.0019 },
+    { fromMonth: 230, toMonth: 444, ratePerMonth: 0.001847906976744186 },
   ],
 
-  // Jubilación anticipada voluntaria (RD-ley 2/2023)
-  // Penalización por trimestre de anticipación según años cotizados
-  // Simplificado a penalización mensual media por rango de cotización
+  // Jubilación anticipada voluntaria
+  // Calibrada en esta versión para aproximar el simulador oficial Importass
+  // en cohortes jóvenes (ej. nacidos en los 90), usando tasas mensuales.
   earlyRetirementPenalties: [
     // Menos de 38.5 años cotizados - penalización más alta
     {
       monthsAnticipation: 1,
       minYearsContributed: 0,
       maxYearsContributed: 38.5,
-      penaltyRate: 0.0033,
+      penaltyRate: 0.005,
     },
     {
       monthsAnticipation: 1,
       minYearsContributed: 38.5,
       maxYearsContributed: 44.5,
-      penaltyRate: 0.0029,
+      penaltyRate: 0.0045,
     },
     {
       monthsAnticipation: 1,
       minYearsContributed: 44.5,
       maxYearsContributed: 100,
-      penaltyRate: 0.0025,
+      penaltyRate: 0.0042,
     },
   ],
 
-  // Jubilación demorada (Ley 21/2021)
+  // Jubilación demorada: +4% anual para la opción porcentual
   lateRetirementBonus: [
-    { minYearsContributed: 0, bonusPerYear: 0.02 },
+    { minYearsContributed: 0, bonusPerYear: 0.04 },
     { minYearsContributed: 44.5, bonusPerYear: 0.04 },
   ],
 
