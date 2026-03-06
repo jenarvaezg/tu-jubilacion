@@ -10,6 +10,7 @@ import { formatCurrency } from "../../utils/format.ts";
 
 const SCENARIO_ORDER: readonly ScenarioId[] = [
   "current-law",
+  "fedea-transition",
   "notional-accounts",
   "sustainability-2013",
   "eu-convergence",
@@ -28,6 +29,7 @@ interface ChartTooltipProps {
   readonly payload?: readonly TooltipPayloadItem[];
   readonly label?: number;
   readonly displayMode: "real" | "nominal";
+  readonly combinedLabel?: string;
 }
 
 export function ChartTooltip({
@@ -35,6 +37,7 @@ export function ChartTooltip({
   payload,
   label,
   displayMode,
+  combinedLabel = "Ingreso total",
 }: ChartTooltipProps) {
   if (!active || !payload || payload.length === 0) return null;
 
@@ -99,7 +102,7 @@ export function ChartTooltip({
                     style={{ backgroundColor: "#059669" }}
                   />
                   <span className="text-xs font-semibold text-emerald-700">
-                    Ingreso total
+                    {combinedLabel}
                   </span>
                 </div>
                 <span className="text-xs font-semibold tabular-nums text-gray-800">

@@ -10,11 +10,15 @@ import {
 } from "recharts";
 import type { ScenarioId } from "../../engine/types.ts";
 import type { CombinedChartDataPoint } from "../../hooks/use-combined-chart-data.ts";
-import { SCENARIO_COLORS } from "../../hooks/use-chart-data.ts";
+import {
+  SCENARIO_COLORS,
+  SCENARIO_LABELS,
+} from "../../hooks/use-chart-data.ts";
 import { ChartTooltip } from "../chart/ChartTooltip.tsx";
 
 const SCENARIO_ORDER: readonly ScenarioId[] = [
   "current-law",
+  "fedea-transition",
   "notional-accounts",
   "sustainability-2013",
   "eu-convergence",
@@ -25,27 +29,34 @@ const REFERENCE_LABEL_FONT_SIZE = 10;
 
 interface CombinedHeroChartProps {
   readonly data: readonly CombinedChartDataPoint[];
+  readonly comparisonScenarioId: ScenarioId;
   readonly retirementAge: number;
   readonly displayMode: "real" | "nominal";
 }
 
 export function CombinedHeroChart({
   data,
+  comparisonScenarioId,
   retirementAge,
   displayMode,
 }: CombinedHeroChartProps) {
   if (data.length === 0) return null;
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3" data-testid="combined-income-chart">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-          Ingreso total de jubilacion
+          Ingreso total planificado en jubilacion
         </h3>
         <span className="text-[10px] text-gray-400 uppercase">
           Base publica + complemento privado
         </span>
       </div>
+      <p className="text-xs leading-relaxed text-gray-500">
+        La linea verde muestra tu plan total de ingresos si planificas con{" "}
+        {SCENARIO_LABELS[comparisonScenarioId].toLowerCase()} y el ahorro
+        privado calculado arriba.
+      </p>
       <div className="rounded-xl bg-white p-4 shadow-sm border border-gray-100">
         <ResponsiveContainer width="100%" height={360}>
           <LineChart
@@ -76,7 +87,14 @@ export function CombinedHeroChart({
                 fontSize: 12,
               }}
             />
-            <Tooltip content={<ChartTooltip displayMode={displayMode} />} />
+            <Tooltip
+              content={
+                <ChartTooltip
+                  displayMode={displayMode}
+                  combinedLabel={`Plan total (${SCENARIO_LABELS[comparisonScenarioId]})`}
+                />
+              }
+            />
             <ReferenceLine
               x={retirementAge}
               stroke="#1e40af"
@@ -105,12 +123,11 @@ export function CombinedHeroChart({
               type="monotone"
               dataKey="pension-plus-savings"
               stroke="#059669"
-              strokeWidth={3}
-              strokeDasharray="8 4"
+              strokeWidth={3.5}
               dot={false}
               activeDot={{ r: 5 }}
               connectNulls={false}
-              name="Ingreso total"
+              name={`Plan total (${SCENARIO_LABELS[comparisonScenarioId]})`}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -125,9 +142,11 @@ export function CombinedHeroChart({
             <span>
               {id === "current-law"
                 ? "Ley actual"
+                : id === "fedea-transition"
+                  ? "Transicion"
                 : id === "notional-accounts"
                   ? "Nocional"
-                  : id === "sustainability-2013"
+                : id === "sustainability-2013"
                     ? "Sost. 2013"
                     : id === "eu-convergence"
                       ? "Conv. UE"
@@ -136,9 +155,9 @@ export function CombinedHeroChart({
           </div>
         ))}
         <div className="flex items-center gap-1.5">
-          <span className="h-0.5 w-4 border-t-2 border-dashed border-emerald-600" />
+          <span className="h-0.5 w-4 border-t-2 border-emerald-600" />
           <span className="font-semibold text-emerald-700">
-            Ingreso total
+            Plan total
           </span>
         </div>
       </div>

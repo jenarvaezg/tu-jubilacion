@@ -13,6 +13,7 @@ export type CcaaCode =
 
 export type ScenarioId =
   | "current-law"
+  | "fedea-transition"
   | "notional-accounts"
   | "sustainability-2013"
   | "eu-convergence"

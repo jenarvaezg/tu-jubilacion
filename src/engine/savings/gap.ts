@@ -2,6 +2,7 @@
 // today's lifestyle under different public-pension scenarios.
 import type { ScenarioResult, ScenarioId } from "../types";
 import type { RetirementIncomeGap } from "./types";
+import { getRetirementMonthlyPensionReal } from "../scenario-utils";
 
 export function calculateRetirementIncomeGap(
   results: readonly ScenarioResult[],
@@ -15,19 +16,22 @@ export function calculateRetirementIncomeGap(
 
   if (currentLaw === undefined || comparison === undefined) return null;
 
+  const currentLawPlanningIncome = getRetirementMonthlyPensionReal(currentLaw);
+  const comparisonPlanningIncome = getRetirementMonthlyPensionReal(comparison);
+
   const currentLawGapMonthly = Math.max(
     0,
-    targetMonthlyIncome - currentLaw.monthlyPension,
+    targetMonthlyIncome - currentLawPlanningIncome,
   );
   const comparisonGapMonthly = Math.max(
     0,
-    targetMonthlyIncome - comparison.monthlyPension,
+    targetMonthlyIncome - comparisonPlanningIncome,
   );
 
   return {
     targetMonthlyIncome,
-    currentLawMonthly: currentLaw.monthlyPension,
-    comparisonMonthly: comparison.monthlyPension,
+    currentLawMonthly: currentLawPlanningIncome,
+    comparisonMonthly: comparisonPlanningIncome,
     currentLawGapMonthly,
     comparisonGapMonthly,
     additionalGapMonthly: Math.max(
@@ -36,11 +40,11 @@ export function calculateRetirementIncomeGap(
     ),
     currentLawCoverageRate:
       targetMonthlyIncome > 0
-        ? Math.min(1, currentLaw.monthlyPension / targetMonthlyIncome)
+        ? Math.min(1, currentLawPlanningIncome / targetMonthlyIncome)
         : 1,
     comparisonCoverageRate:
       targetMonthlyIncome > 0
-        ? Math.min(1, comparison.monthlyPension / targetMonthlyIncome)
+        ? Math.min(1, comparisonPlanningIncome / targetMonthlyIncome)
         : 1,
     comparisonScenarioId,
   };

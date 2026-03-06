@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { calculateCurrentLaw } from "../../../src/engine/scenarios/current-law";
+import { calculateFEDEATransition } from "../../../src/engine/scenarios/fedea-transition";
 import { calculateNotionalAccounts } from "../../../src/engine/scenarios/notional-accounts";
 import { calculateSustainability2013 } from "../../../src/engine/scenarios/sustainability-2013";
 import { calculateEUConvergence } from "../../../src/engine/scenarios/eu-convergence";
@@ -61,6 +62,45 @@ describe("Scenario 2: Notional Accounts", () => {
     const result = calculateNotionalAccounts(profileE, CONFIG);
     expect(result.replacementRate).toBeGreaterThan(0.1);
     expect(result.replacementRate).toBeLessThan(1.2);
+  });
+});
+
+describe("Scenario 2B: FEDEA Transition", () => {
+  it("produces a positive pension", () => {
+    const result = calculateFEDEATransition(profileE, {
+      ...CONFIG,
+      notionalGrowthScenario: "historic",
+    });
+    expect(result.scenarioId).toBe("fedea-transition");
+    expect(result.monthlyPension).toBeGreaterThan(0);
+  });
+
+  it("sits between current law and notional accounts", () => {
+    const currentLaw = calculateCurrentLaw(profileE, CONFIG);
+    const transition = calculateFEDEATransition(profileE, {
+      ...CONFIG,
+      notionalGrowthScenario: "historic",
+    });
+    const notional = calculateNotionalAccounts(profileE, {
+      ...CONFIG,
+      notionalGrowthScenario: "historic",
+    });
+
+    expect(transition.monthlyPension).toBeLessThanOrEqual(
+      currentLaw.monthlyPension,
+    );
+    expect(transition.monthlyPension).toBeGreaterThanOrEqual(
+      notional.monthlyPension,
+    );
+  });
+
+  it("has a valid blended timeline", () => {
+    const result = calculateFEDEATransition(profileE, {
+      ...CONFIG,
+      notionalGrowthScenario: "historic",
+    });
+    expect(result.timeline.length).toBeGreaterThan(20);
+    expect(result.timeline[0].age).toBe(67);
   });
 });
 
@@ -169,8 +209,12 @@ describe("Scenario 5: Greece Haircut", () => {
 });
 
 describe("Cross-scenario sanity checks", () => {
-  // Run all 5 scenarios for profile E
+  // Run all 6 scenarios for profile E
   const currentLaw = calculateCurrentLaw(profileE, CONFIG);
+  const transition = calculateFEDEATransition(profileE, {
+    ...CONFIG,
+    notionalGrowthScenario: "historic",
+  });
   const notionalHistoric = calculateNotionalAccounts(profileE, {
     ...CONFIG,
     notionalGrowthScenario: "historic",
@@ -184,6 +228,7 @@ describe("Cross-scenario sanity checks", () => {
 
   it("all scenarios produce positive pensions", () => {
     expect(currentLaw.monthlyPension).toBeGreaterThan(0);
+    expect(transition.monthlyPension).toBeGreaterThan(0);
     expect(notionalHistoric.monthlyPension).toBeGreaterThan(0);
     expect(sustainability.monthlyPension).toBeGreaterThan(0);
     expect(eu.monthlyPension).toBeGreaterThan(0);
@@ -202,6 +247,7 @@ describe("Cross-scenario sanity checks", () => {
 
   it("all scenarios have timelines", () => {
     expect(currentLaw.timeline.length).toBeGreaterThan(0);
+    expect(transition.timeline.length).toBeGreaterThan(0);
     expect(notionalHistoric.timeline.length).toBeGreaterThan(0);
     expect(sustainability.timeline.length).toBeGreaterThan(0);
     expect(eu.timeline.length).toBeGreaterThan(0);

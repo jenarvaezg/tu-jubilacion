@@ -2,6 +2,7 @@ import type { ScenarioResult } from "../../engine/types.ts";
 import { ScenarioCard } from "./ScenarioCard.tsx";
 import { CurrencyDisplay } from "../shared/CurrencyDisplay.tsx";
 import { formatPercent } from "../../utils/format.ts";
+import { getRetirementMonthlyPensionReal } from "../../engine/scenario-utils.ts";
 
 interface ResultsSummaryProps {
   readonly results: readonly ScenarioResult[];
@@ -16,11 +17,18 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
   const publicFloorResult =
     reformResults.reduce<ScenarioResult | null>((lowest, candidate) => {
       if (lowest === null) return candidate;
-      return candidate.monthlyPension < lowest.monthlyPension ? candidate : lowest;
+      return getRetirementMonthlyPensionReal(candidate) <
+        getRetirementMonthlyPensionReal(lowest)
+        ? candidate
+        : lowest;
     }, null) ?? baselineResult ?? null;
 
-  const baselinePension = baselineResult?.monthlyPension ?? 0;
-  const publicFloor = publicFloorResult?.monthlyPension ?? baselinePension;
+  const baselinePension = baselineResult
+    ? getRetirementMonthlyPensionReal(baselineResult)
+    : 0;
+  const publicFloor = publicFloorResult
+    ? getRetirementMonthlyPensionReal(publicFloorResult)
+    : baselinePension;
   const publicRangeDropPercent =
     baselinePension > 0 ? (baselinePension - publicFloor) / baselinePension : 0;
 
@@ -45,7 +53,7 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
             <div className="mt-8 flex flex-wrap gap-8">
               <div>
                 <p className="text-xs font-medium uppercase text-gray-400">
-                  Referencia legal hoy
+                  Al jubilarte, en euros de hoy
                 </p>
                 <CurrencyDisplay
                   amount={baselinePension}

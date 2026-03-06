@@ -36,6 +36,7 @@ const PARAM_KEYS = {
 
 const SCENARIO_SHORT: Record<ScenarioId, string> = {
   "current-law": "cl",
+  "fedea-transition": "ft",
   "notional-accounts": "na",
   "sustainability-2013": "s2",
   "eu-convergence": "eu",

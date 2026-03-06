@@ -296,6 +296,7 @@ describe("url-codec", () => {
 
     it("round-trips each comparisonScenarioId", () => {
       const scenarios = [
+        "fedea-transition",
         "notional-accounts",
         "sustainability-2013",
         "eu-convergence",

@@ -68,7 +68,7 @@ export function BacktestSummaryCard({ summary }: BacktestSummaryCardProps) {
       </div>
       <div className="flex items-center justify-between rounded-lg bg-gray-50 px-4 py-3 border border-gray-100">
         <span className="text-sm text-gray-600">
-          Cohortes que superaron los depositos
+          Cohortes que batieron dejar el dinero sin rentabilidad
         </span>
         <span className="text-sm font-bold tabular-nums text-gray-900">
           {percentileAboveDeposits}%

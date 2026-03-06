@@ -25,7 +25,7 @@ export const ASSET_CLASS_RETURNS: Record<AssetClassId, AssetClassReturns> = {
   },
   deposits: {
     id: "deposits",
-    label: "Depositos",
+    label: "Letras del Tesoro / liquidez",
     expectedRealReturn: 0.0,
     color: "#9ca3af",
   },
@@ -40,14 +40,14 @@ export const INVESTMENT_PROFILES: Record<
   conservative: {
     id: "conservative",
     label: "Conservador",
-    description: "30% renta variable, 50% renta fija, 20% depositos",
+    description: "30% renta variable, 50% renta fija, 20% liquidez",
     allocation: { equity: 0.3, bonds: 0.5, deposits: 0.2 },
     isGlidePath: false,
   },
   moderate: {
     id: "moderate",
     label: "Moderado",
-    description: "60% renta variable, 30% renta fija, 10% depositos",
+    description: "60% renta variable, 30% renta fija, 10% liquidez",
     allocation: { equity: 0.6, bonds: 0.3, deposits: 0.1 },
     isGlidePath: false,
   },

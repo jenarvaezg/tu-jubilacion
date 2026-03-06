@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { calculateCurrentLaw } from "../../src/engine/scenarios/current-law";
+import { calculateFEDEATransition } from "../../src/engine/scenarios/fedea-transition";
 import { calculateNotionalAccounts } from "../../src/engine/scenarios/notional-accounts";
 import { calculateSustainability2013 } from "../../src/engine/scenarios/sustainability-2013";
 import { calculateEUConvergence } from "../../src/engine/scenarios/eu-convergence";
@@ -13,8 +14,12 @@ const CONFIG = {
   salaryGrowthRate: DEFAULT_STATE.calculation.salaryGrowthRate,
 };
 
-describe("E2E smoke test - default inputs produce 5 valid scenarios", () => {
+describe("E2E smoke test - default inputs produce 6 valid scenarios", () => {
   const cl = calculateCurrentLaw(DEFAULT_PROFILE, CONFIG);
+  const ft = calculateFEDEATransition(DEFAULT_PROFILE, {
+    ...CONFIG,
+    notionalGrowthScenario: DEFAULT_STATE.calculation.notionalGrowthScenario,
+  });
   const na = calculateNotionalAccounts(DEFAULT_PROFILE, {
     ...CONFIG,
     notionalGrowthScenario: DEFAULT_STATE.calculation.notionalGrowthScenario,
@@ -25,24 +30,25 @@ describe("E2E smoke test - default inputs produce 5 valid scenarios", () => {
     ...CONFIG,
     haircutRate: DEFAULT_STATE.calculation.greeceHaircutRate,
   });
-  const allResults = [cl, na, s13, eu, gr];
+  const allResults = [cl, ft, na, s13, eu, gr];
 
-  it("all 5 scenarios produce non-zero pensions", () => {
+  it("all 6 scenarios produce non-zero pensions", () => {
     for (const r of allResults) {
       expect(r.monthlyPension).toBeGreaterThan(0);
       expect(r.annualPension).toBeGreaterThan(0);
     }
   });
 
-  it("all 5 scenarios have correct scenario IDs", () => {
+  it("all 6 scenarios have correct scenario IDs", () => {
     expect(cl.scenarioId).toBe("current-law");
+    expect(ft.scenarioId).toBe("fedea-transition");
     expect(na.scenarioId).toBe("notional-accounts");
     expect(s13.scenarioId).toBe("sustainability-2013");
     expect(eu.scenarioId).toBe("eu-convergence");
     expect(gr.scenarioId).toBe("greece-haircut");
   });
 
-  it("all 5 scenarios produce non-empty timelines", () => {
+  it("all 6 scenarios produce non-empty timelines", () => {
     for (const r of allResults) {
       expect(r.timeline.length).toBeGreaterThan(0);
       expect(r.timeline[0].age).toBe(DEFAULT_PROFILE.desiredRetirementAge);
@@ -50,7 +56,7 @@ describe("E2E smoke test - default inputs produce 5 valid scenarios", () => {
     }
   });
 
-  it("all 5 scenarios have valid replacement rates", () => {
+  it("all 6 scenarios have valid replacement rates", () => {
     for (const r of allResults) {
       expect(r.replacementRate).toBeGreaterThan(0);
       expect(r.replacementRate).toBeLessThan(3);
@@ -210,7 +216,7 @@ describe("Boundary tests - extreme input values", () => {
     expect(result14.monthlyPension).not.toBe(result12.monthlyPension);
   });
 
-  it("all 5 scenarios work with boundary profiles", () => {
+  it("all 6 scenarios work with boundary profiles", () => {
     const extremeProfile: UserProfile = {
       age: 18,
       monthlySalary: 1134,
@@ -223,12 +229,13 @@ describe("Boundary tests - extreme input values", () => {
     };
 
     const cl = calculateCurrentLaw(extremeProfile);
+    const ft = calculateFEDEATransition(extremeProfile);
     const na = calculateNotionalAccounts(extremeProfile);
     const s13 = calculateSustainability2013(extremeProfile);
     const eu = calculateEUConvergence(extremeProfile);
     const gr = calculateGreeceHaircut(extremeProfile);
 
-    for (const r of [cl, na, s13, eu, gr]) {
+    for (const r of [cl, ft, na, s13, eu, gr]) {
       expect(r.monthlyPension).toBeGreaterThan(0);
       expect(r.timeline.length).toBeGreaterThan(0);
       expect(Number.isFinite(r.monthlyPension)).toBe(true);

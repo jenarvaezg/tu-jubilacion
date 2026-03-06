@@ -3,6 +3,7 @@ import { SCENARIO_LABELS, SCENARIO_COLORS } from '../../hooks/use-chart-data.ts'
 
 const SCENARIO_ORDER: readonly ScenarioId[] = [
   'current-law',
+  'fedea-transition',
   'notional-accounts',
   'sustainability-2013',
   'eu-convergence',

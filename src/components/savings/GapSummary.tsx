@@ -6,6 +6,7 @@ import { SCENARIO_LABELS } from "../../hooks/use-chart-data.ts";
 import { formatPercent } from "../../utils/format.ts";
 
 const COMPARISON_OPTIONS: readonly ScenarioId[] = [
+  "fedea-transition",
   "notional-accounts",
   "sustainability-2013",
   "eu-convergence",
@@ -53,14 +54,15 @@ export function GapSummary({
         </p>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
           La referencia de nivel de vida sale de tu ingreso neto anual actual,
-          normalizado a 12 meses. Asi evitamos que las 14 pagas oculten la
-          renta mensual que realmente quieres sostener en jubilacion.
+          normalizado a 12 meses. La brecha se compara con la pension estimada
+          al jubilarte tambien en euros de hoy, para no mezclar cifras
+          nominales futuras con tu gasto actual.
         </p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-              Nivel de vida objetivo
+              Nivel de vida objetivo (hoy)
             </p>
             <CurrencyDisplay
               amount={gap.targetMonthlyIncome}

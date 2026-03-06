@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import type { ScenarioResult, ScenarioId } from "../engine/types.ts";
 import type { PortfolioYearlyProjection } from "../engine/savings/types.ts";
+import { getChartStartAge } from "./use-chart-data.ts";
 
 export interface CombinedChartDataPoint {
   readonly age: number;
@@ -12,6 +13,7 @@ const MAX_CHART_AGE = 90;
 
 const SCENARIO_IDS: readonly ScenarioId[] = [
   "current-law",
+  "fedea-transition",
   "notional-accounts",
   "sustainability-2013",
   "eu-convergence",
@@ -39,7 +41,11 @@ export function buildCombinedChartData(
 
   if (results.length === 0) return [];
 
-  const chartStartAge = Math.max(18, Math.min(currentAge, MAX_CHART_AGE));
+  const retirementAge =
+    results[0]?.timeline[0]?.age !== undefined
+      ? results[0].timeline[0].age
+      : MAX_CHART_AGE;
+  const chartStartAge = getChartStartAge(currentAge, retirementAge);
   const ages = Array.from(
     { length: MAX_CHART_AGE - chartStartAge + 1 },
     (_, i) => chartStartAge + i,

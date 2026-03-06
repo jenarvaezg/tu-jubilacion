@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { calculateCurrentLaw } from "../../src/engine/scenarios/current-law";
+import { calculateFEDEATransition } from "../../src/engine/scenarios/fedea-transition";
 import { calculateNotionalAccounts } from "../../src/engine/scenarios/notional-accounts";
 import { calculateSustainability2013 } from "../../src/engine/scenarios/sustainability-2013";
 import { calculateEUConvergence } from "../../src/engine/scenarios/eu-convergence";
@@ -246,7 +247,7 @@ describe("Cross-profile sanity checks", () => {
   });
 });
 
-// ── Cross-Scenario Validation (All 5 scenarios, All 5 profiles) ────
+// ── Cross-Scenario Validation (All 6 scenarios, All 5 profiles) ────
 
 const ALL_PROFILES = [PROFILE_A, PROFILE_B, PROFILE_C, PROFILE_D, PROFILE_E];
 const PROFILE_NAMES = [
@@ -261,24 +262,33 @@ describe("Cross-scenario validation - all profiles x all scenarios", () => {
   ALL_PROFILES.forEach((profile, idx) => {
     describe(`Profile ${PROFILE_NAMES[idx]}`, () => {
       const cl = calculateCurrentLaw(profile);
+      const ft = calculateFEDEATransition(profile);
       const na = calculateNotionalAccounts(profile);
       const s13 = calculateSustainability2013(profile);
       const eu = calculateEUConvergence(profile);
       const gr = calculateGreeceHaircut(profile);
 
-      it("all 5 scenarios produce positive pensions", () => {
+      it("all 6 scenarios produce positive pensions", () => {
         expect(cl.monthlyPension).toBeGreaterThan(0);
+        expect(ft.monthlyPension).toBeGreaterThan(0);
         expect(na.monthlyPension).toBeGreaterThan(0);
         expect(s13.monthlyPension).toBeGreaterThan(0);
         expect(eu.monthlyPension).toBeGreaterThan(0);
         expect(gr.monthlyPension).toBeGreaterThan(0);
       });
 
-      it("all 5 scenarios produce valid timelines", () => {
-        for (const result of [cl, na, s13, eu, gr]) {
+      it("all 6 scenarios produce valid timelines", () => {
+        for (const result of [cl, ft, na, s13, eu, gr]) {
           expect(result.timeline.length).toBeGreaterThan(0);
           expect(result.timeline[0].age).toBe(profile.desiredRetirementAge);
         }
+      });
+
+      it("FEDEA transition sits between current law and notional", () => {
+        expect(ft.monthlyPension).toBeLessThanOrEqual(cl.monthlyPension);
+        expect(ft.monthlyPension).toBeGreaterThanOrEqual(
+          na.monthlyPension * 0.99,
+        );
       });
 
       it("notional accounts pension <= current law", () => {

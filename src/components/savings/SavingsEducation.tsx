@@ -7,7 +7,7 @@ export function SavingsEducation() {
       <p className="text-gray-700 leading-relaxed">
         El objetivo es sostener ingresos durante toda la jubilacion. Incluso
         con volatilidad, la probabilidad de acumular mas patrimonio con fondos
-        indexados globales que con depositos a 20+ anos es de aproximadamente{" "}
+        indexados globales que con liquidez o letras a 20+ anos es de aproximadamente{" "}
         <span className="font-bold">~95%</span>. Pequenas diferencias de
         rentabilidad se convierten en grandes diferencias de renta futura.
       </p>
@@ -27,7 +27,9 @@ export function SavingsEducation() {
           </p>
         </div>
         <div className="rounded-lg bg-gray-50 p-3">
-          <p className="text-xs font-bold text-gray-700">Depositos</p>
+          <p className="text-xs font-bold text-gray-700">
+            Letras Tesoro / liquidez
+          </p>
           <p className="text-lg font-extrabold text-gray-600">~0% real</p>
           <p className="text-[10px] text-gray-500">
             Tras inflacion, no creces

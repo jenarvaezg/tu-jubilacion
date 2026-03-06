@@ -17,20 +17,20 @@ export function DrawdownYearsControl({
     <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3">
       <div className="flex-1">
         <p className="text-xs font-medium text-gray-500">
-          Anos de retirada del ahorro
+          Durante cuantos anos quieres complementar tus ingresos
         </p>
         <div className="mt-1 flex items-center gap-3">
           <input
             type="range"
-            aria-label="Anos de retirada del ahorro"
+            aria-label="Durante cuantos anos quieres complementar tus ingresos"
             min={5}
             max={40}
             step={1}
             value={drawdownYears}
-            onChange={(e) =>
+            onChange={(event) =>
               dispatch({
                 type: "SET_DRAWDOWN_YEARS",
-                payload: Number(e.target.value),
+                payload: Number(event.target.value),
               })
             }
             className="h-2 w-32 cursor-pointer accent-blue-600"
@@ -39,6 +39,10 @@ export function DrawdownYearsControl({
             {drawdownYears} anos
           </span>
         </div>
+        <p className="mt-1 text-[11px] text-gray-400">
+          Aproxima cuantos anos quieres que tu cartera cubra rentas desde la
+          jubilacion. Por defecto se deriva de esperanza de vida.
+        </p>
         {isOverride && (
           <p className="mt-1 text-[11px] text-gray-400">
             Derivado: {derivedDefault} anos

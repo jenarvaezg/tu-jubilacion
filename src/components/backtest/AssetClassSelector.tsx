@@ -5,7 +5,6 @@ const SERIES_ORDER: readonly HistoricalSeriesId[] = [
   "sp500",
   "msci-world",
   "tbond",
-  "tbill",
 ];
 
 const SERIES_COLORS: Record<HistoricalSeriesId, string> = {
@@ -43,7 +42,7 @@ export function AssetClassSelector({
       <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
         Clase de activo historica
       </h3>
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {SERIES_ORDER.map((id) => {
           const series = HISTORICAL_SERIES[id];
           const isActive = id === selectedSeriesId;

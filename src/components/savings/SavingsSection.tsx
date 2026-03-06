@@ -99,6 +99,7 @@ export function SavingsSection({
 
       <CombinedHeroChart
         data={combinedChartData}
+        comparisonScenarioId={comparisonScenarioId}
         retirementAge={retirementAge}
         displayMode={displayMode}
       />

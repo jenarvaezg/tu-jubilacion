@@ -119,6 +119,10 @@ export function SpaghettiChart({ summary }: SpaghettiChartProps) {
           Euros reales
         </span>
       </div>
+      <p className="text-xs leading-relaxed text-gray-500">
+        Cada linea representa una cohorte historica distinta de ahorro. Las
+        tres destacadas muestran mejor, mediana y peor secuencia observada.
+      </p>
       <div className="rounded-xl bg-white p-4 shadow-sm border border-gray-100">
         <ResponsiveContainer width="100%" height={320}>
           <LineChart
@@ -129,7 +133,7 @@ export function SpaghettiChart({ summary }: SpaghettiChartProps) {
             <XAxis
               dataKey="yearIndex"
               label={{
-                value: "Anos desde el inicio",
+                value: "Anos desde que empiezas a ahorrar",
                 position: "insideBottom",
                 offset: -8,
                 fontSize: 12,

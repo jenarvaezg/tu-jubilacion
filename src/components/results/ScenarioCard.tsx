@@ -5,10 +5,13 @@ import {
   SCENARIO_COLORS,
 } from "../../hooks/use-chart-data.ts";
 import { formatPercent } from "../../utils/format.ts";
+import { getRetirementMonthlyPensionReal } from "../../engine/scenario-utils.ts";
 
 const SCENARIO_DESCRIPTIONS: Record<ScenarioId, string> = {
   "current-law":
     "La referencia legal de hoy. Sirve como punto de partida util, pero no debe leerse como una promesa estable a 20 o 30 anos vista.",
+  "fedea-transition":
+    "Escenario intermedio: mezcla gradual entre ley actual y cuentas nocionales segun cohorte. Sirve para visualizar una reforma plausible sin saltar directamente al modelo nocional puro.",
   "notional-accounts":
     "Una familia de reformas usada en paises como Suecia o Italia. La usamos como referencia plausible de ajuste entre cotizaciones, pension y esperanza de vida; no como prediccion obligatoria.",
   "sustainability-2013":
@@ -30,9 +33,10 @@ export function ScenarioCard({
   baselinePension,
   showDetail,
 }: ScenarioCardProps) {
+  const displayedPension = getRetirementMonthlyPensionReal(result);
   const diff =
     baselinePension > 0
-      ? (result.monthlyPension - baselinePension) / baselinePension
+      ? (displayedPension - baselinePension) / baselinePension
       : 0;
   const isBaseline = result.scenarioId === "current-law";
   const isLower = diff < -0.005;
@@ -76,9 +80,11 @@ export function ScenarioCard({
       </p>
 
       <div className="mt-2">
-        <p className="text-sm text-gray-600">Ingreso publico estimado</p>
+        <p className="text-sm text-gray-600">
+          Ingreso publico estimado (euros de hoy)
+        </p>
         <CurrencyDisplay
-          amount={result.monthlyPension}
+          amount={displayedPension}
           className="text-xl text-gray-900"
         />
       </div>

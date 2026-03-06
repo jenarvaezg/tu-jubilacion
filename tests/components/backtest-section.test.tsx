@@ -18,12 +18,12 @@ describe("BacktestSection", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders all 4 asset class selector options", () => {
+  it("renders the curated asset class selector options", () => {
     render(<BacktestSection {...defaultProps} />);
     expect(screen.getByText("S&P 500 (EEUU)")).toBeInTheDocument();
     expect(screen.getByText("MSCI World")).toBeInTheDocument();
     expect(screen.getByText("Bonos 10A (EEUU)")).toBeInTheDocument();
-    expect(screen.getByText("Letras (EEUU)")).toBeInTheDocument();
+    expect(screen.queryByText("Letras (EEUU)")).not.toBeInTheDocument();
   });
 
   it("renders the disclaimer callout", () => {
@@ -56,6 +56,9 @@ describe("BacktestSection", () => {
 
     expect(
       screen.getByText(/MSCI World Gross Total Return Index/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/No mostramos Letras del Tesoro de Espana/i),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/No incluye comisiones, impuestos ni conversion/i),

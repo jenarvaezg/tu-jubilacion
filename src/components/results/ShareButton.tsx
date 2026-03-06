@@ -1,6 +1,7 @@
 import type { ScenarioResult } from "../../engine/types.ts";
 import { useShare } from "../../hooks/use-share.ts";
 import { formatCurrency } from "../../utils/format.ts";
+import { getRetirementMonthlyPensionReal } from "../../engine/scenario-utils.ts";
 
 interface ShareButtonProps {
   readonly getShareUrl: () => string;
@@ -16,7 +17,10 @@ function buildShareText(
   const floorResult = reformResults.reduce<ScenarioResult | null>(
     (lowest, candidate) => {
       if (lowest === null) return candidate;
-      return candidate.monthlyPension < lowest.monthlyPension ? candidate : lowest;
+      return getRetirementMonthlyPensionReal(candidate) <
+        getRetirementMonthlyPensionReal(lowest)
+        ? candidate
+        : lowest;
     },
     null,
   );
@@ -25,7 +29,7 @@ function buildShareText(
 
   if (currentLaw && floorResult) {
     lines.push(
-      `Mi ingreso publico de jubilacion se mueve entre ${formatCurrency(floorResult.monthlyPension)} y ${formatCurrency(currentLaw.monthlyPension)}/mes segun como se reforme el sistema.`,
+      `Mi ingreso publico de jubilacion se mueve entre ${formatCurrency(getRetirementMonthlyPensionReal(floorResult))} y ${formatCurrency(getRetirementMonthlyPensionReal(currentLaw))}/mes segun como se reforme el sistema.`,
     );
     lines.push(
       "La clave no es acertar la reforma exacta, sino planificar ahorro para mantener tu nivel de vida durante toda la jubilacion.",

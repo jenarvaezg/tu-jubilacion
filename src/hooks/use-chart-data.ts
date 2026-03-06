@@ -9,6 +9,7 @@ export interface ChartDataPoint {
 
 export const SCENARIO_COLORS: Record<ScenarioId, string> = {
   "current-law": "var(--color-scenario-current)",
+  "fedea-transition": "var(--color-scenario-transition)",
   "notional-accounts": "var(--color-scenario-notional)",
   "sustainability-2013": "var(--color-scenario-sustainability)",
   "eu-convergence": "var(--color-scenario-eu)",
@@ -17,6 +18,7 @@ export const SCENARIO_COLORS: Record<ScenarioId, string> = {
 
 export const SCENARIO_LABELS: Record<ScenarioId, string> = {
   "current-law": "Legislacion vigente",
+  "fedea-transition": "Transicion FEDEA",
   "notional-accounts": "Cuentas nocionales",
   "sustainability-2013": "Factor sostenibilidad 2013",
   "eu-convergence": "Convergencia UE (60%)",
@@ -26,11 +28,23 @@ export const SCENARIO_LABELS: Record<ScenarioId, string> = {
 const MAX_CHART_AGE = 90;
 const SCENARIO_IDS: readonly ScenarioId[] = [
   "current-law",
+  "fedea-transition",
   "notional-accounts",
   "sustainability-2013",
   "eu-convergence",
   "greece-haircut",
 ];
+
+export function getChartStartAge(
+  currentAge: number,
+  retirementAge: number,
+): number {
+  const focusedStartAge = Math.min(60, retirementAge - 6);
+  return Math.max(
+    18,
+    Math.min(MAX_CHART_AGE, Math.max(currentAge, focusedStartAge)),
+  );
+}
 
 export function realKey(scenarioId: ScenarioId): string {
   return `${scenarioId}__real`;
@@ -53,7 +67,11 @@ export function buildChartData({
 }: UseChartDataParams): readonly ChartDataPoint[] {
   if (results.length === 0) return [];
 
-  const chartStartAge = Math.max(18, Math.min(currentAge, MAX_CHART_AGE));
+  const retirementAge =
+    results[0]?.timeline[0]?.age !== undefined
+      ? results[0].timeline[0].age
+      : MAX_CHART_AGE;
+  const chartStartAge = getChartStartAge(currentAge, retirementAge);
   const ages = Array.from(
     { length: MAX_CHART_AGE - chartStartAge + 1 },
     (_, i) => chartStartAge + i,

@@ -100,6 +100,10 @@ export function BacktestSection({
           <div className="mt-3 flex flex-col gap-2 text-xs text-amber-800 leading-relaxed">
             <p>{SERIES_ATTRIBUTION[seriesId]}</p>
             <p>
+              No mostramos Letras del Tesoro de Espana en este backtest hasta
+              incorporar una serie historica homogenea y comparable.
+            </p>
+            <p>
               No incluye comisiones, impuestos ni conversion de divisa EUR/USD.
             </p>
             <p className="text-[11px] italic text-amber-700">

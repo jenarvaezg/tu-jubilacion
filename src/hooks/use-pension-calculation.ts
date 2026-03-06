@@ -3,6 +3,7 @@ import type { ScenarioResult } from "../engine/types.ts";
 import type { CalculationInputs } from "../state/types.ts";
 import {
   calculateCurrentLaw,
+  calculateFEDEATransition,
   calculateNotionalAccounts,
   calculateSustainability2013,
   calculateEUConvergence,
@@ -36,6 +37,10 @@ export function usePensionCalculation(
 
       const results: ScenarioResult[] = [
         calculateCurrentLaw(profile, sharedConfig),
+        calculateFEDEATransition(profile, {
+          ...sharedConfig,
+          notionalGrowthScenario,
+        }),
         calculateNotionalAccounts(profile, {
           ...sharedConfig,
           notionalGrowthScenario,

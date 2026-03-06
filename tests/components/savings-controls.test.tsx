@@ -6,7 +6,7 @@ import { CurrentSavingsBalanceControl } from "../../src/components/savings/Curre
 import { DrawdownYearsControl } from "../../src/components/savings/DrawdownYearsControl";
 
 describe("CurrentSavingsBalanceControl", () => {
-  it("dispatches current savings balance changes", () => {
+  it("allows clearing the input and commits on blur", () => {
     const dispatch = vi.fn();
 
     render(
@@ -17,12 +17,16 @@ describe("CurrentSavingsBalanceControl", () => {
     );
 
     fireEvent.change(screen.getByLabelText("Ahorro actual para jubilacion"), {
-      target: { value: "40000" },
+      target: { value: "" },
     });
+
+    expect(dispatch).not.toHaveBeenCalled();
+
+    fireEvent.blur(screen.getByLabelText("Ahorro actual para jubilacion"));
 
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_CURRENT_SAVINGS_BALANCE",
-      payload: 40000,
+      payload: 0,
     });
   });
 });
@@ -87,9 +91,14 @@ describe("DrawdownYearsControl", () => {
       />,
     );
 
-    fireEvent.change(screen.getByLabelText("Anos de retirada del ahorro"), {
-      target: { value: "24" },
-    });
+    fireEvent.change(
+      screen.getByLabelText(
+        "Durante cuantos anos quieres complementar tus ingresos",
+      ),
+      {
+        target: { value: "24" },
+      },
+    );
     fireEvent.click(screen.getByRole("button", { name: /Restaurar defecto/i }));
 
     expect(screen.getByText("Derivado: 21 anos")).toBeInTheDocument();

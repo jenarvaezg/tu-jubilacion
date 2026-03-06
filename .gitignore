@@ -6,6 +6,8 @@ dist/
 dist-ssr/
 coverage/
 *.tsbuildinfo
+playwright-report/
+test-results/
 
 # Logs
 logs/
