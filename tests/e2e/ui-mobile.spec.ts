@@ -27,6 +27,23 @@ test("mantiene legibilidad y evita overflow horizontal en movil", async ({
     page.getByRole("heading", { name: "Transicion FEDEA" }),
   ).toBeVisible();
 
+  const heroSurface = page
+    .getByTestId("hero-chart")
+    .locator(".recharts-surface");
+  const heroBox = await heroSurface.boundingBox();
+  expect(heroBox).not.toBeNull();
+  if (heroBox) {
+    await heroSurface.click({
+      position: {
+        x: heroBox.width * 0.7,
+        y: heroBox.height * 0.35,
+      },
+    });
+  }
+  await expect(
+    page.getByText(/equivalente real \(hoy\):/).first(),
+  ).toBeVisible();
+
   await page.getByText("Brecha de ingresos a cubrir").scrollIntoViewIfNeeded();
   await expect(page.getByTestId("combined-income-chart")).toBeVisible();
 

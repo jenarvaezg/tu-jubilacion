@@ -53,8 +53,8 @@ export function ChartTooltip({
       <p className="mb-2 text-xs text-gray-500">En {modeLabel}</p>
       <div className="flex flex-col gap-1">
         {SCENARIO_ORDER.map((scenarioId) => {
-          const item = payload.find((p) => p.dataKey === scenarioId);
-          if (!item) return null;
+          const displayValue = point?.[scenarioId];
+          if (displayValue === undefined) return null;
 
           return (
             <div key={scenarioId} className="mb-1">
@@ -69,7 +69,7 @@ export function ChartTooltip({
                   </span>
                 </div>
                 <span className="text-xs font-semibold tabular-nums text-gray-800">
-                  {formatCurrency(item.value)}
+                  {formatCurrency(displayValue)}
                 </span>
               </div>
               {point !== undefined && (
@@ -78,8 +78,8 @@ export function ChartTooltip({
                     {counterpartLabel}:{" "}
                     {formatCurrency(
                       displayMode === "real"
-                        ? (point[nominalKey(scenarioId)] ?? item.value)
-                        : (point[realKey(scenarioId)] ?? item.value),
+                        ? (point[nominalKey(scenarioId)] ?? displayValue)
+                        : (point[realKey(scenarioId)] ?? displayValue),
                     )}
                   </span>
                 </div>
@@ -88,10 +88,8 @@ export function ChartTooltip({
           );
         })}
         {(() => {
-          const combined = payload.find(
-            (p) => p.dataKey === "pension-plus-savings",
-          );
-          if (!combined) return null;
+          const combinedValue = point?.["pension-plus-savings"];
+          if (combinedValue === undefined) return null;
           return (
             <>
               <div className="my-1.5 border-t border-gray-200" />
@@ -106,7 +104,7 @@ export function ChartTooltip({
                   </span>
                 </div>
                 <span className="text-xs font-semibold tabular-nums text-gray-800">
-                  {formatCurrency(combined.value)}
+                  {formatCurrency(combinedValue)}
                 </span>
               </div>
             </>

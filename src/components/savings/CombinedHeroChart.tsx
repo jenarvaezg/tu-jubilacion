@@ -88,6 +88,7 @@ export function CombinedHeroChart({
               }}
             />
             <Tooltip
+              allowEscapeViewBox={{ x: true, y: true }}
               content={
                 <ChartTooltip
                   displayMode={displayMode}
@@ -113,7 +114,16 @@ export function CombinedHeroChart({
                 type="monotone"
                 dataKey={scenarioId}
                 stroke={SCENARIO_COLORS[scenarioId]}
-                strokeWidth={scenarioId === "current-law" ? 2.5 : 1.5}
+                strokeWidth={
+                  scenarioId === "current-law"
+                    ? 2.5
+                    : scenarioId === "fedea-transition"
+                      ? 2.25
+                      : 1.5
+                }
+                strokeDasharray={
+                  scenarioId === "fedea-transition" ? "6 3" : undefined
+                }
                 dot={false}
                 activeDot={{ r: 4 }}
                 connectNulls={false}

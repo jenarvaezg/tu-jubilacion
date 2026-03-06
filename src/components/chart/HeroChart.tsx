@@ -73,7 +73,10 @@ export function HeroChart({ data, retirementAge, displayMode }: HeroChartProps) 
                 tickFormatter={(v: number) => `${Math.round(v)}`}
                 label={{ value: 'EUR/mes', angle: -90, position: 'insideLeft', offset: -2, fontSize: 12 }}
               />
-              <Tooltip content={<ChartTooltip displayMode={displayMode} />} />
+              <Tooltip
+                allowEscapeViewBox={{ x: true, y: true }}
+                content={<ChartTooltip displayMode={displayMode} />}
+              />
               {REFERENCE_MARKERS.map((marker) => (
                 <ReferenceLine
                   key={marker.age}
@@ -113,7 +116,16 @@ export function HeroChart({ data, retirementAge, displayMode }: HeroChartProps) 
                   type="monotone"
                   dataKey={scenarioId}
                   stroke={SCENARIO_COLORS[scenarioId]}
-                  strokeWidth={scenarioId === 'current-law' ? 2.5 : 1.5}
+                  strokeWidth={
+                    scenarioId === 'current-law'
+                      ? 2.5
+                      : scenarioId === 'fedea-transition'
+                        ? 2.25
+                        : 1.5
+                  }
+                  strokeDasharray={
+                    scenarioId === 'fedea-transition' ? '6 3' : undefined
+                  }
                   dot={false}
                   activeDot={{ r: 4 }}
                   connectNulls={false}

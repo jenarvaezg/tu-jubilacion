@@ -17,9 +17,26 @@ const DEFAULT_CONFIG: FEDEATransitionConfig = {
   currentYear: 2025,
 };
 
+const TRANSITION_START_BIRTH_YEAR = 1975;
+const TRANSITION_END_BIRTH_YEAR = 2005;
+const MAX_NOTIONAL_WEIGHT = 0.75;
+
 function getNotionalWeight(profile: UserProfile, currentYear: number): number {
   const birthYear = currentYear - profile.age;
-  return Math.max(0, Math.min(1, (birthYear - 1970) * 0.05));
+
+  if (birthYear <= TRANSITION_START_BIRTH_YEAR) {
+    return 0;
+  }
+
+  if (birthYear >= TRANSITION_END_BIRTH_YEAR) {
+    return MAX_NOTIONAL_WEIGHT;
+  }
+
+  const progress =
+    (birthYear - TRANSITION_START_BIRTH_YEAR) /
+    (TRANSITION_END_BIRTH_YEAR - TRANSITION_START_BIRTH_YEAR);
+
+  return Math.max(0, Math.min(MAX_NOTIONAL_WEIGHT, progress * MAX_NOTIONAL_WEIGHT));
 }
 
 export function calculateFEDEATransition(

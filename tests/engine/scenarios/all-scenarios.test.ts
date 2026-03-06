@@ -92,6 +92,9 @@ describe("Scenario 2B: FEDEA Transition", () => {
     expect(transition.monthlyPension).toBeGreaterThanOrEqual(
       notional.monthlyPension,
     );
+    expect(
+      Math.abs(transition.monthlyPension - notional.monthlyPension),
+    ).toBeGreaterThan(1);
   });
 
   it("has a valid blended timeline", () => {
