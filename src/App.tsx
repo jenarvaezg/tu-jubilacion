@@ -84,6 +84,7 @@ function App() {
           savingsCalc={savingsCalc}
           comparisonChartData={comparisonChartData}
           combinedChartData={combinedChartData}
+          profile={state.calculation.profile}
           comparisonScenarioId={state.calculation.comparisonScenarioId}
           investmentProfileId={state.calculation.investmentProfileId}
           currentSavingsBalance={state.calculation.currentSavingsBalance}
@@ -92,6 +93,7 @@ function App() {
           monthlyContributionOverride={
             state.calculation.monthlyContributionOverride
           }
+          drawdownYears={savingsCalc.drawdownYears}
           drawdownYearsOverride={state.calculation.drawdownYears}
           derivedDrawdownYears={savingsCalc.derivedDrawdownYears}
           dispatch={dispatch}

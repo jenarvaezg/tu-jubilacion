@@ -2,6 +2,7 @@ import type { SavingsCalculationResult } from "../../hooks/use-savings-calculati
 import type { ComparisonChartDataPoint } from "../../hooks/use-comparison-chart-data.ts";
 import type { CombinedChartDataPoint } from "../../hooks/use-combined-chart-data.ts";
 import type { ScenarioId } from "../../engine/types.ts";
+import type { UserProfile } from "../../engine/types.ts";
 import type { InvestmentProfileId } from "../../engine/savings/types.ts";
 import type { AppAction } from "../../state/types.ts";
 import { GapSummary } from "./GapSummary.tsx";
@@ -18,12 +19,14 @@ interface SavingsSectionProps {
   readonly savingsCalc: SavingsCalculationResult;
   readonly comparisonChartData: readonly ComparisonChartDataPoint[];
   readonly combinedChartData: readonly CombinedChartDataPoint[];
+  readonly profile: UserProfile;
   readonly comparisonScenarioId: ScenarioId;
   readonly investmentProfileId: InvestmentProfileId;
   readonly currentSavingsBalance: number;
   readonly retirementAge: number;
   readonly displayMode: "real" | "nominal";
   readonly monthlyContributionOverride: number | null;
+  readonly drawdownYears: number;
   readonly drawdownYearsOverride: number | null;
   readonly derivedDrawdownYears: number;
   readonly dispatch: React.Dispatch<AppAction>;
@@ -33,12 +36,14 @@ export function SavingsSection({
   savingsCalc,
   comparisonChartData,
   combinedChartData,
+  profile,
   comparisonScenarioId,
   investmentProfileId,
   currentSavingsBalance,
   retirementAge,
   displayMode,
   monthlyContributionOverride,
+  drawdownYears,
   drawdownYearsOverride,
   derivedDrawdownYears,
   dispatch,
@@ -66,6 +71,7 @@ export function SavingsSection({
 
       <GapSummary
         gap={gap}
+        profile={profile}
         comparisonScenarioId={comparisonScenarioId}
         dispatch={dispatch}
       />
@@ -101,6 +107,7 @@ export function SavingsSection({
         data={combinedChartData}
         comparisonScenarioId={comparisonScenarioId}
         retirementAge={retirementAge}
+        drawdownYears={drawdownYears}
         displayMode={displayMode}
       />
 

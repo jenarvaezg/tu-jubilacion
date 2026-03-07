@@ -31,6 +31,7 @@ interface CombinedHeroChartProps {
   readonly data: readonly CombinedChartDataPoint[];
   readonly comparisonScenarioId: ScenarioId;
   readonly retirementAge: number;
+  readonly drawdownYears: number;
   readonly displayMode: "real" | "nominal";
 }
 
@@ -38,9 +39,15 @@ export function CombinedHeroChart({
   data,
   comparisonScenarioId,
   retirementAge,
+  drawdownYears,
   displayMode,
 }: CombinedHeroChartProps) {
   if (data.length === 0) return null;
+
+  const privateIncomeEndAge = retirementAge + drawdownYears;
+  const showsPrivateIncomeEnd =
+    privateIncomeEndAge > retirementAge &&
+    privateIncomeEndAge <= data[data.length - 1].age;
 
   return (
     <div className="flex flex-col gap-3" data-testid="combined-income-chart">
@@ -108,6 +115,21 @@ export function CombinedHeroChart({
                 fill: "#1e40af",
               }}
             />
+            {showsPrivateIncomeEnd && (
+              <ReferenceLine
+                x={privateIncomeEndAge}
+                stroke="#047857"
+                strokeDasharray="2 6"
+                label={{
+                  value: `${privateIncomeEndAge} fin complemento`,
+                  position: "insideTop",
+                  dy: 18,
+                  dx: 8,
+                  fontSize: REFERENCE_LABEL_FONT_SIZE,
+                  fill: "#047857",
+                }}
+              />
+            )}
             {SCENARIO_ORDER.map((scenarioId) => (
               <Line
                 key={scenarioId}
@@ -121,16 +143,15 @@ export function CombinedHeroChart({
                       ? 2.25
                       : 1.5
                 }
-                strokeDasharray={
-                  scenarioId === "fedea-transition" ? "6 3" : undefined
-                }
+                strokeOpacity={scenarioId === "fedea-transition" ? 0.92 : 1}
+                strokeLinecap="round"
                 dot={false}
                 activeDot={{ r: 4 }}
                 connectNulls={false}
               />
             ))}
             <Line
-              type="monotone"
+              type="linear"
               dataKey="pension-plus-savings"
               stroke="#059669"
               strokeWidth={3.5}
@@ -171,6 +192,14 @@ export function CombinedHeroChart({
           </span>
         </div>
       </div>
+      {showsPrivateIncomeEnd && (
+        <p className="text-xs leading-relaxed text-gray-500">
+          El salto en los {privateIncomeEndAge} anos marca el fin del
+          complemento privado. El plan asume {drawdownYears} anos de apoyo
+          desde la jubilacion; a partir de ahi la linea vuelve a reflejar solo
+          la pension publica estimada.
+        </p>
+      )}
     </div>
   );
 }

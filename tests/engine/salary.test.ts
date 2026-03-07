@@ -6,6 +6,7 @@ import {
   monthlyToAnnualGross,
   grossToNetAnnual,
   deriveMonthlyLifestyleTarget,
+  deriveLifestyleTargetBreakdown,
 } from "../../src/engine/salary";
 
 describe("grossToBaseCotizacion", () => {
@@ -172,5 +173,41 @@ describe("deriveMonthlyLifestyleTarget", () => {
     });
 
     expect(target).toBeCloseTo(annualNet / 12, 2);
+  });
+});
+
+describe("deriveLifestyleTargetBreakdown", () => {
+  it("explains a net monthly input with 14 payments", () => {
+    const breakdown = deriveLifestyleTargetBreakdown({
+      monthlySalary: 4700,
+      salaryType: "net",
+      ccaa: "madrid",
+      pagasExtra: true,
+    });
+
+    expect(breakdown.inputMode).toBe("net-monthly");
+    expect(breakdown.inputAmount).toBe(4700);
+    expect(breakdown.paymentsPerYear).toBe(14);
+    expect(breakdown.annualNet).toBe(65800);
+    expect(breakdown.normalizedMonthlyNet).toBeCloseTo(5483.33, 2);
+  });
+
+  it("explains a gross input as annual compensation", () => {
+    const annualGross = 48000;
+    const breakdown = deriveLifestyleTargetBreakdown({
+      monthlySalary: annualGross / 12,
+      salaryType: "gross",
+      ccaa: "madrid",
+      pagasExtra: false,
+    });
+
+    expect(breakdown.inputMode).toBe("gross-annual");
+    expect(breakdown.inputAmount).toBe(annualGross);
+    expect(breakdown.annualGross).toBe(annualGross);
+    expect(breakdown.annualNet).toBeCloseTo(grossToNetAnnual(annualGross, "madrid"), 2);
+    expect(breakdown.normalizedMonthlyNet).toBeCloseTo(
+      grossToNetAnnual(annualGross, "madrid") / 12,
+      2,
+    );
   });
 });

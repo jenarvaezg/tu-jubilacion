@@ -10,6 +10,11 @@ import {
   DEFAULT_PERSONAL_SITUATIONS,
   type PersonalSituations,
 } from "../engine/types.ts";
+import {
+  grossToNetAnnual,
+  monthlyToAnnualGross,
+  netToGross,
+} from "../engine/salary.ts";
 
 const STORAGE_KEY = "tu-jubilacion:state:v1";
 
@@ -20,6 +25,10 @@ function withPersonalSituations(state: AppState) {
       DEFAULT_PERSONAL_SITUATIONS),
     ...(state.calculation.profile.personalSituations ?? {}),
   } satisfies PersonalSituations;
+}
+
+function roundMoney(amount: number): number {
+  return Math.round(amount * 100) / 100;
 }
 
 function appReducer(state: AppState, action: AppAction): AppState {
@@ -49,6 +58,9 @@ function appReducer(state: AppState, action: AppAction): AppState {
         },
       };
     case "SET_SALARY_TYPE":
+      if (state.calculation.profile.salaryType === action.payload) {
+        return state;
+      }
       return {
         ...state,
         calculation: {
@@ -56,6 +68,27 @@ function appReducer(state: AppState, action: AppAction): AppState {
           profile: {
             ...state.calculation.profile,
             salaryType: action.payload,
+            monthlySalary: roundMoney(
+              action.payload === "gross"
+                ? monthlyToAnnualGross(
+                    netToGross(
+                      state.calculation.profile.monthlySalary,
+                      state.calculation.profile.ccaa,
+                      state.calculation.profile.pagasExtra,
+                    ),
+                    state.calculation.profile.pagasExtra,
+                  ) / 12
+                : grossToNetAnnual(
+                    monthlyToAnnualGross(
+                      state.calculation.profile.monthlySalary,
+                      state.calculation.profile.pagasExtra,
+                    ),
+                    state.calculation.profile.ccaa,
+                  ) / 12,
+            ),
+            // Gross input is shown as annual, so we normalize its internal
+            // representation to 12 pays. Users can still choose 12/14 in net mode.
+            pagasExtra: false,
           },
         },
       };

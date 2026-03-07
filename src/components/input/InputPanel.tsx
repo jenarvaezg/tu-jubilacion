@@ -24,9 +24,9 @@ export function InputPanel({ state, dispatch }: InputPanelProps) {
         <h2 className="text-lg font-bold text-gray-900">Tu punto de partida</h2>
       </div>
       <p className="text-sm leading-relaxed text-gray-600">
-        Usamos tu sueldo actual como referencia de nivel de vida y estimamos
-        qué parte podría cubrir la pensión pública si el sistema acaba
-        reformándose.
+        Usamos tu ingreso actual como referencia de nivel de vida. Puedes
+        introducirlo como neto mensual o como bruto anual y la app lo
+        normaliza para comparar escenarios en una misma base.
       </p>
 
       <AgeInput

@@ -1,9 +1,10 @@
 import type { RetirementIncomeGap } from "../../engine/savings/types.ts";
-import type { ScenarioId } from "../../engine/types.ts";
+import type { ScenarioId, UserProfile } from "../../engine/types.ts";
 import type { AppAction } from "../../state/types.ts";
+import { deriveLifestyleTargetBreakdown } from "../../engine/salary.ts";
 import { CurrencyDisplay } from "../shared/CurrencyDisplay.tsx";
 import { SCENARIO_LABELS } from "../../hooks/use-chart-data.ts";
-import { formatPercent } from "../../utils/format.ts";
+import { formatCurrency, formatPercent } from "../../utils/format.ts";
 
 const COMPARISON_OPTIONS: readonly ScenarioId[] = [
   "fedea-transition",
@@ -15,18 +16,25 @@ const COMPARISON_OPTIONS: readonly ScenarioId[] = [
 
 interface GapSummaryProps {
   readonly gap: RetirementIncomeGap;
+  readonly profile: UserProfile;
   readonly comparisonScenarioId: ScenarioId;
   readonly dispatch: React.Dispatch<AppAction>;
 }
 
 export function GapSummary({
   gap,
+  profile,
   comparisonScenarioId,
   dispatch,
 }: GapSummaryProps) {
   const selectedGap = gap.comparisonGapMonthly;
   const hasSelectedGap = selectedGap > 0;
   const hasAdditionalGap = gap.additionalGapMonthly > 0;
+  const lifestyleBreakdown = deriveLifestyleTargetBreakdown(profile);
+  const inputExplanation =
+    lifestyleBreakdown.inputMode === "net-monthly"
+      ? `${formatCurrency(lifestyleBreakdown.inputAmount)} netos/mes x ${lifestyleBreakdown.paymentsPerYear} pagas = ${formatCurrency(lifestyleBreakdown.annualNet)} netos al ano`
+      : `${formatCurrency(lifestyleBreakdown.annualGross)} brutos al ano -> ${formatCurrency(lifestyleBreakdown.annualNet)} netos estimados al ano`;
 
   return (
     <div className="overflow-hidden rounded-2xl bg-gray-900 text-white shadow-xl">
@@ -58,25 +66,42 @@ export function GapSummary({
           al jubilarte tambien en euros de hoy, para no mezclar cifras
           nominales futuras con tu gasto actual.
         </p>
+        <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm leading-relaxed text-gray-200">
+          <p className="font-medium text-white">Como se calcula tu referencia actual</p>
+          <p className="mt-1">
+            {inputExplanation}. Para comparar con la jubilacion lo pasamos a una base comun de 12 meses:
+            {" "}
+            <span className="font-semibold text-emerald-300">
+              {formatCurrency(lifestyleBreakdown.normalizedMonthlyNet)}/mes
+            </span>
+            .
+          </p>
+        </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-              Nivel de vida objetivo (hoy)
+              Referencia actual (base 12 meses)
             </p>
             <CurrencyDisplay
               amount={gap.targetMonthlyIncome}
               className="mt-2 text-xl font-bold text-white"
             />
+            <p className="mt-2 text-xs text-gray-300">
+              Tu gasto mensual equivalente de hoy.
+            </p>
           </div>
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-              Ley actual cubriria
+              Pension publica estimada
             </p>
             <CurrencyDisplay
               amount={gap.currentLawMonthly}
               className="mt-2 text-xl font-bold text-white"
             />
+            <p className="mt-2 text-xs text-gray-300">
+              Ley actual, al jubilarte, en euros de hoy.
+            </p>
             <p className="mt-2 text-xs text-gray-300">
               {formatPercent(gap.currentLawCoverageRate)} del objetivo. Brecha:{" "}
               <span className="font-semibold text-white">
@@ -92,6 +117,9 @@ export function GapSummary({
               amount={gap.comparisonMonthly}
               className="mt-2 text-xl font-bold text-amber-100"
             />
+            <p className="mt-2 text-xs text-amber-100/90">
+              Pension publica estimada bajo este escenario, en euros de hoy.
+            </p>
             <p className="mt-2 text-xs text-amber-100/90">
               {formatPercent(gap.comparisonCoverageRate)} del objetivo. Brecha:{" "}
               <span className="font-semibold text-amber-50">

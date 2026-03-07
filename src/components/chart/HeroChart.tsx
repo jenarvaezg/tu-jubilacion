@@ -123,9 +123,8 @@ export function HeroChart({ data, retirementAge, displayMode }: HeroChartProps) 
                         ? 2.25
                         : 1.5
                   }
-                  strokeDasharray={
-                    scenarioId === 'fedea-transition' ? '6 3' : undefined
-                  }
+                  strokeOpacity={scenarioId === 'fedea-transition' ? 0.92 : 1}
+                  strokeLinecap="round"
                   dot={false}
                   activeDot={{ r: 4 }}
                   connectNulls={false}

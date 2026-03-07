@@ -4,6 +4,19 @@ import type { CcaaCode, IRPFResult, UserProfile } from "./types";
 import { IRPF_TABLES } from "../data/irpf-tables";
 import { SS_RULES } from "../data/ss-tables";
 
+export interface LifestyleTargetBreakdown {
+  readonly inputMode: "net-monthly" | "gross-annual";
+  readonly inputAmount: number;
+  readonly annualGross: number;
+  readonly annualNet: number;
+  readonly normalizedMonthlyNet: number;
+  readonly paymentsPerYear: 12 | 14;
+}
+
+function roundMoney(amount: number): number {
+  return Math.round(amount * 100) / 100;
+}
+
 /**
  * Calculate IRPF tax for a given annual gross income in a specific CCAA.
  * Applies work income deduction (reducción por rendimientos del trabajo)
@@ -199,15 +212,49 @@ export function grossToNetAnnual(grossAnnual: number, ccaa: CcaaCode): number {
 export function deriveMonthlyLifestyleTarget(
   profile: Pick<UserProfile, "monthlySalary" | "salaryType" | "ccaa" | "pagasExtra">,
 ): number {
-  const annualNet =
-    profile.salaryType === "net"
-      ? profile.monthlySalary * (profile.pagasExtra ? 14 : 12)
-      : grossToNetAnnual(
-          monthlyToAnnualGross(profile.monthlySalary, profile.pagasExtra),
-          profile.ccaa,
-        );
+  return deriveLifestyleTargetBreakdown(profile).normalizedMonthlyNet;
+}
 
-  return Math.round((annualNet / 12) * 100) / 100;
+/**
+ * Explain how today's lifestyle target is derived from the salary input.
+ * Net inputs are monthly and use the selected 12/14-pay structure.
+ * Gross inputs are normalized to an annual gross amount before estimating net.
+ */
+export function deriveLifestyleTargetBreakdown(
+  profile: Pick<UserProfile, "monthlySalary" | "salaryType" | "ccaa" | "pagasExtra">,
+): LifestyleTargetBreakdown {
+  const paymentsPerYear = profile.pagasExtra ? 14 : 12;
+
+  if (profile.salaryType === "net") {
+    const annualNet = profile.monthlySalary * paymentsPerYear;
+    const monthlyGross = netToGross(
+      profile.monthlySalary,
+      profile.ccaa,
+      profile.pagasExtra,
+    );
+    const annualGross = monthlyToAnnualGross(monthlyGross, profile.pagasExtra);
+
+    return {
+      inputMode: "net-monthly",
+      inputAmount: roundMoney(profile.monthlySalary),
+      annualGross: roundMoney(annualGross),
+      annualNet: roundMoney(annualNet),
+      normalizedMonthlyNet: roundMoney(annualNet / 12),
+      paymentsPerYear,
+    };
+  }
+
+  const annualGross = monthlyToAnnualGross(profile.monthlySalary, profile.pagasExtra);
+  const annualNet = grossToNetAnnual(annualGross, profile.ccaa);
+
+  return {
+    inputMode: "gross-annual",
+    inputAmount: roundMoney(annualGross),
+    annualGross: roundMoney(annualGross),
+    annualNet: roundMoney(annualNet),
+    normalizedMonthlyNet: roundMoney(annualNet / 12),
+    paymentsPerYear,
+  };
 }
 
 /**

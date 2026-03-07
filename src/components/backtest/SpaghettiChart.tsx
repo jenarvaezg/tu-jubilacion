@@ -126,6 +126,7 @@ export function SpaghettiChart({ summary }: SpaghettiChartProps) {
       <div className="rounded-xl bg-white p-4 shadow-sm border border-gray-100">
         <ResponsiveContainer width="100%" height={320}>
           <LineChart
+            key={summary.seriesId}
             data={data}
             margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
           >
@@ -169,7 +170,9 @@ export function SpaghettiChart({ summary }: SpaghettiChartProps) {
                 strokeWidth={1}
                 dot={false}
                 activeDot={false}
-                isAnimationActive={false}
+                isAnimationActive={true}
+                animationDuration={450}
+                animationEasing="ease-out"
               />
             ))}
             <Line
@@ -179,7 +182,9 @@ export function SpaghettiChart({ summary }: SpaghettiChartProps) {
               stroke="#16a34a"
               strokeWidth={2.5}
               dot={false}
-              isAnimationActive={false}
+              isAnimationActive={true}
+              animationDuration={650}
+              animationEasing="ease-out"
             />
             <Line
               type="monotone"
@@ -188,7 +193,9 @@ export function SpaghettiChart({ summary }: SpaghettiChartProps) {
               stroke="#2563eb"
               strokeWidth={2.5}
               dot={false}
-              isAnimationActive={false}
+              isAnimationActive={true}
+              animationDuration={650}
+              animationEasing="ease-out"
             />
             <Line
               type="monotone"
@@ -197,7 +204,9 @@ export function SpaghettiChart({ summary }: SpaghettiChartProps) {
               stroke="#dc2626"
               strokeWidth={2.5}
               dot={false}
-              isAnimationActive={false}
+              isAnimationActive={true}
+              animationDuration={650}
+              animationEasing="ease-out"
             />
           </LineChart>
         </ResponsiveContainer>
