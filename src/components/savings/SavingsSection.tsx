@@ -53,21 +53,31 @@ export function SavingsSection({
   if (gap === null || savings === null) return null;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div id="savings-section" className="flex flex-col gap-6">
       <div className="flex items-center justify-between border-b border-gray-200 pb-2">
         <h2 className="text-xl font-black uppercase tracking-tight italic text-gray-900">
-          Como sostener tus ingresos
+          Cómo sostener tus ingresos
         </h2>
-        <span className="text-[10px] font-bold uppercase text-gray-400">
+        <span className="text-xs font-bold uppercase text-gray-400">
           Fase 2: Plan de Ahorro
         </span>
       </div>
       <p className="text-sm leading-relaxed text-gray-600">
         Tomamos tu ingreso neto actual como referencia de nivel de vida y
         calculamos cuanto complemento privado necesitas para sostenerlo durante
-        toda la jubilacion. Si la pension publica se reforma a la baja, ese
+        toda la jubilación. Si la pensión pública se reforma a la baja, ese
         esfuerzo sube.
       </p>
+
+      <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+        <p className="text-sm font-medium text-amber-800">Aviso importante</p>
+        <p className="mt-1 text-xs text-amber-700">
+          Las proyecciones de ahorro e inversión son estimaciones educativas
+          basadas en rentabilidades históricas. La rentabilidad pasada no
+          garantiza resultados futuros. Consulta con un asesor financiero
+          profesional antes de tomar decisiones de inversión.
+        </p>
+      </div>
 
       <GapSummary
         gap={gap}

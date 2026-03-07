@@ -74,7 +74,7 @@ export function ChartTooltip({
               </div>
               {point !== undefined && (
                 <div className="flex justify-end">
-                  <span className="text-[11px] text-gray-500 tabular-nums">
+                  <span className="text-xs text-gray-500 tabular-nums">
                     {counterpartLabel}:{" "}
                     {formatCurrency(
                       displayMode === "real"

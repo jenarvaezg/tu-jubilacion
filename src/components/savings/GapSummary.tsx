@@ -33,8 +33,8 @@ export function GapSummary({
   const lifestyleBreakdown = deriveLifestyleTargetBreakdown(profile);
   const inputExplanation =
     lifestyleBreakdown.inputMode === "net-monthly"
-      ? `${formatCurrency(lifestyleBreakdown.inputAmount)} netos/mes x ${lifestyleBreakdown.paymentsPerYear} pagas = ${formatCurrency(lifestyleBreakdown.annualNet)} netos al ano`
-      : `${formatCurrency(lifestyleBreakdown.annualGross)} brutos al ano -> ${formatCurrency(lifestyleBreakdown.annualNet)} netos estimados al ano`;
+      ? `${formatCurrency(lifestyleBreakdown.inputAmount)} netos/mes x ${lifestyleBreakdown.paymentsPerYear} pagas = ${formatCurrency(lifestyleBreakdown.annualNet)} netos al año`
+      : `${formatCurrency(lifestyleBreakdown.annualGross)} brutos al año -> ${formatCurrency(lifestyleBreakdown.annualNet)} netos estimados al año`;
 
   return (
     <div className="overflow-hidden rounded-2xl bg-gray-900 text-white shadow-xl">
@@ -51,26 +51,29 @@ export function GapSummary({
                   amount={selectedGap}
                   className="text-2xl text-emerald-400 md:text-3xl"
                 />
-              </span>
-              {" "}bajo {SCENARIO_LABELS[comparisonScenarioId].toLowerCase()}.
+              </span>{" "}
+              bajo {SCENARIO_LABELS[comparisonScenarioId].toLowerCase()}.
             </>
           ) : (
             <span className="text-green-400">
-              Bajo este escenario, la pension publica cubriria tu nivel de vida actual.
+              Bajo este escenario, la pensión pública cubriría tu nivel de vida
+              actual.
             </span>
           )}
         </p>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
           La referencia de nivel de vida sale de tu ingreso neto anual actual,
-          normalizado a 12 meses. La brecha se compara con la pension estimada
-          al jubilarte tambien en euros de hoy, para no mezclar cifras
-          nominales futuras con tu gasto actual.
+          normalizado a 12 meses. La brecha se compara con la pensión estimada
+          al jubilarte también en euros de hoy, para no mezclar cifras nominales
+          futuras con tu gasto actual.
         </p>
         <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm leading-relaxed text-gray-200">
-          <p className="font-medium text-white">Como se calcula tu referencia actual</p>
+          <p className="font-medium text-white">
+            Como se calcula tu referencia actual
+          </p>
           <p className="mt-1">
-            {inputExplanation}. Para comparar con la jubilacion lo pasamos a una base comun de 12 meses:
-            {" "}
+            {inputExplanation}. Para comparar con la jubilación lo pasamos a una
+            base común de 12 meses:{" "}
             <span className="font-semibold text-emerald-300">
               {formatCurrency(lifestyleBreakdown.normalizedMonthlyNet)}/mes
             </span>
@@ -93,7 +96,7 @@ export function GapSummary({
           </div>
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-              Pension publica estimada
+              Pensión pública estimada
             </p>
             <CurrencyDisplay
               amount={gap.currentLawMonthly}
@@ -118,7 +121,7 @@ export function GapSummary({
               className="mt-2 text-xl font-bold text-amber-100"
             />
             <p className="mt-2 text-xs text-amber-100/90">
-              Pension publica estimada bajo este escenario, en euros de hoy.
+              Pensión pública estimada bajo este escenario, en euros de hoy.
             </p>
             <p className="mt-2 text-xs text-amber-100/90">
               {formatPercent(gap.comparisonCoverageRate)} del objetivo. Brecha:{" "}
@@ -136,20 +139,20 @@ export function GapSummary({
               el esfuerzo privado sube en{" "}
               <span className="font-bold text-white">
                 <CurrencyDisplay amount={gap.additionalGapMonthly} />
-              </span>
-              {" "}frente a planificar con ley actual.
+              </span>{" "}
+              frente a planificar con ley actual.
             </>
           ) : (
             <>
               Frente a la ley actual, este escenario no aumenta la brecha de
-              ingresos que tendrias que cubrir con ahorro privado.
+              ingresos que tendrías que cubrir con ahorro privado.
             </>
           )}
         </div>
 
         <div className="mt-6">
           <label className="text-xs font-medium text-gray-400">
-            Escenario de planificacion:
+            Escenario de planificación:
           </label>
           <select
             className="ml-2 rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none"

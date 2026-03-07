@@ -45,7 +45,7 @@ export function ContributionOverrideControl({
           <div className="mt-1 flex items-center gap-2">
             <input
               type="number"
-              aria-label="Aportacion mensual personalizada"
+              aria-label="Aportación mensual personalizada"
               min={0}
               max={10000}
               step={10}
@@ -88,7 +88,7 @@ export function ContributionOverrideControl({
       </div>
       <div className="flex items-center gap-2">
         <span
-          className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${
+          className={`rounded-full px-2 py-0.5 text-xs font-bold uppercase ${
             isOverride
               ? "bg-amber-100 text-amber-700"
               : "bg-green-100 text-green-700"

@@ -23,7 +23,7 @@ export function SavingsResult({ savings }: SavingsResultProps) {
           />
         </div>
         <div>
-          <p className="text-xs text-gray-500">Aportacion mensual desde hoy</p>
+          <p className="text-xs text-gray-500">Aportación mensual desde hoy</p>
           <CurrencyDisplay
             amount={savings.monthlyContribution}
             className="text-2xl font-extrabold text-gray-900"
@@ -61,13 +61,15 @@ export function SavingsResult({ savings }: SavingsResultProps) {
       </div>
 
       <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-400">
-        <span>{savings.yearsOfAccumulation} anos de ahorro por delante</span>
-        <span>Nuevas aportaciones: {formatCurrency(savings.totalContributed)}</span>
+        <span>{savings.yearsOfAccumulation} años de ahorro por delante</span>
+        <span>
+          Nuevas aportaciones: {formatCurrency(savings.totalContributed)}
+        </span>
       </div>
 
       <p className="mt-3 text-xs italic leading-relaxed text-gray-400">
-        El capital que ya tienes acumulado reduce la aportacion necesaria desde
-        hoy. Estimacion basada en rentabilidad historica media; los resultados
+        El capital que ya tienes acumulado reduce la aportación necesaria desde
+        hoy. Estimación basada en rentabilidad histórica media; los resultados
         reales pueden variar significativamente.
       </p>
     </div>

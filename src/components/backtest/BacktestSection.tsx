@@ -56,7 +56,7 @@ export function BacktestSection({
         <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight italic">
           Como Habria Ido Historicamente
         </h2>
-        <span className="text-[10px] font-bold text-gray-400 uppercase">
+        <span className="text-xs font-bold text-gray-400 uppercase">
           Fase 3: Backtest
         </span>
       </div>
@@ -106,7 +106,7 @@ export function BacktestSection({
             <p>
               No incluye comisiones, impuestos ni conversion de divisa EUR/USD.
             </p>
-            <p className="text-[11px] italic text-amber-700">
+            <p className="text-xs italic text-amber-700">
               Se muestra el patrimonio en euros reales para compararlo con el
               resto de la app, pero la serie subyacente es siempre USD real.
             </p>

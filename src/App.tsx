@@ -14,6 +14,7 @@ import { EducationSection } from "./components/education/EducationSection.tsx";
 import { DetailToggle } from "./components/detail/DetailToggle.tsx";
 import { SavingsSection } from "./components/savings/SavingsSection.tsx";
 import { BacktestSection } from "./components/backtest/BacktestSection.tsx";
+import { WelcomeBanner } from "./components/shared/WelcomeBanner.tsx";
 
 function App() {
   const { state, dispatch, getShareUrl } = useAppState();
@@ -54,6 +55,8 @@ function App() {
             <p className="text-sm text-red-700">{error}</p>
           </div>
         )}
+
+        <WelcomeBanner />
 
         <ChartControls
           displayMode={state.display.displayMode}

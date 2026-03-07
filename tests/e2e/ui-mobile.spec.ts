@@ -24,7 +24,7 @@ test("mantiene legibilidad y evita overflow horizontal en movil", async ({
 
   await expect(page.getByText("Analisis multi-escenario")).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Transicion FEDEA" }),
+    page.getByRole("heading", { name: "Propuesta FEDEA" }),
   ).toBeVisible();
 
   const heroSurface = page

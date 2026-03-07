@@ -17,12 +17,21 @@ export const SCENARIO_COLORS: Record<ScenarioId, string> = {
 };
 
 export const SCENARIO_LABELS: Record<ScenarioId, string> = {
-  "current-law": "Legislacion vigente",
-  "fedea-transition": "Transicion FEDEA",
-  "notional-accounts": "Cuentas nocionales",
-  "sustainability-2013": "Factor sostenibilidad 2013",
-  "eu-convergence": "Convergencia UE (60%)",
-  "greece-haircut": "Recorte tipo Grecia",
+  "current-law": "Ley actual",
+  "fedea-transition": "Propuesta FEDEA",
+  "notional-accounts": "Modelo tipo Suecia",
+  "sustainability-2013": "Reforma Rajoy (2013)",
+  "eu-convergence": "Media europea",
+  "greece-haircut": "Recorte severo",
+};
+
+export const SCENARIO_DASH_PATTERNS: Record<ScenarioId, string> = {
+  "current-law": "",
+  "fedea-transition": "8 4",
+  "notional-accounts": "4 4",
+  "sustainability-2013": "12 4 4 4",
+  "eu-convergence": "2 4",
+  "greece-haircut": "8 4 2 4 2 4",
 };
 
 const MAX_CHART_AGE = 90;
@@ -77,9 +86,15 @@ export function buildChartData({
     (_, i) => chartStartAge + i,
   );
 
-  const lookups = new Map<ScenarioId, Map<number, { real: number; nominal: number; year: number }>>();
+  const lookups = new Map<
+    ScenarioId,
+    Map<number, { real: number; nominal: number; year: number }>
+  >();
   for (const result of results) {
-    const map = new Map<number, { real: number; nominal: number; year: number }>();
+    const map = new Map<
+      number,
+      { real: number; nominal: number; year: number }
+    >();
     for (const entry of result.timeline) {
       map.set(entry.age, {
         real: entry.monthlyPensionReal,
@@ -105,7 +120,9 @@ export function buildChartData({
   });
 }
 
-export function useChartData(params: UseChartDataParams): readonly ChartDataPoint[] {
+export function useChartData(
+  params: UseChartDataParams,
+): readonly ChartDataPoint[] {
   const { results, displayMode, currentAge } = params;
   return useMemo(
     () => buildChartData({ results, displayMode, currentAge }),

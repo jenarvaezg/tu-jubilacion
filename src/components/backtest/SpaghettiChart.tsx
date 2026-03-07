@@ -113,103 +113,111 @@ export function SpaghettiChart({ summary }: SpaghettiChartProps) {
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-          Simulacion historica por cohorte
+          Simulación histórica por cohorte
         </h3>
-        <span className="text-[10px] text-gray-400 uppercase">
-          Euros reales
-        </span>
+        <span className="text-xs text-gray-400 uppercase">Euros reales</span>
       </div>
       <p className="text-xs leading-relaxed text-gray-500">
-        Cada linea representa una cohorte historica distinta de ahorro. Las
-        tres destacadas muestran mejor, mediana y peor secuencia observada.
+        Cada línea representa una cohorte histórica distinta de ahorro. Las tres
+        destacadas muestran mejor, mediana y peor secuencia observada.
       </p>
       <div className="rounded-xl bg-white p-4 shadow-sm border border-gray-100">
-        <ResponsiveContainer width="100%" height={320}>
-          <LineChart
-            key={summary.seriesId}
-            data={data}
-            margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis
-              dataKey="yearIndex"
-              label={{
-                value: "Anos desde que empiezas a ahorrar",
-                position: "insideBottom",
-                offset: -8,
-                fontSize: 12,
-              }}
-              tick={{ fontSize: 11 }}
-              stroke="#9ca3af"
-            />
-            <YAxis
-              tick={{ fontSize: 11 }}
-              stroke="#9ca3af"
-              tickFormatter={(v: number) => `${Math.round(v / 1000)}k`}
-              label={{
-                value: "EUR",
-                angle: -90,
-                position: "insideLeft",
-                offset: -2,
-                fontSize: 12,
-              }}
-            />
-            <Tooltip
-              content={
-                <SpaghettiTooltipContent
-                  totalYears={summary.yearsOfAccumulation}
+        <div
+          role="img"
+          aria-label="Simulación histórica de rendimiento de cartera en diferentes períodos"
+        >
+          <p className="sr-only">
+            Gráfico tipo espagueti que muestra la evolución del valor de cartera
+            para distintas cohortes históricas de ahorro, destacando la mejor,
+            la mediana y la peor secuencia observada.
+          </p>
+          <ResponsiveContainer width="100%" height={320}>
+            <LineChart
+              key={summary.seriesId}
+              data={data}
+              margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis
+                dataKey="yearIndex"
+                label={{
+                  value: "Anos desde que empiezas a ahorrar",
+                  position: "insideBottom",
+                  offset: -8,
+                  fontSize: 12,
+                }}
+                tick={{ fontSize: 11 }}
+                stroke="#9ca3af"
+              />
+              <YAxis
+                tick={{ fontSize: 11 }}
+                stroke="#9ca3af"
+                tickFormatter={(v: number) => `${Math.round(v / 1000)}k`}
+                label={{
+                  value: "EUR",
+                  angle: -90,
+                  position: "insideLeft",
+                  offset: -2,
+                  fontSize: 12,
+                }}
+              />
+              <Tooltip
+                content={
+                  <SpaghettiTooltipContent
+                    totalYears={summary.yearsOfAccumulation}
+                  />
+                }
+              />
+              {backgroundKeys.map((key) => (
+                <Line
+                  key={key}
+                  type="monotone"
+                  dataKey={key}
+                  stroke="#d1d5db"
+                  strokeWidth={1}
+                  dot={false}
+                  activeDot={false}
+                  isAnimationActive={true}
+                  animationDuration={450}
+                  animationEasing="ease-out"
                 />
-              }
-            />
-            {backgroundKeys.map((key) => (
+              ))}
               <Line
-                key={key}
                 type="monotone"
-                dataKey={key}
-                stroke="#d1d5db"
-                strokeWidth={1}
+                dataKey="best"
+                name={`Mejor (${best.startYear})`}
+                stroke="#16a34a"
+                strokeWidth={2.5}
                 dot={false}
-                activeDot={false}
                 isAnimationActive={true}
-                animationDuration={450}
+                animationDuration={650}
                 animationEasing="ease-out"
               />
-            ))}
-            <Line
-              type="monotone"
-              dataKey="best"
-              name={`Mejor (${best.startYear})`}
-              stroke="#16a34a"
-              strokeWidth={2.5}
-              dot={false}
-              isAnimationActive={true}
-              animationDuration={650}
-              animationEasing="ease-out"
-            />
-            <Line
-              type="monotone"
-              dataKey="median"
-              name={`Mediana (${median.startYear})`}
-              stroke="#2563eb"
-              strokeWidth={2.5}
-              dot={false}
-              isAnimationActive={true}
-              animationDuration={650}
-              animationEasing="ease-out"
-            />
-            <Line
-              type="monotone"
-              dataKey="worst"
-              name={`Peor (${worst.startYear})`}
-              stroke="#dc2626"
-              strokeWidth={2.5}
-              dot={false}
-              isAnimationActive={true}
-              animationDuration={650}
-              animationEasing="ease-out"
-            />
-          </LineChart>
-        </ResponsiveContainer>
+              <Line
+                type="monotone"
+                dataKey="median"
+                name={`Mediana (${median.startYear})`}
+                stroke="#2563eb"
+                strokeWidth={2.5}
+                dot={false}
+                isAnimationActive={true}
+                animationDuration={650}
+                animationEasing="ease-out"
+              />
+              <Line
+                type="monotone"
+                dataKey="worst"
+                name={`Peor (${worst.startYear})`}
+                stroke="#dc2626"
+                strokeWidth={2.5}
+                dot={false}
+                isAnimationActive={true}
+                animationDuration={650}
+                animationEasing="ease-out"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
         <div className="mt-2 flex items-center justify-center gap-4 text-xs text-gray-500">
           <span className="flex items-center gap-1">
             <span className="inline-block h-0.5 w-4 bg-green-600" /> Mejor

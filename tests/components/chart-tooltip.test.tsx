@@ -69,7 +69,7 @@ describe("ChartTooltip", () => {
       />,
     );
 
-    expect(screen.getByText("Legislacion vigente")).toBeInTheDocument();
-    expect(screen.getByText("Transicion FEDEA")).toBeInTheDocument();
+    expect(screen.getByText("Ley actual")).toBeInTheDocument();
+    expect(screen.getByText("Propuesta FEDEA")).toBeInTheDocument();
   });
 });

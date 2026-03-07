@@ -20,7 +20,9 @@ export function CurrentSavingsBalanceControl({
   function commitDraft() {
     const trimmed = draft.trim();
     const parsed = trimmed === "" ? 0 : Number(trimmed);
-    const normalized = Number.isFinite(parsed) ? Math.max(0, Math.round(parsed)) : 0;
+    const normalized = Number.isFinite(parsed)
+      ? Math.max(0, Math.round(parsed))
+      : 0;
     dispatch({
       type: "SET_CURRENT_SAVINGS_BALANCE",
       payload: normalized,
@@ -33,16 +35,16 @@ export function CurrentSavingsBalanceControl({
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="max-w-2xl">
           <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
-            Ahorro actual para jubilacion
+            Ahorro actual para jubilación
           </p>
           <p className="mt-1 text-sm leading-relaxed text-gray-600">
             Capital que ya tienes reservado para retiro. Lo proyectamos hasta tu
-            jubilacion como base inicial del plan.
+            jubilación como base inicial del plan.
           </p>
         </div>
         <div className="flex items-center gap-3">
           <label className="sr-only" htmlFor="current-savings-balance">
-            Ahorro actual para jubilacion
+            Ahorro actual para jubilación
           </label>
           <input
             id="current-savings-balance"

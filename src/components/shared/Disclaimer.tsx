@@ -1,9 +1,9 @@
 export function Disclaimer() {
   return (
     <p className="text-xs text-gray-500 leading-relaxed">
-      Estimacion educativa. No constituye asesoramiento financiero.
-      Consulte con un profesional. Los calculos se basan en datos publicos
-      y supuestos simplificados.
+      Estimación educativa. No constituye asesoramiento financiero. Consulte con
+      un profesional. Los cálculos se basan en datos públicos y supuestos
+      simplificados.
     </p>
   );
 }

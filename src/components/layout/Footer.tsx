@@ -1,10 +1,23 @@
-import { Disclaimer } from '../shared/Disclaimer.tsx';
+import { Disclaimer } from "../shared/Disclaimer.tsx";
 
 export function Footer() {
   return (
     <footer className="border-t border-gray-200 bg-white mt-auto">
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="text-xs text-gray-600">
+            <p className="font-medium">
+              Proyecto open-source de José Enrique Narváez
+            </p>
+            <a
+              href="https://github.com/jenarvaezg/tu-jubilacion"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              Código fuente en GitHub
+            </a>
+          </div>
           <Disclaimer />
           <div className="flex flex-col items-start gap-1 sm:items-end">
             <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">

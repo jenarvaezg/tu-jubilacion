@@ -6,20 +6,20 @@ test("mantiene visibles los cambios clave de pension y ahorro", async ({
   await page.goto("/");
   await page.waitForLoadState("networkidle");
 
-  await expect(page.getByText("Analisis multi-escenario")).toBeVisible();
+  await expect(page.getByText("Análisis multi-escenario")).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Transicion FEDEA" }),
+    page.getByRole("heading", { name: "Propuesta FEDEA" }),
   ).toBeVisible();
 
   await expect(page.getByText("Letras (EEUU)")).toHaveCount(0);
-  await expect(page.getByText("Letras Tesoro / liquidez").first()).toBeVisible();
   await expect(
-    page.getByText("Durante cuantos anos quieres complementar tus ingresos"),
+    page.getByText("Letras Tesoro / liquidez").first(),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Durante cuántos años quieres complementar tus ingresos"),
   ).toBeVisible();
 
-  const currentSavingsInput = page.getByLabel(
-    "Ahorro actual para jubilacion",
-  );
+  const currentSavingsInput = page.getByLabel("Ahorro actual para jubilación");
   await currentSavingsInput.fill("");
   await expect(currentSavingsInput).toHaveValue("");
   await currentSavingsInput.press("Tab");

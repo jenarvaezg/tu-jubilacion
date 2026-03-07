@@ -29,10 +29,10 @@ function buildShareText(
 
   if (currentLaw && floorResult) {
     lines.push(
-      `Mi ingreso publico de jubilacion se mueve entre ${formatCurrency(getRetirementMonthlyPensionReal(floorResult))} y ${formatCurrency(getRetirementMonthlyPensionReal(currentLaw))}/mes segun como se reforme el sistema.`,
+      `Mi ingreso público de jubilación se mueve entre ${formatCurrency(getRetirementMonthlyPensionReal(floorResult))} y ${formatCurrency(getRetirementMonthlyPensionReal(currentLaw))}/mes según como se reforme el sistema.`,
     );
     lines.push(
-      "La clave no es acertar la reforma exacta, sino planificar ahorro para mantener tu nivel de vida durante toda la jubilacion.",
+      "La clave no es acertar la reforma exacta, sino planificar ahorro para mantener tu nivel de vida durante toda la jubilación.",
     );
   }
   lines.push(`Descubre cuanto cobraras tu -> ${url}`);

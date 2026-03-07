@@ -1,6 +1,6 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { Toggle } from '../shared/Toggle.tsx';
-import { monthlyToAnnualGross } from '../../engine/salary.ts';
+import { useState, useCallback, useRef, useEffect } from "react";
+import { Toggle } from "../shared/Toggle.tsx";
+import { monthlyToAnnualGross } from "../../engine/salary.ts";
 
 const MAX_NET_MONTHLY = 50000;
 const MAX_GROSS_ANNUAL = 700000;
@@ -11,10 +11,10 @@ function formatInputAmount(value: number): string {
 
 interface SalaryInputProps {
   readonly salary: number;
-  readonly salaryType: 'net' | 'gross';
+  readonly salaryType: "net" | "gross";
   readonly pagasExtra: boolean;
   readonly onSalaryChange: (salary: number) => void;
-  readonly onSalaryTypeChange: (type: 'net' | 'gross') => void;
+  readonly onSalaryTypeChange: (type: "net" | "gross") => void;
   readonly onPagasExtraChange: (pagasExtra: boolean) => void;
 }
 
@@ -26,11 +26,13 @@ export function SalaryInput({
   onSalaryTypeChange,
   onPagasExtraChange,
 }: SalaryInputProps) {
-  const isGrossAnnual = salaryType === 'gross';
+  const isGrossAnnual = salaryType === "gross";
   const displayAmount = isGrossAnnual
     ? monthlyToAnnualGross(salary, pagasExtra)
     : salary;
-  const [localValue, setLocalValue] = useState(formatInputAmount(displayAmount));
+  const [localValue, setLocalValue] = useState(
+    formatInputAmount(displayAmount),
+  );
   const [error, setError] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -50,19 +52,21 @@ export function SalaryInput({
       debounceRef.current = setTimeout(() => {
         const parsed = parseFloat(raw);
         if (isNaN(parsed) || parsed < 0) {
-          setError('Introduce un importe valido');
+          setError("Introduce un importe válido");
           return;
         }
         if (parsed > (isGrossAnnual ? MAX_GROSS_ANNUAL : MAX_NET_MONTHLY)) {
           setError(
             isGrossAnnual
-              ? 'El importe maximo es 700.000 euros brutos al ano'
-              : 'El importe maximo es 50.000 euros netos al mes',
+              ? "El importe máximo es 700.000 euros brutos al año"
+              : "El importe máximo es 50.000 euros netos al mes",
           );
           return;
         }
         setError(null);
-        onSalaryChange(isGrossAnnual ? parsed / (pagasExtra ? 14 : 12) : parsed);
+        onSalaryChange(
+          isGrossAnnual ? parsed / (pagasExtra ? 14 : 12) : parsed,
+        );
       }, 300);
     },
     [isGrossAnnual, onSalaryChange, pagasExtra],
@@ -71,13 +75,16 @@ export function SalaryInput({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <label htmlFor="salary-input" className="text-sm font-medium text-gray-700">
-          {isGrossAnnual ? 'Salario bruto anual' : 'Ingreso neto al mes'}
+        <label
+          htmlFor="salary-input"
+          className="text-sm font-medium text-gray-700"
+        >
+          {isGrossAnnual ? "Salario bruto anual" : "Ingreso neto al mes"}
         </label>
         <p className="text-xs leading-relaxed text-gray-500">
           {isGrossAnnual
-            ? 'Introduce el bruto total del ano. La app estima el neto equivalente para comparar tu nivel de vida.'
-            : 'Introduce lo que realmente te entra por paga. Debajo eliges si cobras en 12 o en 14 pagas.'}
+            ? "Introduce el bruto total del año. La app estima el neto equivalente para comparar tu nivel de vida."
+            : "Introduce lo que realmente te entra por paga. Debajo eliges si cobras en 12 o en 14 pagas."}
         </p>
         <div className="flex gap-2">
           <div className="relative flex-1">
@@ -92,7 +99,7 @@ export function SalaryInput({
               className="w-full rounded-lg border border-gray-300 px-3 py-2 pr-8 text-sm
                 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none
                 transition-colors"
-              placeholder={isGrossAnnual ? '42000' : '2000'}
+              placeholder={isGrossAnnual ? "42000" : "2000"}
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">
               EUR
@@ -100,7 +107,9 @@ export function SalaryInput({
           </div>
         </div>
         {error !== null && (
-          <span className="text-xs text-danger" role="alert">{error}</span>
+          <span className="text-xs text-danger" role="alert">
+            {error}
+          </span>
         )}
       </div>
 
@@ -112,8 +121,8 @@ export function SalaryInput({
               type="radio"
               name="salary-type"
               value="net"
-              checked={salaryType === 'net'}
-              onChange={() => onSalaryTypeChange('net')}
+              checked={salaryType === "net"}
+              onChange={() => onSalaryTypeChange("net")}
               className="accent-primary"
             />
             <span className="text-sm text-gray-700">Neto / mes</span>
@@ -123,19 +132,19 @@ export function SalaryInput({
               type="radio"
               name="salary-type"
               value="gross"
-              checked={salaryType === 'gross'}
-              onChange={() => onSalaryTypeChange('gross')}
+              checked={salaryType === "gross"}
+              onChange={() => onSalaryTypeChange("gross")}
               className="accent-primary"
             />
-            <span className="text-sm text-gray-700">Bruto / ano</span>
+            <span className="text-sm text-gray-700">Bruto / año</span>
           </label>
         </fieldset>
       </div>
 
-      {salaryType === 'net' ? (
+      {salaryType === "net" ? (
         <Toggle
           id="pagas-extra-toggle"
-          label="Pagas al ano"
+          label="Pagas al año"
           checked={pagasExtra}
           onChange={onPagasExtraChange}
           labelOn="14"
@@ -144,7 +153,7 @@ export function SalaryInput({
       ) : (
         <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs leading-relaxed text-blue-800">
           En bruto anual no hace falta elegir 12 o 14 pagas: el total anual ya
-          queda normalizado para el calculo.
+          queda normalizado para el cálculo.
         </div>
       )}
     </div>

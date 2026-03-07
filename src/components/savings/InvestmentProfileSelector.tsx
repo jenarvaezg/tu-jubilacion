@@ -35,7 +35,7 @@ export function InvestmentProfileSelector({
   return (
     <div className="flex flex-col gap-3">
       <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-        Perfil de inversion
+        Perfil de inversión
       </h3>
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {PROFILE_ORDER.map((id) => {
@@ -54,9 +54,7 @@ export function InvestmentProfileSelector({
                 dispatch({ type: "SET_INVESTMENT_PROFILE", payload: id })
               }
             >
-              <p className="text-sm font-bold text-gray-900">
-                {profile.label}
-              </p>
+              <p className="text-sm font-bold text-gray-900">{profile.label}</p>
               <p className="mt-1 text-xs text-gray-600 leading-relaxed">
                 {profile.description}
               </p>

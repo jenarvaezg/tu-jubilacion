@@ -52,9 +52,7 @@ export function BacktestSummaryCard({ summary }: BacktestSummaryCardProps) {
             key={label}
             className={`rounded-lg border border-gray-100 p-4 ${bg}`}
           >
-            <p
-              className={`text-xs font-bold uppercase tracking-wide ${color}`}
-            >
+            <p className={`text-xs font-bold uppercase tracking-wide ${color}`}>
               {label} ({cohort.startYear})
             </p>
             <p className="mt-2 text-lg font-black tabular-nums text-gray-900">
@@ -76,12 +74,10 @@ export function BacktestSummaryCard({ summary }: BacktestSummaryCardProps) {
       </div>
       <p className="text-xs text-gray-400">
         {initialBalance > 0 && (
-          <>
-            Capital inicial proyectado: {fmt.format(initialBalance)}.{" "}
-          </>
+          <>Capital inicial proyectado: {fmt.format(initialBalance)}. </>
         )}
-        Basado en {totalCohorts} cohortes historicas de{" "}
-        {summary.yearsOfAccumulation} años de acumulacion
+        Basado en {totalCohorts} cohortes históricas de{" "}
+        {summary.yearsOfAccumulation} años de acumulación
       </p>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from "react";
 
 interface YearsWorkedInputProps {
   readonly value: number;
@@ -6,7 +6,11 @@ interface YearsWorkedInputProps {
   readonly onChange: (years: number) => void;
 }
 
-export function YearsWorkedInput({ value, age, onChange }: YearsWorkedInputProps) {
+export function YearsWorkedInput({
+  value,
+  age,
+  onChange,
+}: YearsWorkedInputProps) {
   const [localValue, setLocalValue] = useState(String(value));
   const [error, setError] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -27,11 +31,11 @@ export function YearsWorkedInput({ value, age, onChange }: YearsWorkedInputProps
       debounceRef.current = setTimeout(() => {
         const parsed = parseInt(raw, 10);
         if (isNaN(parsed) || parsed < 0) {
-          setError('Introduce un numero valido');
+          setError("Introduce un número válido");
           return;
         }
         if (parsed > 50) {
-          setError('El maximo es 50 anos');
+          setError("El máximo es 50 años");
           return;
         }
         setError(null);
@@ -45,8 +49,11 @@ export function YearsWorkedInput({ value, age, onChange }: YearsWorkedInputProps
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor="years-worked-input" className="text-sm font-medium text-gray-700">
-        Anos trabajados
+      <label
+        htmlFor="years-worked-input"
+        className="text-sm font-medium text-gray-700"
+      >
+        Años trabajados
       </label>
       <input
         id="years-worked-input"
@@ -62,7 +69,9 @@ export function YearsWorkedInput({ value, age, onChange }: YearsWorkedInputProps
         placeholder={placeholder}
       />
       {error !== null && (
-        <span className="text-xs text-danger" role="alert">{error}</span>
+        <span className="text-xs text-danger" role="alert">
+          {error}
+        </span>
       )}
       <span className="text-xs text-gray-500">
         Si no lo sabes, usamos {placeholder} (edad - 22)

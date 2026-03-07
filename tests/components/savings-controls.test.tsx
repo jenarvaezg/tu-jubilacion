@@ -16,13 +16,13 @@ describe("CurrentSavingsBalanceControl", () => {
       />,
     );
 
-    fireEvent.change(screen.getByLabelText("Ahorro actual para jubilacion"), {
+    fireEvent.change(screen.getByLabelText("Ahorro actual para jubilación"), {
       target: { value: "" },
     });
 
     expect(dispatch).not.toHaveBeenCalled();
 
-    fireEvent.blur(screen.getByLabelText("Ahorro actual para jubilacion"));
+    fireEvent.blur(screen.getByLabelText("Ahorro actual para jubilación"));
 
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_CURRENT_SAVINGS_BALANCE",
@@ -45,7 +45,7 @@ describe("ContributionOverrideControl", () => {
 
     fireEvent.click(screen.getByRole("button"));
     fireEvent.change(
-      screen.getByLabelText("Aportacion mensual personalizada"),
+      screen.getByLabelText("Aportación mensual personalizada"),
       {
         target: { value: "300" },
       },
@@ -93,7 +93,7 @@ describe("DrawdownYearsControl", () => {
 
     fireEvent.change(
       screen.getByLabelText(
-        "Durante cuantos anos quieres complementar tus ingresos",
+        "Durante cuántos años quieres complementar tus ingresos",
       ),
       {
         target: { value: "24" },
@@ -101,7 +101,7 @@ describe("DrawdownYearsControl", () => {
     );
     fireEvent.click(screen.getByRole("button", { name: /Restaurar defecto/i }));
 
-    expect(screen.getByText("Derivado: 21 anos")).toBeInTheDocument();
+    expect(screen.getByText("Derivado: 21 años")).toBeInTheDocument();
     expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: "SET_DRAWDOWN_YEARS",
       payload: 24,

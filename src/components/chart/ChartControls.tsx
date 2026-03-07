@@ -76,7 +76,7 @@ export function ChartControls({
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl bg-white p-4 shadow-sm border border-gray-100">
         <div className="flex flex-wrap items-center gap-6">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-bold text-gray-700 uppercase tracking-wider text-[10px]">
+            <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">
               Ver en:
             </span>
             <div className="flex overflow-hidden rounded-lg border border-gray-200 p-1 bg-gray-50">
@@ -112,7 +112,7 @@ export function ChartControls({
           <div className="flex items-center gap-3">
             <label
               htmlFor="ipc-select"
-              className="text-sm font-bold text-gray-700 uppercase tracking-wider text-[10px]"
+              className="text-xs font-bold text-gray-700 uppercase tracking-wider"
             >
               Inflación (IPC):
             </label>
@@ -140,7 +140,7 @@ export function ChartControls({
           <div className="flex items-center gap-3">
             <label
               htmlFor="notional-scenario-select"
-              className="text-sm font-bold text-gray-700 uppercase tracking-wider text-[10px]"
+              className="text-xs font-bold text-gray-700 uppercase tracking-wider"
             >
               Variante nocional:
             </label>

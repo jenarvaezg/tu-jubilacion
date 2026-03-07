@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from "react";
 
 interface AgeInputProps {
   readonly value: number;
@@ -26,15 +26,15 @@ export function AgeInput({ value, onChange }: AgeInputProps) {
       debounceRef.current = setTimeout(() => {
         const parsed = parseInt(raw, 10);
         if (isNaN(parsed)) {
-          setError('Introduce un numero valido');
+          setError("Introduce un número válido");
           return;
         }
         if (parsed < 18) {
-          setError('La edad minima es 18 anos');
+          setError("La edad mínima es 18 años");
           return;
         }
         if (parsed > 66) {
-          setError('La edad maxima es 66 anos');
+          setError("La edad máxima es 66 años");
           return;
         }
         setError(null);
@@ -63,7 +63,9 @@ export function AgeInput({ value, onChange }: AgeInputProps) {
         placeholder="35"
       />
       {error !== null && (
-        <span className="text-xs text-danger" role="alert">{error}</span>
+        <span className="text-xs text-danger" role="alert">
+          {error}
+        </span>
       )}
     </div>
   );
