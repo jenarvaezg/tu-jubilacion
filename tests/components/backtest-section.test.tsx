@@ -31,9 +31,9 @@ describe("BacktestSection", () => {
     expect(
       screen.getByText("Rendimientos pasados no garantizan resultados futuros"),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Series historicas en USD/i)).toBeInTheDocument();
+    expect(screen.getByText(/Series históricas en USD/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Ver fuentes y limites/i }),
+      screen.getByRole("button", { name: /Ver fuentes y límites/i }),
     ).toHaveAttribute("aria-expanded", "false");
     expect(
       screen.getByText(/Incluye tu ahorro actual como capital inicial/i),
@@ -52,7 +52,9 @@ describe("BacktestSection", () => {
     fireEvent.click(msciButton);
     expect(msciButton).toHaveAttribute("aria-pressed", "true");
 
-    fireEvent.click(screen.getByRole("button", { name: /Ver fuentes y limites/i }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /Ver fuentes y límites/i }),
+    );
 
     expect(
       screen.getByText(/MSCI World Gross Total Return Index/i),

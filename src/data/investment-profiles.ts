@@ -62,7 +62,7 @@ export const INVESTMENT_PROFILES: Record<
     id: "glide-path",
     label: "Ciclo de vida",
     description:
-      "De agresivo a conservador con la edad: mas riesgo de joven, mas seguridad al jubilarte",
+      "De agresivo a conservador con la edad: más riesgo de joven, más seguridad al jubilarte",
     allocation: { equity: 0.6, bonds: 0.3, deposits: 0.1 },
     isGlidePath: true,
   },

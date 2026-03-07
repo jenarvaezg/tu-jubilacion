@@ -73,7 +73,7 @@ export function BacktestSection({
             Rendimientos pasados no garantizan resultados futuros
           </p>
           <p>
-            Series historicas en USD. La simulacion capitaliza con
+            Series históricas en USD. La simulación capitaliza con
             rentabilidades anuales y no refleja volatilidad intra-anual.
           </p>
           {currentSavingsBalance > 0 && (
@@ -90,7 +90,7 @@ export function BacktestSection({
           onClick={() => setDisclaimerOpen(!disclaimerOpen)}
         >
           <p className="text-xs font-semibold text-amber-800">
-            Ver fuentes y limites
+            Ver fuentes y límites
           </p>
           <span className="ml-2 text-xs text-amber-600">
             {disclaimerOpen ? "▲" : "▼"}

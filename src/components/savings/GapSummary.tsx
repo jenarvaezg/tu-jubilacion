@@ -45,7 +45,7 @@ export function GapSummary({
         <p className="mt-4 text-2xl font-extrabold leading-tight md:text-3xl">
           {hasSelectedGap ? (
             <>
-              Para mantener tu nivel de vida actual, te faltarian{" "}
+              Para mantener tu nivel de vida actual, te faltarían{" "}
               <span className="text-emerald-400">
                 <CurrencyDisplay
                   amount={selectedGap}
@@ -69,7 +69,7 @@ export function GapSummary({
         </p>
         <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm leading-relaxed text-gray-200">
           <p className="font-medium text-white">
-            Como se calcula tu referencia actual
+            Cómo se calcula tu referencia actual
           </p>
           <p className="mt-1">
             {inputExplanation}. Para comparar con la jubilación lo pasamos a una

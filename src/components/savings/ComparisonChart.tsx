@@ -65,12 +65,12 @@ export function ComparisonChart({ data, displayMode }: ComparisonChartProps) {
     <div className="flex flex-col gap-3" data-testid="comparison-chart">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-          Como construyes tu complemento privado
+          Cómo construyes tu complemento privado
         </h3>
         <span className="text-xs text-gray-400 uppercase">En {label}</span>
       </div>
       <p className="text-xs leading-relaxed text-gray-500">
-        Mismo ahorro actual y misma aportacion mensual, proyectados con
+        Mismo ahorro actual y misma aportación mensual, proyectados con
         distintas rentabilidades reales a largo plazo.
       </p>
       <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
