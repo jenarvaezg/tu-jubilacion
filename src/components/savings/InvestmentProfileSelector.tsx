@@ -9,20 +9,6 @@ const PROFILE_ORDER: readonly InvestmentProfileId[] = [
   "glide-path",
 ];
 
-const PROFILE_COLORS: Record<InvestmentProfileId, string> = {
-  conservative: "border-blue-500 bg-blue-50",
-  moderate: "border-amber-500 bg-amber-50",
-  aggressive: "border-red-500 bg-red-50",
-  "glide-path": "border-purple-500 bg-purple-50",
-};
-
-const PROFILE_ACTIVE_COLORS: Record<InvestmentProfileId, string> = {
-  conservative: "border-blue-600 bg-blue-100 ring-2 ring-blue-300",
-  moderate: "border-amber-600 bg-amber-100 ring-2 ring-amber-300",
-  aggressive: "border-red-600 bg-red-100 ring-2 ring-red-300",
-  "glide-path": "border-purple-600 bg-purple-100 ring-2 ring-purple-300",
-};
-
 interface InvestmentProfileSelectorProps {
   readonly selectedProfileId: InvestmentProfileId;
   readonly dispatch: React.Dispatch<AppAction>;

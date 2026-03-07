@@ -26,8 +26,6 @@ const SCENARIO_ORDER: readonly ScenarioId[] = [
   "greece-haircut",
 ];
 
-const REFERENCE_LABEL_FONT_SIZE = 10;
-
 interface CombinedHeroChartProps {
   readonly data: readonly CombinedChartDataPoint[];
   readonly comparisonScenarioId: ScenarioId;

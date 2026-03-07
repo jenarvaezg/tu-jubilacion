@@ -31,9 +31,9 @@ describe("SalaryInput", () => {
 
     expect(onSalaryChange).toHaveBeenCalledWith(5000);
     expect(
-      screen.getByText(/En bruto anual no hace falta elegir 12 o 14 pagas/i),
+      screen.getByText(/En cómputo anual, las pagas extras se consideran ya prorrateadas/i),
     ).toBeInTheDocument();
-    expect(screen.queryByText("Pagas al año")).not.toBeInTheDocument();
+    expect(screen.queryByText("Estructura de pagos")).not.toBeInTheDocument();
   });
 
   it("keeps the 12/14-pay selector visible in net mode", () => {
@@ -48,7 +48,7 @@ describe("SalaryInput", () => {
       />,
     );
 
-    expect(screen.getByLabelText("Ingreso neto al mes")).toHaveValue(2200);
-    expect(screen.getByText("Pagas al año")).toBeInTheDocument();
+    expect(screen.getByLabelText("Ingreso neto mensual")).toHaveValue(2200);
+    expect(screen.getByText("Estructura de pagos")).toBeInTheDocument();
   });
 });

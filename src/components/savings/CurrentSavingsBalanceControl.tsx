@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import type { AppAction } from "../../state/types.ts";
-import { formatCurrency } from "../../utils/format.ts";
 
 interface CurrentSavingsBalanceControlProps {
   readonly currentSavingsBalance: number;
@@ -34,9 +33,9 @@ export function CurrentSavingsBalanceControl({
     <div className="border border-paper-dark bg-white p-6">
       <div className="flex flex-col gap-4">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-ink/40 mb-1">
+          <label htmlFor="current-savings-balance" className="text-[10px] font-bold uppercase tracking-widest text-ink/40 mb-1 block">
             Capital Reservado Actual
-          </p>
+          </label>
           <p className="font-serif italic text-xs leading-relaxed text-ink-light/70">
             Ahorro específico ya acumulado para la jubilación. Se proyectará hasta su fecha de retiro.
           </p>

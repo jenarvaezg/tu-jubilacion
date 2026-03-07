@@ -26,7 +26,6 @@ const SCENARIO_ORDER: readonly ScenarioId[] = [
   "greece-haircut",
 ];
 
-const REFERENCE_LABEL_FONT_SIZE = 10;
 const REFERENCE_MARKERS = [
   { age: 63, label: "63 ant.", dy: 2, dx: -10, stroke: "#9ca3af" },
   { age: 67, label: "67 legal", dy: 16, dx: 0, stroke: "#6b7280" },
@@ -107,7 +106,6 @@ export function HeroChart({
                       dx: marker.dx,
                       fontSize: 9,
                       fontFamily: 'ui-monospace',
-                      textTransform: 'uppercase',
                       fill: "#94a3b8",
                     }}
                   />

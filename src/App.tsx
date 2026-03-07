@@ -51,7 +51,7 @@ function App() {
     >
       <div className="flex flex-col gap-6">
         {error !== null && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+          <div data-testid="global-error" className="rounded-lg border border-red-200 bg-red-50 p-4">
             <p className="text-sm text-red-700">{error}</p>
           </div>
         )}

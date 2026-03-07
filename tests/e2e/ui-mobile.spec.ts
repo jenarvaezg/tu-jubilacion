@@ -10,6 +10,12 @@ test("mantiene legibilidad y evita overflow horizontal en movil", async ({
   await page.goto("/");
   await page.waitForLoadState("networkidle");
 
+  // Dismiss welcome banner if present
+  const startBtn = page.getByText(/Iniciar simulación/i);
+  if (await startBtn.isVisible()) {
+    await startBtn.click();
+  }
+
   const viewport = page.viewportSize();
   expect(viewport).not.toBeNull();
 
@@ -22,9 +28,13 @@ test("mantiene legibilidad y evita overflow horizontal en movil", async ({
     pageMetrics.innerWidth + 1,
   );
 
-  await expect(page.getByText("Analisis multi-escenario")).toBeVisible();
+  await expect(page.getByText(/Análisis de Sensibilidad/i)).toBeVisible();
+  
+  // Open the collapsible to see all scenarios
+  await page.getByText(/Desglosar todos los escenarios/i).click();
+
   await expect(
-    page.getByRole("heading", { name: "Propuesta FEDEA" }),
+    page.getByRole("heading", { name: "PROPUESTA FEDEA" }),
   ).toBeVisible();
 
   const heroSurface = page
@@ -44,16 +54,16 @@ test("mantiene legibilidad y evita overflow horizontal en movil", async ({
     page.getByText(/equivalente real \(hoy\):/).first(),
   ).toBeVisible();
 
-  await page.getByText("Brecha de ingresos a cubrir").scrollIntoViewIfNeeded();
+  await page.getByText("Auditoría de Brecha de Ingresos").scrollIntoViewIfNeeded();
   await expect(page.getByTestId("combined-income-chart")).toBeVisible();
 
   await page
-    .getByText("Como construyes tu complemento privado")
+    .getByText("Dinámica de Acumulación Patrimonial")
     .scrollIntoViewIfNeeded();
   await expect(page.getByTestId("comparison-chart-legend")).toBeVisible();
 
   await page
-    .getByText("Simulacion historica por cohorte")
+    .getByText("Simulación histórica por cohorte")
     .scrollIntoViewIfNeeded();
   await expect(page.getByText("Euros reales")).toBeVisible();
 });

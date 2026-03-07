@@ -16,13 +16,13 @@ describe("CurrentSavingsBalanceControl", () => {
       />,
     );
 
-    fireEvent.change(screen.getByLabelText("Ahorro actual para jubilación"), {
+    fireEvent.change(screen.getByLabelText("Capital Reservado Actual"), {
       target: { value: "" },
     });
 
     expect(dispatch).not.toHaveBeenCalled();
 
-    fireEvent.blur(screen.getByLabelText("Ahorro actual para jubilación"));
+    fireEvent.blur(screen.getByLabelText("Capital Reservado Actual"));
 
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_CURRENT_SAVINGS_BALANCE",
@@ -50,7 +50,7 @@ describe("ContributionOverrideControl", () => {
         target: { value: "300" },
       },
     );
-    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    fireEvent.click(screen.getByRole("button", { name: "Set" }));
 
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_MONTHLY_CONTRIBUTION",
@@ -69,7 +69,7 @@ describe("ContributionOverrideControl", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Modo auto/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Restore/i }));
 
     expect(dispatch).toHaveBeenCalledWith({
       type: "SET_MONTHLY_CONTRIBUTION",
@@ -99,9 +99,9 @@ describe("DrawdownYearsControl", () => {
         target: { value: "24" },
       },
     );
-    fireEvent.click(screen.getByRole("button", { name: /Restaurar defecto/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Reset/i }));
 
-    expect(screen.getByText("Derivado: 21 años")).toBeInTheDocument();
+    expect(screen.getByText(/Estimación por esperanza de vida: 21 años/i)).toBeInTheDocument();
     expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: "SET_DRAWDOWN_YEARS",
       payload: 24,
