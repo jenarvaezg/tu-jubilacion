@@ -17,7 +17,7 @@ export const DEFAULT_STATE: AppState = {
     salaryGrowthRate: 0,
     greeceHaircutRate: 0.3,
     notionalGrowthScenario: "historic",
-    ipcRate: 0.02,
+    ipcRate: 0.025,
     comparisonScenarioId: "notional-accounts",
     investmentProfileId: "moderate",
     currentSavingsBalance: 0,

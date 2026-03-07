@@ -29,11 +29,11 @@ export function ChartControls({
   const ipcPct = (ipcRate * 100).toFixed(1).replace(".", ",");
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       {displayMode === "nominal" && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
-          <div className="flex gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+        <div className="border border-accent/20 bg-accent/5 p-6 animate-in fade-in slide-in-from-top-2 duration-500">
+          <div className="flex gap-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center border border-accent/30 text-accent">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -41,7 +41,7 @@ export function ChartControls({
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
@@ -51,44 +51,36 @@ export function ChartControls({
               </svg>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-amber-900">
-                Atención: Ilusión monetaria
+              <h3 className="text-sm font-serif font-bold text-accent uppercase tracking-wider">
+                Advertencia: Ilusión Monetaria
               </h3>
-              <p className="mt-1 text-sm text-amber-800 leading-relaxed">
-                Estás viendo euros nominales. Debido a la inflación ({ipcPct}%),
-                el dinero valdrá mucho menos en el futuro.
-                <span className="font-bold">
-                  {" "}
-                  {exampleNominal.toLocaleString("es-ES")}€
-                </span>{" "}
-                en {targetYear} equivaldrán a solo
-                <span className="font-bold underline decoration-amber-500/50">
-                  {" "}
-                  ~{exampleReal.toLocaleString("es-ES")}€
-                </span>{" "}
-                de hoy.
+              <p className="mt-1 font-serif italic text-sm text-accent leading-relaxed">
+                Usted está visualizando euros nominales. Debido a la inflación estimada del {ipcPct}%,
+                el poder adquisitivo se verá significativamente mermado: 
+                <span className="font-mono font-bold"> {exampleNominal.toLocaleString("es-ES")}€</span> en {targetYear} equivaldrán a solo
+                <span className="font-mono font-bold underline decoration-accent/30 ml-1"> ~{exampleReal.toLocaleString("es-ES")}€</span> de hoy.
               </p>
             </div>
           </div>
         </div>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl bg-white p-4 shadow-sm border border-gray-100">
-        <div className="flex flex-wrap items-center gap-6">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">
-              Ver en:
+      <div className="flex flex-wrap items-center justify-between gap-6 border border-paper-dark bg-white/40 p-6">
+        <div className="flex flex-wrap items-center gap-8">
+          <div className="flex flex-col gap-2">
+            <span className="text-[10px] font-bold text-ink/60 uppercase tracking-widest">
+              Unidad de cuenta
             </span>
-            <div className="flex overflow-hidden rounded-lg border border-gray-200 p-1 bg-gray-50">
+            <div className="flex">
               <button
                 type="button"
                 onClick={() =>
                   dispatch({ type: "SET_DISPLAY_MODE", payload: "nominal" })
                 }
-                className={`px-4 py-1.5 text-xs font-bold transition-all rounded-md ${
+                className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest border transition-all ${
                   displayMode === "nominal"
-                    ? "bg-white text-gray-900 shadow-sm border border-gray-100"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "bg-ink text-paper border-ink"
+                    : "bg-transparent text-ink/40 border-ink/10 hover:text-ink/60"
                 }`}
               >
                 Nominal (Futuro)
@@ -98,10 +90,10 @@ export function ChartControls({
                 onClick={() =>
                   dispatch({ type: "SET_DISPLAY_MODE", payload: "real" })
                 }
-                className={`px-4 py-1.5 text-xs font-bold transition-all rounded-md ${
+                className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest border -ml-[1px] transition-all ${
                   displayMode === "real"
-                    ? "bg-white text-gray-900 shadow-sm border border-gray-100"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "bg-ink text-paper border-ink"
+                    : "bg-transparent text-ink/40 border-ink/10 hover:text-ink/60"
                 }`}
               >
                 Real (Hoy)
@@ -109,12 +101,12 @@ export function ChartControls({
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="ipc-select"
-              className="text-xs font-bold text-gray-700 uppercase tracking-wider"
+              className="text-[10px] font-bold text-ink/60 uppercase tracking-widest"
             >
-              Inflación (IPC):
+              Inflación (IPC)
             </label>
             <select
               id="ipc-select"
@@ -125,7 +117,7 @@ export function ChartControls({
                   payload: Number(e.target.value),
                 })
               }
-              className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+              className="appearance-none rounded-none border-b border-ink/20 bg-transparent py-1 font-mono text-xs font-bold text-ink focus:border-accent focus:outline-none cursor-pointer"
             >
               {IPC_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -136,32 +128,30 @@ export function ChartControls({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-6">
-          <div className="flex items-center gap-3">
-            <label
-              htmlFor="notional-scenario-select"
-              className="text-xs font-bold text-gray-700 uppercase tracking-wider"
-            >
-              Variante nocional:
-            </label>
-            <select
-              id="notional-scenario-select"
-              value={notionalGrowthScenario}
-              onChange={(e) =>
-                dispatch({
-                  type: "SET_NOTIONAL_SCENARIO",
-                  payload:
-                    e.target.value === "ageing-report"
-                      ? "ageing-report"
-                      : "historic",
-                })
-              }
-              className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
-            >
-              <option value="historic">Histórico (PIB +2,2%)</option>
-              <option value="ageing-report">Ageing Report (+1,2%)</option>
-            </select>
-          </div>
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="notional-scenario-select"
+            className="text-[10px] font-bold text-ink/60 uppercase tracking-widest"
+          >
+            Escenario Nocional
+          </label>
+          <select
+            id="notional-scenario-select"
+            value={notionalGrowthScenario}
+            onChange={(e) =>
+              dispatch({
+                type: "SET_NOTIONAL_SCENARIO",
+                payload:
+                  e.target.value === "ageing-report"
+                    ? "ageing-report"
+                    : "historic",
+              })
+            }
+            className="appearance-none rounded-none border-b border-ink/20 bg-transparent py-1 font-mono text-xs font-bold text-ink focus:border-accent focus:outline-none cursor-pointer"
+          >
+            <option value="historic">Histórico (PIB +2,2%)</option>
+            <option value="ageing-report">Ageing Report (+1,2%)</option>
+          </select>
         </div>
       </div>
     </div>

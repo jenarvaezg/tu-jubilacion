@@ -1,17 +1,60 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1e40af;
-  --color-primary-light: #3b82f6;
-  --color-primary-dark: #1e3a8a;
-  --color-danger: #dc2626;
-  --color-success: #16a34a;
-  --color-warning: #d97706;
+  /* Heritage Palette */
+  --color-primary: #0f172a;
+  --color-primary-light: #334155;
+  --color-primary-dark: #020617;
+  --color-accent: #c2410c;
+  --color-accent-light: #ea580c;
+  
+  /* Paper & Ink */
+  --color-paper: #fdfcfb;
+  --color-paper-dark: #f5f2ed;
+  --color-ink: #0f172a;
+  --color-ink-light: #475569;
 
-  --color-scenario-current: #2563eb;
-  --color-scenario-transition: #0f766e;
-  --color-scenario-notional: #dc2626;
-  --color-scenario-sustainability: #d97706;
-  --color-scenario-eu: #7c3aed;
-  --color-scenario-greece: #059669;
+  /* Functional Colors with personality */
+  --color-danger: #991b1b;
+  --color-success: #166534;
+  --color-warning: #92400e;
+
+  /* Scenario Colors (Infographic Style) */
+  --color-scenario-current: #0f172a;
+  --color-scenario-transition: #155e75;
+  --color-scenario-notional: #991b1b;
+  --color-scenario-sustainability: #854d0e;
+  --color-scenario-eu: #5b21b6;
+  --color-scenario-greece: #065f46;
+
+  /* Typography */
+  --font-serif: "Charter", "Bitstream Charter", "Sitka Text", "Cambria", "Georgia", serif;
+  --font-mono: "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-paper text-ink selection:bg-accent/20;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-serif tracking-tight;
+  }
+
+  /* Elegance for numbers */
+  .font-numeric {
+    @apply font-mono tracking-tighter;
+  }
+}
+
+/* Custom Scrollbar for a cleaner look */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-paper;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-200 rounded-full border-4 border-paper hover:bg-gray-300;
 }

@@ -15,17 +15,18 @@ export function WelcomeBanner() {
   };
 
   return (
-    <div className="rounded-xl border border-blue-200 bg-blue-50 p-6">
-      <h2 className="text-lg font-bold text-blue-900">Descubre cuánto podrías cobrar de pensión</h2>
-      <p className="mt-2 text-sm leading-relaxed text-blue-800">
-        Introduce tu edad y salario para ver proyecciones bajo 6 escenarios de reforma.
-        Herramienta educativa basada en datos de la Seguridad Social.
+    <div className="border border-paper-dark bg-white p-8 mb-4">
+      <h2 className="text-2xl font-serif font-bold text-ink">
+        Análisis de Sostenibilidad de la Pensión Pública
+      </h2>
+      <p className="mt-3 font-serif italic text-base leading-relaxed text-ink-light/90">
+        Utilice esta herramienta interactiva para proyectar sus ingresos de jubilación bajo distintos escenarios de reforma del sistema. El cálculo se fundamenta en la legislación vigente y las principales propuestas técnicas de sostenibilidad.
       </p>
       <button
         onClick={handleDismiss}
-        className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+        className="mt-6 border-2 border-ink bg-ink px-6 py-2 text-xs font-bold uppercase tracking-widest text-paper hover:bg-transparent hover:text-ink transition-all"
       >
-        Entendido
+        Iniciar simulación
       </button>
     </div>
   );

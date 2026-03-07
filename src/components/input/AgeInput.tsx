@@ -45,25 +45,29 @@ export function AgeInput({ value, onChange }: AgeInputProps) {
   );
 
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor="age-input" className="text-sm font-medium text-gray-700">
+    <div className="flex flex-col gap-2">
+      <label htmlFor="age-input" className="text-xs font-bold uppercase tracking-wider text-ink/70">
         Edad actual
       </label>
-      <input
-        id="age-input"
-        type="number"
-        inputMode="numeric"
-        min={18}
-        max={66}
-        value={localValue}
-        onChange={handleChange}
-        className="rounded-lg border border-gray-300 px-3 py-2 text-sm
-          focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none
-          transition-colors"
-        placeholder="35"
-      />
+      <div className="relative">
+        <input
+          id="age-input"
+          type="number"
+          inputMode="numeric"
+          min={18}
+          max={66}
+          value={localValue}
+          onChange={handleChange}
+          className="w-full rounded-none border-b-2 border-ink/10 bg-transparent px-0 py-2 font-mono text-xl
+            focus:border-accent focus:outline-none transition-all placeholder:text-ink/10"
+          placeholder="35"
+        />
+        <span className="absolute right-0 bottom-2 text-[10px] font-mono uppercase text-ink/40">
+          Años
+        </span>
+      </div>
       {error !== null && (
-        <span className="text-xs text-danger" role="alert">
+        <span className="text-[10px] font-mono uppercase text-danger mt-1" role="alert">
           {error}
         </span>
       )}

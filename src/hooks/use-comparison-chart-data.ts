@@ -7,6 +7,7 @@ export interface ComparisonChartDataPoint {
   readonly equity: number;
   readonly bonds: number;
   readonly deposits: number;
+  readonly savings: number;
 }
 
 interface UseComparisonChartDataParams {
@@ -34,6 +35,10 @@ export function buildComparisonChartData(
       displayMode === "real"
         ? point.depositsPortfolioReal
         : point.depositsPortfolioNominal,
+    savings:
+      displayMode === "real"
+        ? point.savingsOnlyReal
+        : point.savingsOnlyNominal,
   }));
 }
 

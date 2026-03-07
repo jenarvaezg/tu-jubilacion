@@ -55,23 +55,22 @@ export function ShareButton({ getShareUrl, results }: ShareButtonProps) {
       type="button"
       onClick={handleClick}
       className={`
-        inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
-        transition-colors duration-200
+        group relative inline-flex items-center justify-center gap-3 border-2 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300
         ${
           copied
-            ? "bg-success text-white"
-            : "bg-primary text-white hover:bg-primary-dark"
+            ? "border-success bg-success text-paper"
+            : "border-ink bg-ink text-paper hover:bg-transparent hover:text-ink"
         }
       `}
     >
       {copied ? (
         <>
           <svg
-            className="h-4 w-4"
+            className="h-3 w-3"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
+            strokeWidth={3}
           >
             <path
               strokeLinecap="round"
@@ -79,16 +78,16 @@ export function ShareButton({ getShareUrl, results }: ShareButtonProps) {
               d="M5 13l4 4L19 7"
             />
           </svg>
-          URL copiada
+          Enlace Copiado
         </>
       ) : (
         <>
           <svg
-            className="h-4 w-4"
+            className="h-3 w-3 transition-transform group-hover:scale-110"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
+            strokeWidth={2.5}
           >
             <path
               strokeLinecap="round"
@@ -96,7 +95,7 @@ export function ShareButton({ getShareUrl, results }: ShareButtonProps) {
               d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
             />
           </svg>
-          Compartir plan
+          Exportar Plan
         </>
       )}
     </button>

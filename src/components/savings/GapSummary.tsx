@@ -37,139 +37,139 @@ export function GapSummary({
       : `${formatCurrency(lifestyleBreakdown.annualGross)} brutos al año -> ${formatCurrency(lifestyleBreakdown.annualNet)} netos estimados al año`;
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-gray-900 text-white shadow-xl">
-      <div className="p-6 md:p-8">
-        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400">
-          Brecha de ingresos a cubrir
+    <div className="border border-paper-dark bg-white p-8 sm:p-12 overflow-hidden">
+      <div>
+        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink/40 mb-6">
+          Auditoría de Brecha de Ingresos
         </h2>
-        <p className="mt-4 text-2xl font-extrabold leading-tight md:text-3xl">
+        <p className="text-2xl font-serif font-bold leading-tight text-ink sm:text-3xl">
           {hasSelectedGap ? (
             <>
-              Para mantener tu nivel de vida actual, te faltarían{" "}
-              <span className="text-emerald-400">
+              Para sostener su nivel de vida actual, se estima una carencia de{" "}
+              <span className="text-accent underline decoration-accent/20">
                 <CurrencyDisplay
                   amount={selectedGap}
-                  className="text-2xl text-emerald-400 md:text-3xl"
+                  className="text-2xl text-accent md:text-3xl"
                 />
               </span>{" "}
-              bajo {SCENARIO_LABELS[comparisonScenarioId].toLowerCase()}.
+              bajo el escenario {SCENARIO_LABELS[comparisonScenarioId].toLowerCase()}.
             </>
           ) : (
-            <span className="text-green-400">
-              Bajo este escenario, la pensión pública cubriría tu nivel de vida
-              actual.
+            <span className="text-success">
+              Bajo este escenario de reforma, la pensión pública cubriría íntegramente su nivel de vida actual.
             </span>
           )}
         </p>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-300">
-          La referencia de nivel de vida sale de tu ingreso neto anual actual,
-          normalizado a 12 meses. La brecha se compara con la pensión estimada
-          al jubilarte también en euros de hoy, para no mezclar cifras nominales
-          futuras con tu gasto actual.
+        <p className="mt-6 font-serif italic text-base leading-relaxed text-ink-light/80 max-w-3xl">
+          Este análisis normaliza su gasto actual a una base de 12 meses y lo compara con la pensión estimada al jubilarse, todo expresado en euros de hoy para garantizar la coherencia del poder adquisitivo.
         </p>
-        <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm leading-relaxed text-gray-200">
-          <p className="font-medium text-white">
-            Cómo se calcula tu referencia actual
+
+        <div className="mt-8 border border-dashed border-ink/20 bg-paper-dark/30 p-6">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-2">
+            Metodología de Referencia Actual
           </p>
-          <p className="mt-1">
-            {inputExplanation}. Para comparar con la jubilación lo pasamos a una
-            base común de 12 meses:{" "}
-            <span className="font-semibold text-emerald-300">
+          <p className="font-serif italic text-sm text-ink-light leading-relaxed">
+            {inputExplanation}. Referencia mensual normalizada (12 meses):{" "}
+            <span className="font-mono font-bold text-ink ml-1">
               {formatCurrency(lifestyleBreakdown.normalizedMonthlyNet)}/mes
-            </span>
-            .
+            </span>.
           </p>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-              Referencia actual (base 12 meses)
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="border border-paper-dark p-6">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-ink/40 mb-3">
+              Referencia Actual
             </p>
-            <CurrencyDisplay
-              amount={gap.targetMonthlyIncome}
-              className="mt-2 text-xl font-bold text-white"
-            />
-            <p className="mt-2 text-xs text-gray-300">
-              Tu gasto mensual equivalente de hoy.
-            </p>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-              Pensión pública estimada
-            </p>
-            <CurrencyDisplay
-              amount={gap.currentLawMonthly}
-              className="mt-2 text-xl font-bold text-white"
-            />
-            <p className="mt-2 text-xs text-gray-300">
-              Ley actual, al jubilarte, en euros de hoy.
-            </p>
-            <p className="mt-2 text-xs text-gray-300">
-              {formatPercent(gap.currentLawCoverageRate)} del objetivo. Brecha:{" "}
-              <span className="font-semibold text-white">
-                <CurrencyDisplay amount={gap.currentLawGapMonthly} suffix="" />
-              </span>
+            <div className="flex items-baseline gap-1">
+              <CurrencyDisplay
+                amount={gap.targetMonthlyIncome}
+                className="text-2xl font-mono font-bold text-ink tracking-tighter"
+                suffix=""
+              />
+              <span className="text-[10px] font-mono text-ink/40 uppercase">/mes</span>
+            </div>
+            <p className="mt-4 font-serif italic text-[10px] text-ink-light/70 leading-relaxed uppercase">
+              Su gasto mensual equivalente hoy.
             </p>
           </div>
-          <div className="rounded-xl border border-amber-400/25 bg-amber-400/10 p-4">
-            <p className="text-xs font-medium uppercase tracking-wide text-amber-200">
-              {SCENARIO_LABELS[comparisonScenarioId]}
+
+          <div className="border border-paper-dark p-6">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-ink/40 mb-3">
+              Pensión Ley Actual
             </p>
-            <CurrencyDisplay
-              amount={gap.comparisonMonthly}
-              className="mt-2 text-xl font-bold text-amber-100"
-            />
-            <p className="mt-2 text-xs text-amber-100/90">
-              Pensión pública estimada bajo este escenario, en euros de hoy.
+            <div className="flex items-baseline gap-1">
+              <CurrencyDisplay
+                amount={gap.currentLawMonthly}
+                className="text-2xl font-mono font-bold text-ink tracking-tighter"
+                suffix=""
+              />
+              <span className="text-[10px] font-mono text-ink/40 uppercase">/mes</span>
+            </div>
+            <p className="mt-4 font-serif italic text-[10px] text-ink-light/70 leading-relaxed uppercase">
+              Cobertura: {formatPercent(gap.currentLawCoverageRate)}. Brecha: {formatCurrency(gap.currentLawGapMonthly)}.
             </p>
-            <p className="mt-2 text-xs text-amber-100/90">
-              {formatPercent(gap.comparisonCoverageRate)} del objetivo. Brecha:{" "}
-              <span className="font-semibold text-amber-50">
-                <CurrencyDisplay amount={gap.comparisonGapMonthly} suffix="" />
-              </span>
+          </div>
+
+          <div className="border border-accent/40 bg-accent/5 p-6">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-accent mb-3">
+              Escenario {SCENARIO_LABELS[comparisonScenarioId]}
+            </p>
+            <div className="flex items-baseline gap-1">
+              <CurrencyDisplay
+                amount={gap.comparisonMonthly}
+                className="text-2xl font-mono font-bold text-accent tracking-tighter"
+                suffix=""
+              />
+              <span className="text-[10px] font-mono text-accent/40 uppercase">/mes</span>
+            </div>
+            <p className="mt-4 font-serif italic text-[10px] text-accent/70 leading-relaxed uppercase">
+              Cobertura: {formatPercent(gap.comparisonCoverageRate)}. Brecha: {formatCurrency(gap.comparisonGapMonthly)}.
             </p>
           </div>
         </div>
 
-        <div className="mt-6 rounded-xl border border-blue-400/20 bg-blue-500/10 p-4 text-sm leading-relaxed text-blue-100">
-          {hasAdditionalGap ? (
-            <>
-              Si la reforma se parece a {SCENARIO_LABELS[comparisonScenarioId]},
-              el esfuerzo privado sube en{" "}
-              <span className="font-bold text-white">
-                <CurrencyDisplay amount={gap.additionalGapMonthly} />
-              </span>{" "}
-              frente a planificar con ley actual.
-            </>
-          ) : (
-            <>
-              Frente a la ley actual, este escenario no aumenta la brecha de
-              ingresos que tendrías que cubrir con ahorro privado.
-            </>
-          )}
-        </div>
+        <div className="mt-8 border-t border-paper-dark pt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="max-w-xl">
+            <p className="font-serif italic text-sm text-ink-light/90 leading-relaxed">
+              {hasAdditionalGap ? (
+                <>
+                  Si la reforma se asimila a {SCENARIO_LABELS[comparisonScenarioId]},
+                  el esfuerzo de ahorro privado requerido se incrementa en{" "}
+                  <span className="font-mono font-bold text-ink not-italic">
+                    <CurrencyDisplay amount={gap.additionalGapMonthly} />
+                  </span>{" "}
+                  mensuales respecto al marco legal actual.
+                </>
+              ) : (
+                <>
+                  Este escenario no supone un incremento de la brecha de ingresos proyectada bajo la legislación vigente.
+                </>
+              )}
+            </p>
+          </div>
 
-        <div className="mt-6">
-          <label className="text-xs font-medium text-gray-400">
-            Escenario de planificación:
-          </label>
-          <select
-            className="ml-2 rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none"
-            value={comparisonScenarioId}
-            onChange={(event) =>
-              dispatch({
-                type: "SET_COMPARISON_SCENARIO",
-                payload: event.target.value as ScenarioId,
-              })
-            }
-          >
-            {COMPARISON_OPTIONS.map((id) => (
-              <option key={id} value={id}>
-                {SCENARIO_LABELS[id]}
-              </option>
-            ))}
-          </select>
+          <div className="flex flex-col gap-2 shrink-0">
+            <label className="text-[10px] font-bold text-ink/40 uppercase tracking-widest">
+              Escenario de Planificación
+            </label>
+            <select
+              className="appearance-none rounded-none border-b border-ink/20 bg-transparent py-1 font-mono text-xs font-bold text-ink focus:border-accent focus:outline-none cursor-pointer"
+              value={comparisonScenarioId}
+              onChange={(event) =>
+                dispatch({
+                  type: "SET_COMPARISON_SCENARIO",
+                  payload: event.target.value as ScenarioId,
+                })
+              }
+            >
+              {COMPARISON_OPTIONS.map((id) => (
+                <option key={id} value={id}>
+                  {SCENARIO_LABELS[id]}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
     </div>

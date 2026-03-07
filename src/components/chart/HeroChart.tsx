@@ -46,59 +46,49 @@ export function HeroChart({
 }: HeroChartProps) {
   if (data.length === 0) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-white">
-        <p className="text-sm text-gray-500">
-          Introduce tus datos para ver las proyecciones
+      <div className="flex h-64 items-center justify-center border border-dashed border-ink/20 bg-white/50">
+        <p className="font-serif italic text-sm text-ink/40">
+          Introduzca sus datos para generar la proyección
         </p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-xs leading-relaxed text-gray-500">
-        La gráfica se centra en el tramo final de tu carrera y en la jubilación
-        para que el rango relevante se lea mejor.
-      </p>
-      <div className="rounded-xl bg-white p-4 shadow-sm border border-gray-100">
+    <div className="flex flex-col gap-6">
+      <div className="border border-paper-dark bg-white p-6 sm:p-8">
+        <div className="mb-6 border-b border-paper-dark pb-4">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-ink/60">
+            Proyección de Ingresos Públicos
+          </h3>
+          <p className="mt-1 font-serif italic text-xs text-ink-light/80">
+            Comparativa de escenarios de reforma según edad alcanzada (Euros {displayMode === 'real' ? 'de hoy' : 'nominales'}).
+          </p>
+        </div>
+        
         <div data-testid="hero-chart">
           <div
             role="img"
             aria-label="Gráfico de pensión mensual estimada por edad bajo 6 escenarios de reforma"
           >
-            <p className="sr-only">
-              Gráfico que muestra la evolución de la pensión mensual estimada
-              desde la edad de jubilación hasta los 90 años, comparando 6
-              escenarios de reforma del sistema de pensiones.
-            </p>
-            <ResponsiveContainer width="100%" height={360}>
+            <ResponsiveContainer width="100%" height={400}>
               <LineChart
                 data={data as ChartDataPoint[]}
-                margin={{ top: 56, right: 18, left: 20, bottom: 26 }}
+                margin={{ top: 40, right: 20, left: 0, bottom: 20 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis
                   dataKey="age"
-                  label={{
-                    value: "Edad",
-                    position: "insideBottom",
-                    offset: -8,
-                    fontSize: 12,
-                  }}
-                  tick={{ fontSize: 11 }}
-                  stroke="#9ca3af"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 10, fontFamily: 'ui-monospace', fill: '#64748b' }}
+                  dy={10}
                 />
                 <YAxis
-                  tick={{ fontSize: 11 }}
-                  stroke="#9ca3af"
-                  tickFormatter={(v: number) => `${Math.round(v)}`}
-                  label={{
-                    value: "EUR/mes",
-                    angle: -90,
-                    position: "insideLeft",
-                    offset: -2,
-                    fontSize: 12,
-                  }}
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 10, fontFamily: 'ui-monospace', fill: '#64748b' }}
+                  tickFormatter={(v: number) => `${Math.round(v)}€`}
                 />
                 <Tooltip
                   allowEscapeViewBox={{ x: true, y: true }}
@@ -109,14 +99,16 @@ export function HeroChart({
                     key={marker.age}
                     x={marker.age}
                     stroke={marker.stroke}
-                    strokeDasharray={marker.age === 67 ? "4 4" : "3 3"}
+                    strokeDasharray="2 2"
                     label={{
                       value: marker.label,
                       position: "insideTop",
                       dy: marker.dy,
                       dx: marker.dx,
-                      fontSize: REFERENCE_LABEL_FONT_SIZE,
-                      fill: "#6b7280",
+                      fontSize: 9,
+                      fontFamily: 'ui-monospace',
+                      textTransform: 'uppercase',
+                      fill: "#94a3b8",
                     }}
                   />
                 ))}
@@ -125,15 +117,17 @@ export function HeroChart({
                   retirementAge !== 70 && (
                     <ReferenceLine
                       x={retirementAge}
-                      stroke="#1e40af"
-                      strokeDasharray="4 4"
+                      stroke="#c2410c"
+                      strokeDasharray="3 3"
                       label={{
-                        value: `${retirementAge} tuya`,
+                        value: `${retirementAge} JUB.`,
                         position: "insideTop",
                         dy: 44,
                         dx: retirementAge < 67 ? -8 : 8,
-                        fontSize: REFERENCE_LABEL_FONT_SIZE,
-                        fill: "#1e40af",
+                        fontSize: 9,
+                        fontFamily: 'ui-monospace',
+                        fontWeight: 'bold',
+                        fill: "#c2410c",
                       }}
                     />
                   )}
@@ -145,18 +139,18 @@ export function HeroChart({
                     stroke={SCENARIO_COLORS[scenarioId]}
                     strokeWidth={
                       scenarioId === "current-law"
-                        ? 2.5
+                        ? 3
                         : scenarioId === "fedea-transition"
-                          ? 2.25
+                          ? 2.5
                           : 1.5
                     }
                     strokeDasharray={
                       SCENARIO_DASH_PATTERNS[scenarioId] || undefined
                     }
-                    strokeOpacity={scenarioId === "fedea-transition" ? 0.92 : 1}
-                    strokeLinecap="round"
+                    strokeOpacity={scenarioId === "fedea-transition" ? 0.9 : 0.8}
+                    strokeLinecap="butt"
                     dot={false}
-                    activeDot={{ r: 4 }}
+                    activeDot={{ r: 4, stroke: '#fff', strokeWidth: 2 }}
                     connectNulls={false}
                   />
                 ))}

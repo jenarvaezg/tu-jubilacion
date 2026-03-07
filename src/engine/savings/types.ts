@@ -86,4 +86,6 @@ export interface ComparisonYearlyPoint {
   readonly bondsPortfolioNominal: number;
   readonly depositsPortfolioReal: number;
   readonly depositsPortfolioNominal: number;
+  readonly savingsOnlyReal: number;
+  readonly savingsOnlyNominal: number;
 }

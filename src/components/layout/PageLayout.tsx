@@ -11,43 +11,40 @@ export function PageLayout({ sidebar, children }: PageLayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 transition-colors duration-300">
+    <div className="flex min-h-screen flex-col bg-paper transition-colors duration-300">
       <Header />
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6">
-        <div className="flex flex-col gap-6 md:flex-row relative">
-          {/* Toggle Button for Desktop */}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="absolute -left-3 top-4 z-20 hidden h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm hover:bg-gray-50 md:flex transition-transform duration-300"
-            style={{
-              transform: isCollapsed ? "translateX(0)" : "translateX(0)",
-            }}
-            title={isCollapsed ? "Expandir datos" : "Colapsar datos"}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className={`transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`}
-            >
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </button>
-
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-8">
+        <div className="flex flex-col gap-8 md:flex-row relative items-start">
           <aside
-            className={`w-full shrink-0 transition-all duration-300 ease-in-out overflow-hidden md:sticky md:top-4 md:h-fit ${
+            className={`w-full shrink-0 transition-all duration-300 ease-in-out md:sticky md:top-8 md:max-h-[calc(100vh-4rem)] md:overflow-y-auto pr-2 custom-scrollbar ${
               isCollapsed
                 ? "md:w-0 md:opacity-0 md:pointer-events-none"
                 : "md:w-80 lg:w-96 md:opacity-100"
             }`}
           >
-            <div className="min-w-[320px]">{sidebar}</div>
+            {/* Toggle Button for Desktop - Anchored to sidebar but floating on the edge */}
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="absolute -right-4 top-4 z-20 hidden h-9 w-9 items-center justify-center rounded-full border border-paper-dark bg-white shadow-sm hover:bg-paper-dark md:flex transition-all duration-300"
+              title={isCollapsed ? "Expandir datos" : "Colapsar datos"}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={`transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`}
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+
+            <div className="min-w-[320px] pb-8">{sidebar}</div>
           </aside>
 
           {/* Re-open button when collapsed */}

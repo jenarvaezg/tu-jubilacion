@@ -14,61 +14,68 @@ export function DrawdownYearsControl({
   dispatch,
 }: DrawdownYearsControlProps) {
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3">
-      <div className="flex-1">
-        <p className="text-xs font-medium text-gray-500">
-          Durante cuántos años quieres complementar tus ingresos
+    <div className="border border-paper-dark bg-white p-6 h-full flex flex-col justify-between">
+      <div>
+        <p className="text-[10px] font-bold uppercase tracking-widest text-ink/40 mb-1">
+          Horizonte de Complemento Privado
         </p>
-        <div className="mt-1 flex items-center gap-3">
-          <input
-            type="range"
-            aria-label="Durante cuántos años quieres complementar tus ingresos"
-            min={5}
-            max={40}
-            step={1}
-            value={drawdownYears}
-            onChange={(event) =>
-              dispatch({
-                type: "SET_DRAWDOWN_YEARS",
-                payload: Number(event.target.value),
-              })
-            }
-            className="h-2 w-32 cursor-pointer accent-blue-600"
-          />
-          <span className="text-lg font-bold tabular-nums text-gray-900">
-            {drawdownYears} años
-          </span>
-        </div>
-        <p className="mt-1 text-xs text-gray-400">
-          Aproxima cuántos años quieres que tu cartera cubra rentas desde la
-          jubilación. Por defecto se deriva de esperanza de vida.
+        <p className="font-serif italic text-xs leading-relaxed text-ink-light/70">
+          Aproximación del periodo durante el cual su cartera privada cubrirá la brecha de ingresos.
         </p>
-        {isOverride && (
-          <p className="mt-1 text-xs text-gray-400">
-            Derivado: {derivedDefault} años
-          </p>
-        )}
       </div>
-      <div className="flex items-center gap-2">
-        <span
-          className={`rounded-full px-2 py-0.5 text-xs font-bold uppercase ${
-            isOverride
-              ? "bg-amber-100 text-amber-700"
-              : "bg-green-100 text-green-700"
-          }`}
-        >
-          {isOverride ? "Manual" : "Auto"}
-        </span>
+
+      <div className="mt-6 border-t border-paper-dark/10 pt-4 flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-baseline gap-1">
+            <span className="text-2xl font-mono font-bold text-ink tracking-tighter">
+              {drawdownYears}
+            </span>
+            <span className="text-[10px] font-mono text-ink/40 uppercase">Años</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span
+              className={`border px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest ${
+                isOverride
+                  ? "border-accent text-accent bg-accent/5"
+                  : "border-success text-success bg-success/5"
+              }`}
+            >
+              {isOverride ? "Manual" : "Auto"}
+            </span>
+            {isOverride && (
+              <button
+                type="button"
+                onClick={() =>
+                  dispatch({ type: "SET_DRAWDOWN_YEARS", payload: null })
+                }
+                className="text-[10px] font-mono font-bold uppercase tracking-widest text-ink/40 hover:text-ink underline underline-offset-4 decoration-ink/20 transition-all"
+              >
+                Reset
+              </button>
+            )}
+          </div>
+        </div>
+        
+        <input
+          type="range"
+          aria-label="Durante cuántos años quieres complementar tus ingresos"
+          min={5}
+          max={40}
+          step={1}
+          value={drawdownYears}
+          onChange={(event) =>
+            dispatch({
+              type: "SET_DRAWDOWN_YEARS",
+              payload: Number(event.target.value),
+            })
+          }
+          className="w-full accent-accent bg-ink/10 h-1 rounded-none appearance-none cursor-pointer"
+        />
+        
         {isOverride && (
-          <button
-            type="button"
-            onClick={() =>
-              dispatch({ type: "SET_DRAWDOWN_YEARS", payload: null })
-            }
-            className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
-          >
-            Restaurar defecto
-          </button>
+          <p className="font-mono text-[9px] uppercase tracking-widest text-ink/30">
+            Estimación por esperanza de vida: {derivedDefault} años
+          </p>
         )}
       </div>
     </div>

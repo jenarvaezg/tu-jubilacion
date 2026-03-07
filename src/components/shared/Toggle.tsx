@@ -9,33 +9,34 @@ interface ToggleProps {
 
 export function Toggle({ label, checked, onChange, id, labelOn = 'Si', labelOff = 'No' }: ToggleProps) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-sm font-medium text-gray-700">{label}</span>
-      <button
-        id={id}
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        onClick={() => onChange(!checked)}
-        className={`
-          relative inline-flex h-8 w-16 shrink-0 cursor-pointer rounded-full
-          border-2 border-transparent transition-colors duration-200 ease-in-out
-          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
-          ${checked ? 'bg-primary' : 'bg-gray-300'}
-        `}
-      >
-        <span
+    <div className="flex flex-col gap-2">
+      <span className="text-[10px] font-bold uppercase tracking-widest text-ink/60">{label}</span>
+      <div className="flex" id={id}>
+        <button
+          type="button"
+          onClick={() => onChange(false)}
           className={`
-            pointer-events-none inline-flex h-7 w-7 items-center justify-center
-            rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out
-            ${checked ? 'translate-x-8' : 'translate-x-0'}
+            flex-1 px-4 py-2 text-[10px] font-bold uppercase tracking-widest border transition-all
+            ${!checked 
+              ? 'bg-ink text-paper border-ink shadow-sm' 
+              : 'bg-transparent text-ink/40 border-ink/10 hover:text-ink/60'}
           `}
         >
-          <span className="text-xs font-medium text-gray-500">
-            {checked ? labelOn : labelOff}
-          </span>
-        </span>
-      </button>
+          {labelOff}
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange(true)}
+          className={`
+            flex-1 px-4 py-2 text-[10px] font-bold uppercase tracking-widest border -ml-[1px] transition-all
+            ${checked 
+              ? 'bg-ink text-paper border-ink shadow-sm' 
+              : 'bg-transparent text-ink/40 border-ink/10 hover:text-ink/60'}
+          `}
+        >
+          {labelOn}
+        </button>
+      </div>
     </div>
   );
 }

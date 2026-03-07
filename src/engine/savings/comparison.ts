@@ -66,6 +66,9 @@ export function generateComparisonTimeline(params: {
         yearsInvested,
       );
 
+    const savingsOnlyNominal = normalizedCurrentSavings + (monthlyContribution * 12 * yearsInvested);
+    const savingsOnlyReal = savingsOnlyNominal / Math.pow(1 + ipcRate, yearsFromNow);
+
     points.push({
       age,
       year,
@@ -82,6 +85,8 @@ export function generateComparisonTimeline(params: {
         Math.round(
           realToNominal(depositsReal, yearsFromNow, ipcRate) * 100,
         ) / 100,
+      savingsOnlyReal: Math.round(savingsOnlyReal * 100) / 100,
+      savingsOnlyNominal: Math.round(savingsOnlyNominal * 100) / 100,
     });
   }
 

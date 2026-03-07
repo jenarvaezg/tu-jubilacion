@@ -73,87 +73,85 @@ export function SalaryInput({
   );
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
         <label
           htmlFor="salary-input"
-          className="text-sm font-medium text-gray-700"
+          className="text-xs font-bold uppercase tracking-wider text-ink/70"
         >
-          {isGrossAnnual ? "Salario bruto anual" : "Ingreso neto al mes"}
+          {isGrossAnnual ? "Salario bruto anual" : "Ingreso neto mensual"}
         </label>
-        <p className="text-xs leading-relaxed text-gray-500">
+        <p className="font-serif italic text-xs leading-relaxed text-ink-light/80">
           {isGrossAnnual
-            ? "Introduce el bruto total del año. La app estima el neto equivalente para comparar tu nivel de vida."
-            : "Introduce lo que realmente te entra por paga. Debajo eliges si cobras en 12 o en 14 pagas."}
+            ? "Introduce el bruto total del año. La app estima el neto equivalente."
+            : "Lo que recibes mensualmente en tu cuenta bancaria."}
         </p>
-        <div className="flex gap-2">
-          <div className="relative flex-1">
-            <input
-              id="salary-input"
-              type="number"
-              inputMode="decimal"
-              min={0}
-              max={isGrossAnnual ? MAX_GROSS_ANNUAL : MAX_NET_MONTHLY}
-              value={localValue}
-              onChange={handleChange}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 pr-8 text-sm
-                focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none
-                transition-colors"
-              placeholder={isGrossAnnual ? "42000" : "2000"}
-            />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">
-              EUR
-            </span>
-          </div>
+        <div className="relative">
+          <input
+            id="salary-input"
+            type="number"
+            inputMode="decimal"
+            min={0}
+            max={isGrossAnnual ? MAX_GROSS_ANNUAL : MAX_NET_MONTHLY}
+            value={localValue}
+            onChange={handleChange}
+            className="w-full rounded-none border-b-2 border-ink/10 bg-transparent px-0 py-2 font-mono text-xl
+              focus:border-accent focus:outline-none transition-all placeholder:text-ink/10"
+            placeholder={isGrossAnnual ? "42000" : "2000"}
+          />
+          <span className="absolute right-0 bottom-2 text-[10px] font-mono uppercase text-ink/40">
+            EUR
+          </span>
         </div>
         {error !== null && (
-          <span className="text-xs text-danger" role="alert">
+          <span className="text-[10px] font-mono uppercase text-danger mt-1" role="alert">
             {error}
           </span>
         )}
       </div>
 
-      <div className="flex items-center gap-4">
-        <fieldset className="flex items-center gap-2">
+      <div className="flex items-center gap-6">
+        <fieldset className="flex items-center gap-4">
           <legend className="sr-only">Tipo de salario</legend>
-          <label className="flex items-center gap-1.5 cursor-pointer">
+          <label className="flex items-center gap-2 cursor-pointer group">
             <input
               type="radio"
               name="salary-type"
               value="net"
               checked={salaryType === "net"}
               onChange={() => onSalaryTypeChange("net")}
-              className="accent-primary"
+              className="accent-accent w-3 h-3"
             />
-            <span className="text-sm text-gray-700">Neto / mes</span>
+            <span className={`text-[10px] uppercase tracking-widest transition-colors ${salaryType === 'net' ? 'font-bold text-ink' : 'text-ink/40 group-hover:text-ink/60'}`}>Neto</span>
           </label>
-          <label className="flex items-center gap-1.5 cursor-pointer">
+          <label className="flex items-center gap-2 cursor-pointer group">
             <input
               type="radio"
               name="salary-type"
               value="gross"
               checked={salaryType === "gross"}
               onChange={() => onSalaryTypeChange("gross")}
-              className="accent-primary"
+              className="accent-accent w-3 h-3"
             />
-            <span className="text-sm text-gray-700">Bruto / año</span>
+            <span className={`text-[10px] uppercase tracking-widest transition-colors ${salaryType === 'gross' ? 'font-bold text-ink' : 'text-ink/40 group-hover:text-ink/60'}`}>Bruto</span>
           </label>
         </fieldset>
       </div>
 
       {salaryType === "net" ? (
-        <Toggle
-          id="pagas-extra-toggle"
-          label="Pagas al año"
-          checked={pagasExtra}
-          onChange={onPagasExtraChange}
-          labelOn="14"
-          labelOff="12"
-        />
+        <div className="border-t border-ink/5 pt-4">
+          <Toggle
+            id="pagas-extra-toggle"
+            label="Estructura de pagos"
+            checked={pagasExtra}
+            onChange={onPagasExtraChange}
+            labelOn="14 Pagas"
+            labelOff="12 Pagas"
+          />
+        </div>
       ) : (
-        <div className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs leading-relaxed text-blue-800">
-          En bruto anual no hace falta elegir 12 o 14 pagas: el total anual ya
-          queda normalizado para el cálculo.
+        <div className="border border-dashed border-accent/20 bg-accent/5 px-4 py-3 text-[10px] uppercase tracking-wider leading-relaxed text-accent font-medium">
+          En cómputo anual, las pagas extras se consideran ya prorrateadas.
         </div>
       )}
     </div>

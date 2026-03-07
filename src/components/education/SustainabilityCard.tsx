@@ -2,56 +2,44 @@ import { SourceLink } from "../detail/SourceLink.tsx";
 
 export function SustainabilityCard() {
   return (
-    <div className="flex flex-col gap-4 text-sm text-gray-700 leading-relaxed">
-      <div>
-        <h4 className="font-semibold text-gray-800">
-          El Factor de Equidad Actuarial (FdEA)
+    <div className="flex flex-col gap-8 text-base font-serif italic text-ink-light/90 leading-relaxed">
+      <div className="flex flex-col gap-2">
+        <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink/60">
+          I. El Factor de Equidad Actuarial (FdEA)
         </h4>
-        <p className="mt-1">
-          El FdEA mide cuánto recibes de pensión por cada euro cotizado. En
-          España es <strong>1,62</strong>: por cada euro que cotizas, recibes
-          1,62 euros en pensión. Esto significa que el sistema paga un 62% más
-          de lo que recauda por jubilado. Esa brecha no puede mantenerse
-          indefinidamente sin reformas o más impuestos.
+        <p>
+          El FdEA cuantifica la relación entre las cotizaciones aportadas y la prestación recibida. En el Reino de España, este factor se sitúa en <span className="font-mono font-bold text-ink not-italic">1,62</span>: por cada unidad monetaria cotizada, el sistema devuelve <span className="font-mono font-bold text-ink not-italic">1,62</span> unidades en concepto de pensión. Esta disparidad del <span className="font-mono font-bold text-ink not-italic">62%</span> representa un desequilibrio estructural que exige ajustes periódicos.
         </p>
       </div>
 
-      <div>
-        <h4 className="font-semibold text-gray-800">Déficit contributivo</h4>
-        <p className="mt-1">
-          La Seguridad Social tiene un déficit estructural de aproximadamente el{" "}
-          <strong>2% del PIB</strong>. La diferencia se cubre con transferencias
-          del Estado (impuestos generales), es decir, con una financiación que
-          va mucho más allá de las cotizaciones corrientes.
-        </p>
-      </div>
-
-      <div>
-        <h4 className="font-semibold text-gray-800">Proyecciones al 2050</h4>
-        <p className="mt-1">
-          Sin reformas, el gasto en pensiones podría alcanzar el{" "}
-          <strong>6% del PIB adicional</strong> para 2050. Con menos
-          trabajadores por jubilado (de 2,1 a ~1,3 previsto), la presión fiscal
-          será difícil de sostener sin cambios en edad, fórmula, impuestos o
-          cuantía de las prestaciones.
-        </p>
-      </div>
-
-      <div>
-        <h4 className="font-semibold text-gray-800">
-          Lo importante no es una reforma concreta
+      <div className="flex flex-col gap-2">
+        <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink/60">
+          II. Déficit Contributivo y Transferencias
         </h4>
-        <p className="mt-1">
-          Nadie sabe qué fórmula exacta acabará aprobando España. Las cuentas
-          nocionales son una referencia útil porque muestran una manera de
-          alinear mejor cotizaciones, pensión y esperanza de vida, pero no son
-          la única salida posible. La idea clave es otra: el sistema actual
-          tendrá que ajustarse y tu planificación no debería depender de una
-          sola promesa pública.
+        <p>
+          La Seguridad Social mantiene un déficit estructural recurrente, equivalente aproximadamente al <span className="font-mono font-bold text-ink not-italic">2% del PIB</span>. Este desajuste se compensa mediante transferencias finalistas de los Presupuestos Generales del Estado, lo que implica que la financiación de las pensiones trasciende las cotizaciones de los trabajadores activos.
         </p>
       </div>
 
-      <div className="border-t border-gray-200 pt-3">
+      <div className="flex flex-col gap-2">
+        <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink/60">
+          III. Horizonte Demográfico 2050
+        </h4>
+        <p>
+          Las proyecciones demográficas sugieren que el gasto en pensiones podría incrementarse en un <span className="font-mono font-bold text-ink not-italic">6% del PIB</span> adicional para mediados de siglo. La tasa de dependencia (relación entre trabajadores y jubilados) se encamina hacia una ratio de <span className="font-mono font-bold text-ink not-italic">1,3:1</span>, lo que compromete la viabilidad del modelo actual sin reformas paramétricas.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-2 border-l-2 border-accent/20 pl-6 py-2 bg-accent/5">
+        <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">
+          Nota sobre la Planificación
+        </h4>
+        <p className="text-sm">
+          La incertidumbre sobre la fórmula exacta de reforma no debe ser un obstáculo para la acción. El modelo de cuentas nocionales se utiliza aquí como una referencia técnica de transparencia y equilibrio, permitiendo al usuario visualizar el impacto de alinear sus aportaciones con su esperanza de vida residual.
+        </p>
+      </div>
+
+      <div className="border-t border-paper-dark/20 pt-6">
         <SourceLink
           authors="Devesa, Domenech y Meneu"
           year={2025}

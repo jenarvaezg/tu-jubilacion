@@ -31,44 +31,42 @@ export function CurrentSavingsBalanceControl({
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white px-4 py-3">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div className="max-w-2xl">
-          <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
-            Ahorro actual para jubilación
+    <div className="border border-paper-dark bg-white p-6">
+      <div className="flex flex-col gap-4">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-ink/40 mb-1">
+            Capital Reservado Actual
           </p>
-          <p className="mt-1 text-sm leading-relaxed text-gray-600">
-            Capital que ya tienes reservado para retiro. Lo proyectamos hasta tu
-            jubilación como base inicial del plan.
+          <p className="font-serif italic text-xs leading-relaxed text-ink-light/70">
+            Ahorro específico ya acumulado para la jubilación. Se proyectará hasta su fecha de retiro.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <label className="sr-only" htmlFor="current-savings-balance">
-            Ahorro actual para jubilación
-          </label>
-          <input
-            id="current-savings-balance"
-            type="number"
-            inputMode="numeric"
-            min={0}
-            max={10000000}
-            step={1000}
-            value={draft}
-            onChange={(event) => setDraft(event.target.value)}
-            onBlur={commitDraft}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                commitDraft();
-              }
-              if (event.key === "Escape") {
-                setDraft(String(currentSavingsBalance));
-              }
-            }}
-            className="w-40 rounded border border-gray-300 px-3 py-2 text-sm tabular-nums text-gray-900 focus:border-blue-500 focus:outline-none"
-          />
-          <span className="min-w-28 text-right text-sm font-semibold tabular-nums text-gray-900">
-            {formatCurrency(currentSavingsBalance)}
-          </span>
+        <div className="flex items-center gap-4 border-t border-paper-dark/10 pt-4">
+          <div className="relative flex-1">
+            <input
+              id="current-savings-balance"
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={10000000}
+              step={1000}
+              value={draft}
+              onChange={(event) => setDraft(event.target.value)}
+              onBlur={commitDraft}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  commitDraft();
+                }
+                if (event.key === "Escape") {
+                  setDraft(String(currentSavingsBalance));
+                }
+              }}
+              className="w-full rounded-none border-b border-ink/10 bg-transparent py-1 font-mono text-xl font-bold text-ink focus:border-accent focus:outline-none transition-all"
+            />
+            <span className="absolute right-0 bottom-1.5 text-[10px] font-mono uppercase text-ink/40">
+              EUR
+            </span>
+          </div>
         </div>
       </div>
     </div>

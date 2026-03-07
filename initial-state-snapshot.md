@@ -1,0 +1,565 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - generic [ref=e8]: TJ
+          - generic [ref=e9]:
+            - heading "Tu Jubilación" [level=1] [ref=e10]
+            - paragraph [ref=e11]: Planifica tus ingresos de jubilación
+        - generic [ref=e12]: Datos SS/IRPF 2025 | Mortalidad INE 2023
+    - main [ref=e13]:
+      - generic [ref=e14]:
+        - button "Colapsar datos" [ref=e15]:
+          - img [ref=e16]
+        - complementary [ref=e18]:
+          - generic [ref=e20]:
+            - generic [ref=e21]:
+              - heading "Tu punto de partida" [level=2] [ref=e23]
+              - paragraph [ref=e24]: Usamos tu ingreso actual como referencia de nivel de vida. Puedes introducirlo como neto mensual o como bruto anual y la app lo normaliza para comparar escenarios en una misma base.
+              - generic [ref=e25]:
+                - generic [ref=e26]: Edad actual
+                - spinbutton "Edad actual" [ref=e27]: "35"
+              - generic [ref=e28]:
+                - generic [ref=e29]:
+                  - generic [ref=e30]: Ingreso neto al mes
+                  - paragraph [ref=e31]: Introduce lo que realmente te entra por paga. Debajo eliges si cobras en 12 o en 14 pagas.
+                  - generic [ref=e33]:
+                    - spinbutton "Ingreso neto al mes" [ref=e34]: "2000"
+                    - generic [ref=e35]: EUR
+                - group "Tipo de salario" [ref=e37]:
+                  - generic [ref=e38]: Tipo de salario
+                  - generic [ref=e39] [cursor=pointer]:
+                    - radio "Neto / mes" [checked] [ref=e40]
+                    - generic [ref=e41]: Neto / mes
+                  - generic [ref=e42] [cursor=pointer]:
+                    - radio "Bruto / año" [ref=e43]
+                    - generic [ref=e44]: Bruto / año
+                - generic [ref=e45]:
+                  - generic [ref=e46]: Pagas al año
+                  - switch "14" [checked] [ref=e47] [cursor=pointer]:
+                    - generic:
+                      - generic: "14"
+              - generic [ref=e48]:
+                - generic [ref=e49]:
+                  - generic [ref=e50]: Edad de jubilación deseada
+                  - generic [ref=e51]: 67 años
+                - slider "Edad de jubilación deseada" [ref=e52]: "67"
+              - button "Ajustar detalles del cálculo" [ref=e55]:
+                - generic [ref=e56]: Ajustar detalles del cálculo
+                - img [ref=e57]
+            - button "Compartir plan" [ref=e59]:
+              - img [ref=e60]
+              - text: Compartir plan
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - heading "Descubre cuánto podrías cobrar de pensión" [level=2] [ref=e65]
+            - paragraph [ref=e66]: Introduce tu edad y salario para ver proyecciones bajo 6 escenarios de reforma. Herramienta educativa basada en datos de la Seguridad Social.
+            - button "Entendido" [ref=e67]
+          - generic [ref=e68]:
+            - generic [ref=e70]:
+              - img [ref=e72]
+              - generic [ref=e74]:
+                - 'heading "Atención: Ilusión monetaria" [level=3] [ref=e75]'
+                - paragraph [ref=e76]:
+                  - text: Estás viendo euros nominales. Debido a la inflación (2,0%), el dinero valdrá mucho menos en el futuro.
+                  - generic [ref=e77]: 2000€
+                  - text: en 2055 equivaldrán a solo
+                  - generic [ref=e78]: ~1104€
+                  - text: de hoy.
+            - generic [ref=e79]:
+              - generic [ref=e80]:
+                - generic [ref=e81]:
+                  - generic [ref=e82]: "Ver en:"
+                  - generic [ref=e83]:
+                    - button "Nominal (Futuro)" [ref=e84]
+                    - button "Real (Hoy)" [ref=e85]
+                - generic [ref=e86]:
+                  - generic [ref=e87]: "Inflación (IPC):"
+                  - combobox "Inflación (IPC):" [ref=e88]:
+                    - option "1,5% (BCE optimista)"
+                    - option "2,0% (objetivo BCE)" [selected]
+                    - option "2,5% (historico Espana)"
+                    - option "3,0% (elevado)"
+              - generic [ref=e90]:
+                - generic [ref=e91]: "Variante nocional:"
+                - combobox "Variante nocional:" [ref=e92]:
+                  - option "Histórico (PIB +2,2%)" [selected]
+                  - option "Ageing Report (+1,2%)"
+          - generic [ref=e93]:
+            - paragraph [ref=e94]: La gráfica se centra en el tramo final de tu carrera y en la jubilación para que el rango relevante se lea mejor.
+            - img "Gráfico de pensión mensual estimada por edad bajo 6 escenarios de reforma" [ref=e97]:
+              - paragraph [ref=e98]: Gráfico que muestra la evolución de la pensión mensual estimada desde la edad de jubilación hasta los 90 años, comparando 6 escenarios de reforma del sistema de pensiones.
+              - application [ref=e101]:
+                - generic [ref=e124]:
+                  - generic [ref=e125]:
+                    - generic [ref=e127]: "60"
+                    - generic [ref=e129]: "61"
+                    - generic [ref=e131]: "62"
+                    - generic [ref=e133]: "63"
+                    - generic [ref=e135]: "64"
+                    - generic [ref=e137]: "65"
+                    - generic [ref=e139]: "66"
+                    - generic [ref=e141]: "67"
+                    - generic [ref=e143]: "68"
+                    - generic [ref=e145]: "69"
+                    - generic [ref=e147]: "70"
+                    - generic [ref=e149]: "71"
+                    - generic [ref=e151]: "72"
+                    - generic [ref=e153]: "73"
+                    - generic [ref=e155]: "74"
+                    - generic [ref=e157]: "75"
+                    - generic [ref=e159]: "76"
+                    - generic [ref=e161]: "77"
+                    - generic [ref=e163]: "78"
+                    - generic [ref=e165]: "79"
+                    - generic [ref=e167]: "80"
+                    - generic [ref=e169]: "81"
+                    - generic [ref=e171]: "82"
+                    - generic [ref=e173]: "83"
+                    - generic [ref=e175]: "84"
+                    - generic [ref=e177]: "85"
+                    - generic [ref=e179]: "86"
+                    - generic [ref=e181]: "87"
+                    - generic [ref=e183]: "88"
+                    - generic [ref=e185]: "89"
+                    - generic [ref=e187]: "90"
+                  - generic [ref=e188]: Edad
+                  - generic [ref=e189]:
+                    - generic [ref=e191]: "0"
+                    - generic [ref=e193]: "1500"
+                    - generic [ref=e195]: "3000"
+                    - generic [ref=e197]: "4500"
+                    - generic [ref=e199]: "6000"
+                  - generic [ref=e200]: EUR/mes
+                  - generic [ref=e201]: 63 ant.
+                  - generic [ref=e202]: 67 legal
+                  - generic [ref=e203]: 70 dem.
+            - generic [ref=e204]:
+              - generic [ref=e205]:
+                - img [ref=e206]
+                - generic [ref=e207]: Ley actual
+              - generic [ref=e208]:
+                - img [ref=e209]
+                - generic [ref=e210]: Propuesta FEDEA
+              - generic [ref=e211]:
+                - img [ref=e212]
+                - generic [ref=e213]: Modelo tipo Suecia
+              - generic [ref=e214]:
+                - img [ref=e215]
+                - generic [ref=e216]: Reforma Rajoy (2013)
+              - generic [ref=e217]:
+                - img [ref=e218]
+                - generic [ref=e219]: Media europea
+              - generic [ref=e220]:
+                - img [ref=e221]
+                - generic [ref=e222]: Recorte severo
+          - button "Ver detalle" [ref=e224]:
+            - img [ref=e225]
+            - text: Ver detalle
+          - generic [ref=e227]:
+            - generic [ref=e229]:
+              - generic [ref=e230]:
+                - heading "Tu plan no debe depender de una sola cifra" [level=2] [ref=e231]
+                - paragraph [ref=e232]: El sistema actual tendrá que reformarse. La pensión pública es una base útil, pero no una promesa cerrada para toda tu jubilación.
+                - paragraph [ref=e233]: En los escenarios modelados, tu ingreso público de jubilación se mueve entre un suelo prudente y la referencia legal de hoy. La pregunta importante no es qué reforma exacta vendrá, sino qué parte de tus ingresos deberías construir por tu cuenta.
+                - generic [ref=e234]:
+                  - generic [ref=e235]:
+                    - paragraph [ref=e236]: Al jubilarte, en euros de hoy
+                    - generic [ref=e237]: 1932 €/mes
+                  - img [ref=e239]
+                  - generic [ref=e241]:
+                    - paragraph [ref=e242]: Suelo prudente del rango
+                    - generic [ref=e243]: 780 €/mes
+                    - paragraph [ref=e244]: Media europea
+              - generic [ref=e245]:
+                - paragraph [ref=e246]: Objetivo de planificación
+                - paragraph [ref=e247]: Usa la pensión pública como base, no como plan completo.
+                - paragraph [ref=e248]: Si la reforma se parece al suelo del rango modelado, tu ingreso público podría caer hasta un 59,6 % frente a la ley actual.
+                - paragraph [ref=e249]: Tu ahorro privado es el mecanismo para sostener ingresos durante toda la jubilación, no solo para llegar al día de retiro.
+            - link "Ver mi plan de ahorro" [ref=e250] [cursor=pointer]:
+              - /url: "#savings-section"
+              - text: Ver mi plan de ahorro
+              - img [ref=e251]
+            - generic [ref=e253]:
+              - generic [ref=e254]:
+                - heading "Análisis multi-escenario" [level=2] [ref=e255]
+                - generic [ref=e256]: Rango de planificación
+              - paragraph [ref=e257]: Nadie sabe qué reforma exacta llegará. Estos escenarios no intentan adivinar el futuro con precisión, sino acotar un rango plausible de ingresos públicos con el que conviene planificar tu jubilación.
+              - button "Ver todos los escenarios" [ref=e259]:
+                - generic [ref=e260]: Ver todos los escenarios
+                - img [ref=e261]
+            - generic [ref=e263]:
+              - paragraph [ref=e264]: Enfoque de la herramienta
+              - paragraph [ref=e265]:
+                - text: El sistema actual es difícil de sostener sin cambios. Por eso la pregunta importante no es "qué pensión exacta me tocará", sino "qué parte de mis ingresos de jubilación puedo considerar pública y qué parte tengo que construir yo".
+                - generic [ref=e266]: La app usa varias reformas plausibles para que planifiques con margen de seguridad, no para convertir una de ellas en villano.
+          - generic [ref=e267]:
+            - generic [ref=e268]:
+              - heading "Cómo sostener tus ingresos" [level=2] [ref=e269]
+              - generic [ref=e270]: "Fase 2: Plan de Ahorro"
+            - paragraph [ref=e271]: Tomamos tu ingreso neto actual como referencia de nivel de vida y calculamos cuanto complemento privado necesitas para sostenerlo durante toda la jubilación. Si la pensión pública se reforma a la baja, ese esfuerzo sube.
+            - generic [ref=e272]:
+              - paragraph [ref=e273]: Aviso importante
+              - paragraph [ref=e274]: Las proyecciones de ahorro e inversión son estimaciones educativas basadas en rentabilidades históricas. La rentabilidad pasada no garantiza resultados futuros. Consulta con un asesor financiero profesional antes de tomar decisiones de inversión.
+            - generic [ref=e276]:
+              - heading "Brecha de ingresos a cubrir" [level=2] [ref=e277]
+              - paragraph [ref=e278]:
+                - text: Para mantener tu nivel de vida actual, te faltarían
+                - generic [ref=e280]: 1103 €/mes
+                - text: bajo modelo tipo suecia.
+              - paragraph [ref=e281]: La referencia de nivel de vida sale de tu ingreso neto anual actual, normalizado a 12 meses. La brecha se compara con la pensión estimada al jubilarte también en euros de hoy, para no mezclar cifras nominales futuras con tu gasto actual.
+              - generic [ref=e282]:
+                - paragraph [ref=e283]: Cómo se calcula tu referencia actual
+                - paragraph [ref=e284]:
+                  - text: "2000 € netos/mes x 14 pagas = 28.000 € netos al año. Para comparar con la jubilación lo pasamos a una base común de 12 meses:"
+                  - generic [ref=e285]: 2333 €/mes
+                  - text: .
+              - generic [ref=e286]:
+                - generic [ref=e287]:
+                  - paragraph [ref=e288]: Referencia actual (base 12 meses)
+                  - generic [ref=e289]: 2333 €/mes
+                  - paragraph [ref=e290]: Tu gasto mensual equivalente de hoy.
+                - generic [ref=e291]:
+                  - paragraph [ref=e292]: Pensión pública estimada
+                  - generic [ref=e293]: 1932 €/mes
+                  - paragraph [ref=e294]: Ley actual, al jubilarte, en euros de hoy.
+                  - paragraph [ref=e295]:
+                    - text: "82,8 % del objetivo. Brecha:"
+                    - generic [ref=e296]: 401 €
+                - generic [ref=e297]:
+                  - paragraph [ref=e298]: Modelo tipo Suecia
+                  - generic [ref=e299]: 1230 €/mes
+                  - paragraph [ref=e300]: Pensión pública estimada bajo este escenario, en euros de hoy.
+                  - paragraph [ref=e301]:
+                    - text: "52,7 % del objetivo. Brecha:"
+                    - generic [ref=e302]: 1103 €
+              - generic [ref=e303]:
+                - text: Si la reforma se parece a Modelo tipo Suecia, el esfuerzo privado sube en
+                - generic [ref=e305]: 702 €/mes
+                - text: frente a planificar con ley actual.
+              - generic [ref=e306]:
+                - text: "Escenario de planificación:"
+                - combobox [ref=e307]:
+                  - option "Propuesta FEDEA"
+                  - option "Modelo tipo Suecia" [selected]
+                  - option "Reforma Rajoy (2013)"
+                  - option "Media europea"
+                  - option "Recorte severo"
+            - generic [ref=e309]:
+              - generic [ref=e310]:
+                - paragraph [ref=e311]: Ahorro actual para jubilación
+                - paragraph [ref=e312]: Capital que ya tienes reservado para retiro. Lo proyectamos hasta tu jubilación como base inicial del plan.
+              - generic [ref=e313]:
+                - generic [ref=e314]: Ahorro actual para jubilación
+                - spinbutton "Ahorro actual para jubilación" [ref=e315]: "0"
+                - generic [ref=e316]: 0 €
+            - generic [ref=e317]:
+              - generic [ref=e318]:
+                - paragraph [ref=e319]: Ahorro mensual
+                - button "363 €/mes" [ref=e320]:
+                  - generic [ref=e321]: 363 €/mes
+              - generic [ref=e323]: Auto
+            - generic [ref=e324]:
+              - generic [ref=e325]:
+                - paragraph [ref=e326]: Durante cuántos años quieres complementar tus ingresos
+                - generic [ref=e327]:
+                  - slider "Durante cuántos años quieres complementar tus ingresos" [ref=e328] [cursor=pointer]: "22"
+                  - generic [ref=e329]: 22 años
+                - paragraph [ref=e330]: Aproxima cuántos años quieres que tu cartera cubra rentas desde la jubilación. Por defecto se deriva de esperanza de vida.
+              - generic [ref=e332]: Auto
+            - generic [ref=e333]:
+              - heading "Perfil de inversión" [level=3] [ref=e334]
+              - generic [ref=e335]:
+                - button "Conservador 30% renta variable, 50% renta fija, 20% liquidez" [ref=e336]:
+                  - paragraph [ref=e337]: Conservador
+                  - paragraph [ref=e338]: 30% renta variable, 50% renta fija, 20% liquidez
+                - button "Moderado 60% renta variable, 30% renta fija, 10% liquidez" [ref=e343]:
+                  - paragraph [ref=e344]: Moderado
+                  - paragraph [ref=e345]: 60% renta variable, 30% renta fija, 10% liquidez
+                - button "Agresivo 90% renta variable, 10% renta fija" [ref=e350]:
+                  - paragraph [ref=e351]: Agresivo
+                  - paragraph [ref=e352]: 90% renta variable, 10% renta fija
+                - 'button "Ciclo de vida De agresivo a conservador con la edad: más riesgo de joven, más seguridad al jubilarte" [ref=e356]':
+                  - paragraph [ref=e357]: Ciclo de vida
+                  - paragraph [ref=e358]: "De agresivo a conservador con la edad: más riesgo de joven, más seguridad al jubilarte"
+            - generic [ref=e359]:
+              - heading "Hoja de ruta de ahorro" [level=3] [ref=e360]
+              - generic [ref=e361]:
+                - generic [ref=e362]:
+                  - paragraph [ref=e363]: Ahorro actual reservado
+                  - text: 0 €
+                - generic [ref=e364]:
+                  - paragraph [ref=e365]: Aportación mensual desde hoy
+                  - generic [ref=e366]: 363 €/mes
+                - generic [ref=e367]:
+                  - paragraph [ref=e368]: Ahorro actual al jubilarte
+                  - text: 0 €
+                - generic [ref=e369]:
+                  - paragraph [ref=e370]: Capital total estimado
+                  - text: 244.393 €
+                - generic [ref=e371]:
+                  - paragraph [ref=e372]: Complemento mensual privado
+                  - generic [ref=e373]: 1103 €/mes
+                - generic [ref=e374]:
+                  - paragraph [ref=e375]: Rentabilidad esperada
+                  - paragraph [ref=e376]: 3,3 % real
+              - generic [ref=e377]:
+                - generic [ref=e378]: 32 años de ahorro por delante
+                - generic [ref=e379]: "Nuevas aportaciones: 139.223 €"
+              - paragraph [ref=e380]: El capital que ya tienes acumulado reduce la aportación necesaria desde hoy. Estimación basada en rentabilidad histórica media; los resultados reales pueden variar significativamente.
+            - generic [ref=e381]:
+              - generic [ref=e382]:
+                - heading "Cómo construyes tu complemento privado" [level=3] [ref=e383]
+                - generic [ref=e384]: En euros nominales
+              - paragraph [ref=e385]: Mismo ahorro actual y misma aportación mensual, proyectados con distintas rentabilidades reales a largo plazo.
+              - generic [ref=e386]:
+                - img "Comparación de ingresos entre escenario de referencia y escenario seleccionado" [ref=e387]:
+                  - paragraph [ref=e388]: "Gráfico que compara la acumulación de ahorro proyectada con distintas rentabilidades reales a largo plazo: renta variable, renta fija y letras del Tesoro."
+                  - application [ref=e391]:
+                    - generic [ref=e422]:
+                      - generic [ref=e423]:
+                        - generic [ref=e425]: "35"
+                        - generic [ref=e427]: "36"
+                        - generic [ref=e429]: "37"
+                        - generic [ref=e431]: "38"
+                        - generic [ref=e433]: "39"
+                        - generic [ref=e435]: "40"
+                        - generic [ref=e437]: "41"
+                        - generic [ref=e439]: "42"
+                        - generic [ref=e441]: "43"
+                        - generic [ref=e443]: "44"
+                        - generic [ref=e445]: "45"
+                        - generic [ref=e447]: "46"
+                        - generic [ref=e449]: "47"
+                        - generic [ref=e451]: "48"
+                        - generic [ref=e453]: "49"
+                        - generic [ref=e455]: "50"
+                        - generic [ref=e457]: "51"
+                        - generic [ref=e459]: "52"
+                        - generic [ref=e461]: "53"
+                        - generic [ref=e463]: "54"
+                        - generic [ref=e465]: "55"
+                        - generic [ref=e467]: "56"
+                        - generic [ref=e469]: "57"
+                        - generic [ref=e471]: "58"
+                        - generic [ref=e473]: "59"
+                        - generic [ref=e475]: "60"
+                        - generic [ref=e477]: "61"
+                        - generic [ref=e479]: "62"
+                        - generic [ref=e481]: "63"
+                        - generic [ref=e483]: "64"
+                        - generic [ref=e485]: "65"
+                        - generic [ref=e487]: "66"
+                        - generic [ref=e489]: "67"
+                      - generic [ref=e490]:
+                        - generic [ref=e492]: 0k
+                        - generic [ref=e494]: 200k
+                        - generic [ref=e496]: 400k
+                        - generic [ref=e498]: 600k
+                        - generic [ref=e500]: 800k
+                      - generic [ref=e501]: EUR
+                - generic [ref=e503]:
+                  - generic [ref=e504]:
+                    - generic [ref=e507]: Renta variable
+                    - generic [ref=e510]: Renta fija
+                    - generic [ref=e513]: Letras Tesoro / liquidez
+                  - generic [ref=e514]: "Eje X: edad"
+            - generic [ref=e515]:
+              - generic [ref=e516]:
+                - heading "Ingreso total planificado en jubilación" [level=3] [ref=e517]
+                - generic [ref=e518]: Base pública + complemento privado
+              - paragraph [ref=e519]: La linea verde muestra tu plan total de ingresos si planificas con modelo tipo suecia y el ahorro privado calculado arriba.
+              - img "Gráfico de ingreso total combinando pensión pública y ahorro privado" [ref=e521]:
+                - paragraph [ref=e522]: Gráfico que muestra el ingreso total planificado en jubilación, combinando la pensión pública estimada con el complemento de ahorro privado.
+                - application [ref=e525]:
+                  - generic [ref=e550]:
+                    - generic [ref=e551]:
+                      - generic [ref=e553]: "60"
+                      - generic [ref=e555]: "61"
+                      - generic [ref=e557]: "62"
+                      - generic [ref=e559]: "63"
+                      - generic [ref=e561]: "64"
+                      - generic [ref=e563]: "65"
+                      - generic [ref=e565]: "66"
+                      - generic [ref=e567]: "67"
+                      - generic [ref=e569]: "68"
+                      - generic [ref=e571]: "69"
+                      - generic [ref=e573]: "70"
+                      - generic [ref=e575]: "71"
+                      - generic [ref=e577]: "72"
+                      - generic [ref=e579]: "73"
+                      - generic [ref=e581]: "74"
+                      - generic [ref=e583]: "75"
+                      - generic [ref=e585]: "76"
+                      - generic [ref=e587]: "77"
+                      - generic [ref=e589]: "78"
+                      - generic [ref=e591]: "79"
+                      - generic [ref=e593]: "80"
+                      - generic [ref=e595]: "81"
+                      - generic [ref=e597]: "82"
+                      - generic [ref=e599]: "83"
+                      - generic [ref=e601]: "84"
+                      - generic [ref=e603]: "85"
+                      - generic [ref=e605]: "86"
+                      - generic [ref=e607]: "87"
+                      - generic [ref=e609]: "88"
+                      - generic [ref=e611]: "89"
+                      - generic [ref=e613]: "90"
+                    - generic [ref=e614]: Edad
+                    - generic [ref=e615]:
+                      - generic [ref=e617]: "0"
+                      - generic [ref=e619]: "2000"
+                      - generic [ref=e621]: "4000"
+                      - generic [ref=e623]: "6000"
+                      - generic [ref=e625]: "8000"
+                    - generic [ref=e626]: EUR/mes
+                    - generic [ref=e627]: 67 (jubilación)
+              - generic [ref=e628]:
+                - generic [ref=e631]: Ley actual
+                - generic [ref=e634]: Transicion
+                - generic [ref=e637]: Nocional
+                - generic [ref=e640]: Sost. 2013
+                - generic [ref=e643]: Conv. UE
+                - generic [ref=e646]: Grecia
+                - generic [ref=e649]: Plan total
+              - paragraph [ref=e650]:
+                - text: La línea vertical verde marca el fin del complemento privado a los
+                - generic [ref=e651]: 89 años
+                - text: . El plan asume 22 años de apoyo desde la jubilación; a partir de ahí la línea verde gruesa vuelve a reflejar solo la pensión pública estimada.
+            - generic [ref=e652]:
+              - paragraph [ref=e653]: El objetivo no es acertar la reforma
+              - paragraph [ref=e654]: El objetivo es sostener ingresos durante toda la jubilación. Incluso con volatilidad, la probabilidad de acumular más patrimonio con fondos indexados globales que con liquidez o letras a 20+ años es de aproximadamente ~95%. Pequeñas diferencias de rentabilidad se convierten en grandes diferencias de renta futura.
+              - generic [ref=e655]:
+                - generic [ref=e656]:
+                  - paragraph [ref=e657]: Renta variable
+                  - paragraph [ref=e658]: ~5% real
+                  - paragraph [ref=e659]: MSCI World, historico 1970-2024
+                - generic [ref=e660]:
+                  - paragraph [ref=e661]: Renta fija
+                  - paragraph [ref=e662]: ~1% real
+                  - paragraph [ref=e663]: Bonos gobierno, media historica
+                - generic [ref=e664]:
+                  - paragraph [ref=e665]: Letras Tesoro / liquidez
+                  - paragraph [ref=e666]: ~0% real
+                  - paragraph [ref=e667]: Tras inflacion, no creces
+              - paragraph [ref=e668]: "Fuentes: Damodaran (S&P 500 1928-2024), MSCI World (~1970+), BCE. Rentabilidades pasadas no garantizan resultados futuros. Esto no constituye asesoramiento financiero ni sustituye un plan personalizado."
+          - generic [ref=e669]:
+            - generic [ref=e670]:
+              - heading "Como Habria Ido Historicamente" [level=2] [ref=e671]
+              - generic [ref=e672]: "Fase 3: Backtest"
+            - generic [ref=e673]:
+              - heading "Clase de activo historica" [level=3] [ref=e674]
+              - generic [ref=e675]:
+                - button "S&P 500 (EEUU) Renta variable EEUU, 1928-2024" [pressed] [ref=e676]:
+                  - paragraph [ref=e677]: S&P 500 (EEUU)
+                  - paragraph [ref=e678]: Renta variable EEUU, 1928-2024
+                - button "MSCI World Renta variable global, 1970-2024" [ref=e679]:
+                  - paragraph [ref=e680]: MSCI World
+                  - paragraph [ref=e681]: Renta variable global, 1970-2024
+                - button "Bonos 10A (EEUU) Bonos 10 años EEUU, 1928-2024" [ref=e682]:
+                  - paragraph [ref=e683]: Bonos 10A (EEUU)
+                  - paragraph [ref=e684]: Bonos 10 años EEUU, 1928-2024
+            - generic [ref=e685]:
+              - generic [ref=e686]:
+                - heading "Simulación histórica por cohorte" [level=3] [ref=e687]
+                - generic [ref=e688]: Euros reales
+              - paragraph [ref=e689]: Cada línea representa una cohorte histórica distinta de ahorro. Las tres destacadas muestran mejor, mediana y peor secuencia observada.
+              - generic [ref=e690]:
+                - img "Simulación histórica de rendimiento de cartera en diferentes períodos" [ref=e691]:
+                  - paragraph [ref=e692]: Gráfico tipo espagueti que muestra la evolución del valor de cartera para distintas cohortes históricas de ahorro, destacando la mejor, la mediana y la peor secuencia observada.
+                  - application [ref=e695]:
+                    - generic [ref=e752]:
+                      - generic [ref=e753]:
+                        - generic [ref=e755]: "0"
+                        - generic [ref=e757]: "1"
+                        - generic [ref=e759]: "2"
+                        - generic [ref=e761]: "3"
+                        - generic [ref=e763]: "4"
+                        - generic [ref=e765]: "5"
+                        - generic [ref=e767]: "6"
+                        - generic [ref=e769]: "7"
+                        - generic [ref=e771]: "8"
+                        - generic [ref=e773]: "9"
+                        - generic [ref=e775]: "10"
+                        - generic [ref=e777]: "11"
+                        - generic [ref=e779]: "12"
+                        - generic [ref=e781]: "13"
+                        - generic [ref=e783]: "14"
+                        - generic [ref=e785]: "15"
+                        - generic [ref=e787]: "16"
+                        - generic [ref=e789]: "17"
+                        - generic [ref=e791]: "18"
+                        - generic [ref=e793]: "19"
+                        - generic [ref=e795]: "20"
+                        - generic [ref=e797]: "21"
+                        - generic [ref=e799]: "22"
+                        - generic [ref=e801]: "23"
+                        - generic [ref=e803]: "24"
+                        - generic [ref=e805]: "25"
+                        - generic [ref=e807]: "26"
+                        - generic [ref=e809]: "27"
+                        - generic [ref=e811]: "28"
+                        - generic [ref=e813]: "29"
+                        - generic [ref=e815]: "30"
+                        - generic [ref=e817]: "31"
+                        - generic [ref=e819]: "32"
+                      - generic [ref=e820]: Anos desde que empiezas a ahorrar
+                      - generic [ref=e821]:
+                        - generic [ref=e823]: 0k
+                        - generic [ref=e825]: 300k
+                        - generic [ref=e827]: 600k
+                        - generic [ref=e829]: 900k
+                        - generic [ref=e831]: 1200k
+                      - generic [ref=e832]: EUR
+                - generic [ref=e833]:
+                  - generic [ref=e834]: Mejor
+                  - generic [ref=e836]: Mediana
+                  - generic [ref=e838]: Peor
+                  - generic [ref=e840]: Otras cohortes
+            - generic [ref=e842]:
+              - heading "Resultados del backtest" [level=3] [ref=e843]
+              - generic [ref=e844]:
+                - generic [ref=e845]:
+                  - paragraph [ref=e846]: Mejor (1968)
+                  - paragraph [ref=e847]: 1.017.019 €
+                  - paragraph [ref=e848]: 5424 €/mes en retiro
+                - generic [ref=e849]:
+                  - paragraph [ref=e850]: Mediana (1986)
+                  - paragraph [ref=e851]: 497.420 €
+                  - paragraph [ref=e852]: 2653 €/mes en retiro
+                - generic [ref=e853]:
+                  - paragraph [ref=e854]: Peor (1950)
+                  - paragraph [ref=e855]: 231.120 €
+                  - paragraph [ref=e856]: 1233 €/mes en retiro
+              - generic [ref=e857]:
+                - generic [ref=e858]: Cohortes que batieron dejar el dinero sin rentabilidad
+                - generic [ref=e859]: 100%
+              - paragraph [ref=e860]: Basado en 66 cohortes históricas de 32 años de acumulación
+            - generic [ref=e861]:
+              - generic [ref=e862]:
+                - paragraph [ref=e863]: Rendimientos pasados no garantizan resultados futuros
+                - paragraph [ref=e864]: Series históricas en USD. La simulación capitaliza con rentabilidades anuales y no refleja volatilidad intra-anual.
+              - button "Ver fuentes y límites ▼" [ref=e865]:
+                - paragraph [ref=e866]: Ver fuentes y límites
+                - generic [ref=e867]: ▼
+          - generic [ref=e868]:
+            - heading "Por qué no basta con una cifra de pensión" [level=2] [ref=e869]
+            - button "Por qué el sistema tendrá que reformarse" [ref=e871]:
+              - generic [ref=e872]: Por qué el sistema tendrá que reformarse
+              - img [ref=e873]
+            - button "Como leer los escenarios y las fuentes" [ref=e876]:
+              - generic [ref=e877]: Como leer los escenarios y las fuentes
+              - img [ref=e878]
+    - contentinfo [ref=e880]:
+      - generic [ref=e882]:
+        - generic [ref=e883]:
+          - paragraph [ref=e884]: Proyecto open-source de José Enrique Narváez
+          - link "Código fuente en GitHub" [ref=e885] [cursor=pointer]:
+            - /url: https://github.com/jenarvaezg/tu-jubilacion
+        - paragraph [ref=e886]: Estimación educativa. No constituye asesoramiento financiero. Consulte con un profesional. Los cálculos se basan en datos públicos y supuestos simplificados.
+        - generic [ref=e887]:
+          - generic [ref=e888]: Datos SS/IRPF 2025 | Mortalidad INE 2023
+          - 'link "Ref: Devesa, Domenech y Meneu (2025) - FEDEA" [ref=e889] [cursor=pointer]':
+            - /url: https://documentos.fedea.net/pubs/eee/2025/eee2025-22.pdf
+  - generic [ref=e890]: 300k

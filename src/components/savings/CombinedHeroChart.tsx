@@ -51,58 +51,44 @@ export function CombinedHeroChart({
     privateIncomeEndAge <= data[data.length - 1].age;
 
   return (
-    <div className="flex flex-col gap-3" data-testid="combined-income-chart">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-          Ingreso total planificado en jubilación
-        </h3>
-        <span className="text-xs text-gray-400 uppercase">
-          Base pública + complemento privado
-        </span>
-      </div>
-      <p className="text-xs leading-relaxed text-gray-500">
-        La linea verde muestra tu plan total de ingresos si planificas con{" "}
-        {SCENARIO_LABELS[comparisonScenarioId].toLowerCase()} y el ahorro
-        privado calculado arriba.
-      </p>
-      <div className="rounded-xl bg-white p-4 shadow-sm border border-gray-100">
+    <div className="flex flex-col gap-6" data-testid="combined-income-chart">
+      <div className="border border-paper-dark bg-white p-6 sm:p-8">
+        <div className="mb-6 border-b border-paper-dark pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-ink/60">
+              Proyección de Ingreso Consolidado
+            </h3>
+            <p className="mt-1 font-serif italic text-xs text-ink-light/80">
+              Suma de la pensión pública estimada y el complemento de ahorro privado.
+            </p>
+          </div>
+          <span className="text-[10px] font-mono font-bold uppercase text-success border border-success/20 bg-success/5 px-2 py-1">
+            Plan Total Integrado
+          </span>
+        </div>
+
         <div
           role="img"
           aria-label="Gráfico de ingreso total combinando pensión pública y ahorro privado"
         >
-          <p className="sr-only">
-            Gráfico que muestra el ingreso total planificado en jubilación,
-            combinando la pensión pública estimada con el complemento de ahorro
-            privado.
-          </p>
-          <ResponsiveContainer width="100%" height={360}>
+          <ResponsiveContainer width="100%" height={400}>
             <LineChart
               data={data as CombinedChartDataPoint[]}
-              margin={{ top: 56, right: 18, left: 20, bottom: 26 }}
+              margin={{ top: 40, right: 20, left: -20, bottom: 20 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis
                 dataKey="age"
-                label={{
-                  value: "Edad",
-                  position: "insideBottom",
-                  offset: -8,
-                  fontSize: 12,
-                }}
-                tick={{ fontSize: 11 }}
-                stroke="#9ca3af"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 10, fontFamily: 'ui-monospace', fill: '#64748b' }}
+                dy={10}
               />
               <YAxis
-                tick={{ fontSize: 11 }}
-                stroke="#9ca3af"
-                tickFormatter={(v: number) => `${Math.round(v)}`}
-                label={{
-                  value: "EUR/mes",
-                  angle: -90,
-                  position: "insideLeft",
-                  offset: -2,
-                  fontSize: 12,
-                }}
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 10, fontFamily: 'ui-monospace', fill: '#64748b' }}
+                tickFormatter={(v: number) => `${Math.round(v)}€`}
               />
               <Tooltip
                 allowEscapeViewBox={{ x: true, y: true }}
@@ -115,21 +101,31 @@ export function CombinedHeroChart({
               />
               <ReferenceLine
                 x={retirementAge}
-                stroke="#1e40af"
-                strokeDasharray="4 4"
+                stroke="#c2410c"
+                strokeDasharray="3 3"
                 label={{
-                  value: `${retirementAge} (jubilación)`,
+                  value: `RETIRO ${retirementAge}`,
                   position: "insideTop",
                   dy: 2,
-                  fontSize: REFERENCE_LABEL_FONT_SIZE,
-                  fill: "#1e40af",
+                  fontSize: 9,
+                  fontFamily: 'ui-monospace',
+                  fontWeight: 'bold',
+                  fill: "#c2410c",
                 }}
               />
               {showsPrivateIncomeEnd && (
                 <ReferenceLine
                   x={privateIncomeEndAge}
-                  stroke="#047857"
-                  strokeDasharray="2 6"
+                  stroke="#059669"
+                  strokeDasharray="2 4"
+                  label={{
+                    value: `FIN COMPLEMENTO ${privateIncomeEndAge}`,
+                    position: "insideTop",
+                    dy: 20,
+                    fontSize: 9,
+                    fontFamily: 'ui-monospace',
+                    fill: "#059669",
+                  }}
                 />
               )}
               {SCENARIO_ORDER.map((scenarioId) => (
@@ -138,74 +134,47 @@ export function CombinedHeroChart({
                   type="monotone"
                   dataKey={scenarioId}
                   stroke={SCENARIO_COLORS[scenarioId]}
-                  strokeWidth={
-                    scenarioId === "current-law"
-                      ? 2.5
-                      : scenarioId === "fedea-transition"
-                        ? 2.25
-                        : 1.5
-                  }
+                  strokeWidth={1}
                   strokeDasharray={
-                    SCENARIO_DASH_PATTERNS[scenarioId] || undefined
+                    SCENARIO_DASH_PATTERNS[scenarioId] || "4 4"
                   }
-                  strokeOpacity={scenarioId === "fedea-transition" ? 0.92 : 1}
-                  strokeLinecap="round"
+                  strokeOpacity={0.3}
                   dot={false}
-                  activeDot={{ r: 4 }}
                   connectNulls={false}
                 />
               ))}
               <Line
-                type="linear"
+                type="monotone"
                 dataKey="pension-plus-savings"
                 stroke="#059669"
-                strokeWidth={3.5}
+                strokeWidth={4}
                 dot={false}
-                activeDot={{ r: 5 }}
+                activeDot={{ r: 6, stroke: '#fff', strokeWidth: 2 }}
                 connectNulls={false}
                 name={`Plan total (${SCENARIO_LABELS[comparisonScenarioId]})`}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </div>
-      <div className="flex flex-wrap gap-4 text-xs text-gray-500">
-        {SCENARIO_ORDER.map((id) => (
-          <div key={id} className="flex items-center gap-1.5">
-            <span
-              className="h-2 w-4 rounded-sm"
-              style={{ backgroundColor: SCENARIO_COLORS[id] }}
-            />
-            <span>
-              {id === "current-law"
-                ? "Ley actual"
-                : id === "fedea-transition"
-                  ? "Transicion"
-                  : id === "notional-accounts"
-                    ? "Nocional"
-                    : id === "sustainability-2013"
-                      ? "Sost. 2013"
-                      : id === "eu-convergence"
-                        ? "Conv. UE"
-                        : "Grecia"}
-            </span>
+
+        <div className="mt-8 border-t border-paper-dark/10 pt-4 flex flex-wrap gap-x-6 gap-y-3">
+          <div className="flex items-center gap-2">
+            <span className="h-0.5 w-6 bg-success" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-success">Plan de Ingresos Objetivo</span>
           </div>
-        ))}
-        <div className="flex items-center gap-1.5">
-          <span className="h-0.5 w-4 border-t-2 border-emerald-600" />
-          <span className="font-semibold text-emerald-700">Plan total</span>
+          <div className="flex items-center gap-2">
+            <span className="h-0.5 w-4 border-t border-dashed border-ink/40" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-ink/40">Escenarios de Pensión Pública</span>
+          </div>
         </div>
       </div>
+      
       {showsPrivateIncomeEnd && (
-        <p className="text-xs leading-relaxed text-gray-500">
-          La línea vertical verde marca el fin del complemento privado a los{" "}
-          <span className="font-semibold text-emerald-700">
-            {privateIncomeEndAge} años
-          </span>
-          . El plan asume {drawdownYears} años de apoyo desde la jubilación; a
-          partir de ahí la línea verde gruesa vuelve a reflejar solo la pensión
-          pública estimada.
-        </p>
+        <div className="border-l-2 border-success bg-success/5 p-4">
+          <p className="font-serif italic text-xs leading-relaxed text-success/80">
+            Nota: La línea consolidada refleja el cese del flujo de rentas privadas a los <span className="font-mono font-bold">{privateIncomeEndAge} años</span>. A partir de este hito, el modelo asume que el ingreso se limita estrictamente a la pensión pública proyectada.
+          </p>
+        </div>
       )}
     </div>
   );

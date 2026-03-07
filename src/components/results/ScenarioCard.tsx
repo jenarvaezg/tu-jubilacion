@@ -44,24 +44,24 @@ export function ScenarioCard({
 
   return (
     <div
-      className="rounded-lg border p-4 transition-shadow hover:shadow-md"
+      className="border border-paper-dark bg-white p-6 transition-colors hover:bg-paper-dark/50"
       style={{
-        borderLeftColor: SCENARIO_COLORS[result.scenarioId as ScenarioId],
-        borderLeftWidth: "4px",
+        borderTopColor: SCENARIO_COLORS[result.scenarioId as ScenarioId],
+        borderTopWidth: "2px",
       }}
     >
-      <div className="flex items-start justify-between gap-2">
-        <h3 className="text-sm font-semibold text-gray-800">
+      <div className="flex items-start justify-between gap-2 border-b border-paper-dark/10 pb-3 mb-4">
+        <h3 className="text-xs font-bold uppercase tracking-widest text-ink/80">
           {SCENARIO_LABELS[result.scenarioId as ScenarioId]}
         </h3>
         {!isBaseline && (
           <span
-            className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
+            className={`shrink-0 border px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest ${
               isLower
-                ? "bg-red-100 text-red-700"
+                ? "border-danger text-danger bg-danger/5"
                 : isHigher
-                  ? "bg-green-100 text-green-700"
-                  : "bg-gray-100 text-gray-600"
+                  ? "border-success text-success bg-success/5"
+                  : "border-ink/20 text-ink/40"
             }`}
           >
             {diff > 0 ? "+" : ""}
@@ -69,37 +69,41 @@ export function ScenarioCard({
           </span>
         )}
         {isBaseline && (
-          <span className="shrink-0 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+          <span className="shrink-0 border border-ink/40 bg-ink text-paper px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest">
             Referencia
           </span>
         )}
       </div>
 
-      <p className="mt-2 text-xs leading-relaxed text-gray-500">
+      <p className="font-serif italic text-xs leading-relaxed text-ink-light/70">
         {SCENARIO_DESCRIPTIONS[result.scenarioId as ScenarioId]}
       </p>
 
-      <div className="mt-2">
-        <p className="text-sm text-gray-600">
-          Ingreso público estimado (euros de hoy)
+      <div className="mt-6 border-t border-paper-dark/10 pt-4">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-ink/40 mb-1">
+          Pensión mensual estimada
         </p>
-        <CurrencyDisplay
-          amount={displayedPension}
-          className="text-xl text-gray-900"
-        />
+        <div className="flex items-baseline gap-1">
+          <CurrencyDisplay
+            amount={displayedPension}
+            className="text-2xl font-mono font-bold text-ink tracking-tighter"
+            suffix=""
+          />
+          <span className="text-[10px] font-mono text-ink/40 uppercase">/mes</span>
+        </div>
       </div>
 
       {showDetail && (
-        <div className="mt-3 space-y-1 border-t border-gray-100 pt-3">
-          <div className="flex justify-between text-xs text-gray-500">
+        <div className="mt-4 space-y-2 border-t border-dashed border-paper-dark/20 pt-4">
+          <div className="flex justify-between text-[10px] uppercase tracking-widest text-ink/60">
             <span>Base reguladora</span>
-            <span className="font-medium tabular-nums">
+            <span className="font-mono font-bold">
               {result.baseReguladora.toFixed(2)} EUR
             </span>
           </div>
-          <div className="flex justify-between text-xs text-gray-500">
-            <span>Tasa de reemplazo (bruto)</span>
-            <span className="font-medium tabular-nums">
+          <div className="flex justify-between text-[10px] uppercase tracking-widest text-ink/60">
+            <span>Tasa de reemplazo</span>
+            <span className="font-mono font-bold">
               {formatPercent(result.replacementRate)}
             </span>
           </div>

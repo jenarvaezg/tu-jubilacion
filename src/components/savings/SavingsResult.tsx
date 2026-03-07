@@ -8,70 +8,85 @@ interface SavingsResultProps {
 
 export function SavingsResult({ savings }: SavingsResultProps) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h3 className="text-sm font-bold uppercase tracking-wide text-gray-700">
-        Hoja de ruta de ahorro
+    <div className="border border-paper-dark bg-white p-8 sm:p-10">
+      <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink/40 mb-8 border-b border-paper-dark pb-4">
+        Hoja de Ruta de Capitalización
       </h3>
 
-      <div className="mt-4 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-        <div>
-          <p className="text-xs text-gray-500">Ahorro actual reservado</p>
-          <CurrencyDisplay
-            amount={savings.currentSavingsBalance}
-            className="text-2xl font-extrabold text-gray-900"
-            suffix=""
-          />
+      <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col gap-2">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-ink/40">Base Inicial Reservada</p>
+          <div className="flex items-baseline gap-1">
+            <CurrencyDisplay
+              amount={savings.currentSavingsBalance}
+              className="text-3xl font-mono font-bold text-ink tracking-tighter"
+              suffix=""
+            />
+          </div>
         </div>
-        <div>
-          <p className="text-xs text-gray-500">Aportación mensual desde hoy</p>
-          <CurrencyDisplay
-            amount={savings.monthlyContribution}
-            className="text-2xl font-extrabold text-gray-900"
-          />
+
+        <div className="flex flex-col gap-2">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink/40">Esfuerzo Mensual Requerido</p>
+          <div className="flex items-baseline gap-1">
+            <CurrencyDisplay
+              amount={savings.monthlyContribution}
+              className="text-3xl font-mono font-bold text-ink tracking-tighter"
+              suffix=""
+            />
+            <span className="text-[10px] font-mono text-ink/40 uppercase">/mes</span>
+          </div>
         </div>
-        <div>
-          <p className="text-xs text-gray-500">Ahorro actual al jubilarte</p>
-          <CurrencyDisplay
-            amount={savings.currentSavingsAtRetirement}
-            className="text-xl font-bold text-gray-900"
-            suffix=""
-          />
+
+        <div className="flex flex-col gap-2">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-ink/40">Capital Proyectado al Retiro</p>
+          <div className="flex items-baseline gap-1 text-ink/60">
+            <CurrencyDisplay
+              amount={savings.portfolioAtRetirement}
+              className="text-2xl font-mono font-bold tracking-tighter"
+              suffix=""
+            />
+            <span className="text-[10px] font-mono uppercase">EUR</span>
+          </div>
         </div>
-        <div>
-          <p className="text-xs text-gray-500">Capital total estimado</p>
-          <CurrencyDisplay
-            amount={savings.portfolioAtRetirement}
-            className="text-xl font-bold text-gray-900"
-            suffix=""
-          />
+
+        <div className="flex flex-col gap-2">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-success">Complemento Mensual Privado</p>
+          <div className="flex items-baseline gap-1">
+            <CurrencyDisplay
+              amount={savings.monthlyIncomeFromPortfolio}
+              className="text-3xl font-mono font-bold text-success tracking-tighter"
+              suffix=""
+            />
+            <span className="text-[10px] font-mono text-success/40 uppercase">/mes</span>
+          </div>
         </div>
-        <div>
-          <p className="text-xs text-gray-500">Complemento mensual privado</p>
-          <CurrencyDisplay
-            amount={savings.monthlyIncomeFromPortfolio}
-            className="text-xl font-bold text-green-700"
-          />
+
+
+        <div className="flex flex-col gap-2">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-ink/40">Horizonte de Aportación</p>
+          <div className="flex items-baseline gap-1 text-ink/60">
+            <span className="text-xl font-mono font-bold tracking-tighter">{savings.yearsOfAccumulation}</span>
+            <span className="text-[10px] font-mono uppercase">Años</span>
+          </div>
         </div>
-        <div>
-          <p className="text-xs text-gray-500">Rentabilidad esperada</p>
-          <p className="text-xl font-bold tabular-nums text-gray-900">
-            {formatPercent(savings.weightedRealReturn)} real
+
+        <div className="flex flex-col gap-2">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-ink/40">Rentabilidad Objetivo</p>
+          <p className="text-xl font-mono font-bold tabular-nums text-ink/60 tracking-tighter">
+            {formatPercent(savings.weightedRealReturn)} <span className="text-[10px] font-mono uppercase font-normal ml-1">Real</span>
           </p>
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-400">
-        <span>{savings.yearsOfAccumulation} años de ahorro por delante</span>
-        <span>
-          Nuevas aportaciones: {formatCurrency(savings.totalContributed)}
-        </span>
-      </div>
+      <div className="mt-10 border-t border-paper-dark pt-6 flex flex-col gap-4">
+        <div className="flex flex-wrap gap-6 text-[10px] font-mono font-bold uppercase tracking-widest text-ink/40">
+          <span>Inversión total acumulada: {formatCurrency(savings.totalContributed)}</span>
+        </div>
 
-      <p className="mt-3 text-xs italic leading-relaxed text-gray-400">
-        El capital que ya tienes acumulado reduce la aportación necesaria desde
-        hoy. Estimación basada en rentabilidad histórica media; los resultados
-        reales pueden variar significativamente.
-      </p>
+        <p className="font-serif italic text-xs leading-relaxed text-ink-light/60 max-w-3xl">
+          * Estimación basada en rentabilidad histórica media neta de inflación. El capital reservado reduce linealmente el esfuerzo mensual necesario. Los resultados reales dependerán de la secuencia de retornos del mercado y de la disciplina en las aportaciones.
+        </p>
+      </div>
     </div>
   );
 }

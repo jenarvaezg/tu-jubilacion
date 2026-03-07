@@ -37,42 +37,44 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
     baselinePension > 0 ? (baselinePension - publicFloor) / baselinePension : 0;
 
   return (
-    <div className="flex flex-col gap-8">
-      <div className="overflow-hidden rounded-2xl bg-gray-900 text-white shadow-xl">
+    <div className="flex flex-col gap-12">
+      <div className="border border-paper-dark bg-ink text-paper overflow-hidden">
         <div className="flex flex-col md:flex-row">
-          <div className="flex-1 p-8">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400">
-              Tu plan no debe depender de una sola cifra
+          <div className="flex-1 p-8 sm:p-12">
+            <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-paper/40">
+              Conclusión Prospectiva
             </h2>
-            <p className="mt-4 text-3xl font-extrabold leading-tight">
-              El sistema actual tendrá que reformarse. La pensión pública es una
-              base útil, pero no una promesa cerrada para toda tu jubilación.
+            <p className="mt-6 text-2xl font-serif font-bold leading-tight sm:text-4xl">
+              El sistema actual afronta una reforma estructural necesaria. La pensión pública es una base analítica, no una garantía cerrada.
             </p>
-            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-300">
-              En los escenarios modelados, tu ingreso público de jubilación se
-              mueve entre un suelo prudente y la referencia legal de hoy. La
-              pregunta importante no es qué reforma exacta vendrá, sino qué
-              parte de tus ingresos deberías construir por tu cuenta.
+            <p className="mt-6 max-w-2xl font-serif italic text-base leading-relaxed text-paper/60">
+              En los escenarios modelados, su ingreso público se desplaza entre un suelo prudente y la referencia legal vigente. El objetivo no es predecir la reforma, sino acotar el esfuerzo privado necesario.
             </p>
-            <div className="mt-8 flex flex-wrap gap-8">
+            
+            <div className="mt-12 flex flex-wrap gap-12 border-t border-paper/10 pt-10">
               <div>
-                <p className="text-xs font-medium uppercase text-gray-400">
-                  Al jubilarte, en euros de hoy
+                <p className="text-[10px] font-bold uppercase tracking-widest text-paper/40 mb-2">
+                  Referencia Ley Actual (Euros hoy)
                 </p>
-                <CurrencyDisplay
-                  amount={baselinePension}
-                  className="text-2xl font-bold"
-                />
+                <div className="flex items-baseline gap-2">
+                  <CurrencyDisplay
+                    amount={baselinePension}
+                    className="text-4xl font-mono font-bold tracking-tighter"
+                    suffix=""
+                  />
+                  <span className="text-xs font-mono text-paper/40 uppercase">/mes</span>
+                </div>
               </div>
-              <div className="flex items-center text-gray-600">
+              
+              <div className="hidden items-center text-paper/20 md:flex">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="32"
+                  height="32"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="1"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
@@ -80,15 +82,20 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
                   <path d="m12 5 7 7-7 7" />
                 </svg>
               </div>
+
               <div>
-                <p className="text-xs font-medium uppercase tracking-tighter text-amber-300">
-                  Suelo prudente del rango
+                <p className="text-[10px] font-bold uppercase tracking-widest text-accent mb-2">
+                  Suelo de Planificación (Prudente)
                 </p>
-                <CurrencyDisplay
-                  amount={publicFloor}
-                  className="text-2xl font-extrabold text-amber-300"
-                />
-                <p className="mt-1 text-xs text-gray-400">
+                <div className="flex items-baseline gap-2">
+                  <CurrencyDisplay
+                    amount={publicFloor}
+                    className="text-4xl font-mono font-bold text-accent tracking-tighter"
+                    suffix=""
+                  />
+                  <span className="text-xs font-mono text-accent/40 uppercase">/mes</span>
+                </div>
+                <p className="mt-2 text-[10px] font-mono uppercase tracking-widest text-paper/40">
                   {SCENARIO_LABELS[
                     publicFloorResult?.scenarioId as ScenarioId
                   ] ?? "Escenario modelado"}
@@ -96,24 +103,20 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
               </div>
             </div>
           </div>
-          <div className="flex flex-col justify-center border-l border-white/5 bg-blue-950/30 p-8 md:w-72">
-            <p className="text-xs font-bold uppercase text-blue-300">
-              Objetivo de planificación
+          
+          <div className="flex flex-col justify-center bg-white/5 p-8 sm:p-12 md:w-80 border-t md:border-t-0 md:border-l border-paper/10">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-paper/40">
+              Directriz de Ahorro
             </p>
-            <p className="mt-2 text-2xl font-black leading-tight text-white">
-              Usa la pensión pública como base, no como plan completo.
+            <p className="mt-4 font-serif text-xl leading-tight">
+              La pensión pública debe actuar como base, no como plan integral.
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-gray-300">
-              Si la reforma se parece al suelo del rango modelado, tu ingreso
-              público podría caer hasta un{" "}
-              <span className="font-bold text-blue-200">
+            <p className="mt-6 font-serif italic text-sm leading-relaxed text-paper/60">
+              En el escenario más exigente, su ingreso público podría reducirse un{" "}
+              <span className="font-mono font-bold text-accent not-italic">
                 {formatPercent(publicRangeDropPercent)}
               </span>{" "}
-              frente a la ley actual.
-            </p>
-            <p className="mt-2 text-xs leading-relaxed text-gray-400 italic">
-              Tu ahorro privado es el mecanismo para sostener ingresos durante
-              toda la jubilación, no solo para llegar al día de retiro.
+              frente a la legislación actual.
             </p>
           </div>
         </div>
@@ -121,9 +124,9 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
 
       <a
         href="#savings-section"
-        className="inline-flex items-center gap-2 self-start rounded-lg bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow hover:bg-blue-700 transition-colors"
+        className="group relative inline-flex items-center gap-4 self-center sm:self-start border-2 border-ink bg-ink px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] text-paper hover:bg-transparent hover:text-ink transition-all duration-300"
       >
-        Ver mi plan de ahorro
+        Ver plan de ahorro privado
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -134,59 +137,52 @@ export function ResultsSummary({ results, showDetail }: ResultsSummaryProps) {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          className="transition-transform group-hover:translate-y-1"
         >
           <path d="M12 5v14" />
           <path d="m19 12-7 7-7-7" />
         </svg>
       </a>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between border-b border-gray-200 pb-2">
-          <h2 className="text-xl font-black uppercase tracking-tight italic text-gray-900">
-            Análisis multi-escenario
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center justify-between border-b border-paper-dark pb-4">
+          <h2 className="text-lg font-serif font-bold uppercase tracking-widest text-ink">
+            Análisis de Sensibilidad
           </h2>
-          <span className="text-xs font-bold uppercase text-gray-400">
-            Rango de planificación
+          <span className="font-mono text-[10px] uppercase tracking-widest text-ink/40">
+            Rango de Modelado
           </span>
         </div>
-        <p className="text-sm leading-relaxed text-gray-600">
-          Nadie sabe qué reforma exacta llegará. Estos escenarios no intentan
-          adivinar el futuro con precisión, sino acotar un rango plausible de
-          ingresos públicos con el que conviene planificar tu jubilación.
+        <p className="font-serif italic text-base leading-relaxed text-ink-light/80">
+          La incertidumbre sobre futuras reformas aconseja planificar no sobre una cifra única, sino acotando un rango plausible de ingresos públicos.
         </p>
 
-        <Collapsible
-          title="Ver todos los escenarios"
-          defaultOpen={false}
-          className="border-0 rounded-none"
-        >
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {results.map((result) => (
-              <ScenarioCard
-                key={result.scenarioId}
-                result={result}
-                baselinePension={baselinePension}
-                showDetail={showDetail}
-              />
-            ))}
-          </div>
-        </Collapsible>
+        <div className="mt-4">
+          <Collapsible
+            title="Desglosar todos los escenarios de reforma"
+            defaultOpen={false}
+            className="border border-paper-dark/20 p-2"
+          >
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 p-4">
+              {results.map((result) => (
+                <ScenarioCard
+                  key={result.scenarioId}
+                  result={result}
+                  baselinePension={baselinePension}
+                  showDetail={showDetail}
+                />
+              ))}
+            </div>
+          </Collapsible>
+        </div>
       </div>
 
-      <div className="rounded-xl border-l-4 border-gray-900 bg-white p-6 shadow-sm">
-        <p className="mb-2 text-xs font-bold uppercase tracking-widest text-gray-900">
-          Enfoque de la herramienta
-        </p>
-        <p className="leading-relaxed text-gray-700 italic">
-          El sistema actual es difícil de sostener sin cambios. Por eso la
-          pregunta importante no es "qué pensión exacta me tocará", sino "qué
-          parte de mis ingresos de jubilación puedo considerar pública y qué
-          parte tengo que construir yo".
-          <span className="font-bold">
-            {" "}
-            La app usa varias reformas plausibles para que planifiques con
-            margen de seguridad, no para convertir una de ellas en villano.
-          </span>
+      <div className="border-l-4 border-ink bg-white p-8 border border-paper-dark">
+        <h3 className="text-[10px] font-bold uppercase tracking-widest text-ink/40 mb-3">
+          Nota Metodológica
+        </h3>
+        <p className="font-serif italic text-base leading-relaxed text-ink-light/90">
+          La viabilidad del sistema actual exige ajustes paramétricos o estructurales. Esta herramienta utiliza diversas reformas observadas en la OCDE para que usted pueda planificar con un margen de seguridad prudencial, transformando la incertidumbre en una cifra de ahorro accionable.
         </p>
       </div>
     </div>

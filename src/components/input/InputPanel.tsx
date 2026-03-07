@@ -19,42 +19,46 @@ export function InputPanel({ state, dispatch }: InputPanelProps) {
     profile.personalSituations ?? DEFAULT_PERSONAL_SITUATIONS;
 
   return (
-    <div className="flex flex-col gap-5 rounded-xl bg-white p-5 shadow-sm border border-gray-100">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-gray-900">Tu punto de partida</h2>
+    <div className="flex flex-col gap-8 bg-white border border-paper-dark p-6 sm:p-8">
+      <div className="border-b border-paper-dark pb-4">
+        <h2 className="text-xl font-serif font-bold text-ink tracking-tight uppercase">
+          Perfil del Contribuyente
+        </h2>
+        <p className="mt-2 font-serif italic text-sm text-ink-light/80 leading-relaxed">
+          Establezca los parámetros de su nivel de vida actual para normalizar las proyecciones futuras.
+        </p>
       </div>
-      <p className="text-sm leading-relaxed text-gray-600">
-        Usamos tu ingreso actual como referencia de nivel de vida. Puedes
-        introducirlo como neto mensual o como bruto anual y la app lo
-        normaliza para comparar escenarios en una misma base.
-      </p>
 
-      <AgeInput
-        value={profile.age}
-        onChange={(age) => dispatch({ type: 'SET_AGE', payload: age })}
-      />
+      <div className="flex flex-col gap-6">
+        <AgeInput
+          value={profile.age}
+          onChange={(age) => dispatch({ type: 'SET_AGE', payload: age })}
+        />
 
-      <SalaryInput
-        salary={profile.monthlySalary}
-        salaryType={profile.salaryType}
-        pagasExtra={profile.pagasExtra}
-        onSalaryChange={(s) => dispatch({ type: 'SET_SALARY', payload: s })}
-        onSalaryTypeChange={(t) => dispatch({ type: 'SET_SALARY_TYPE', payload: t })}
-        onPagasExtraChange={(p) => dispatch({ type: 'SET_PAGAS_EXTRA', payload: p })}
-      />
+        <SalaryInput
+          salary={profile.monthlySalary}
+          salaryType={profile.salaryType}
+          pagasExtra={profile.pagasExtra}
+          onSalaryChange={(s) => dispatch({ type: 'SET_SALARY', payload: s })}
+          onSalaryTypeChange={(t) => dispatch({ type: 'SET_SALARY_TYPE', payload: t })}
+          onPagasExtraChange={(p) => dispatch({ type: 'SET_PAGAS_EXTRA', payload: p })}
+        />
 
-      <RetirementAgeSlider
-        value={profile.desiredRetirementAge}
-        onChange={(r) => dispatch({ type: 'SET_RETIREMENT_AGE', payload: r })}
-      />
+        <div className="pt-2">
+          <RetirementAgeSlider
+            value={profile.desiredRetirementAge}
+            onChange={(r) => dispatch({ type: 'SET_RETIREMENT_AGE', payload: r })}
+          />
+        </div>
+      </div>
 
-      <div className="border-t border-gray-50 pt-2">
+      <div className="border-t border-paper-dark pt-4">
         <Collapsible 
-          title="Ajustar detalles del cálculo" 
+          title="Parámetros técnicos adicionales" 
           defaultOpen={false}
-          className="bg-gray-50/50 rounded-lg p-1"
+          className="bg-paper-dark/30 rounded-none p-2 border border-dashed border-ink/20"
         >
-          <div className="flex flex-col gap-5 p-2">
+          <div className="flex flex-col gap-6 p-4">
             <CcaaSelect
               value={profile.ccaa}
               onChange={(c) => dispatch({ type: 'SET_CCAA', payload: c })}
