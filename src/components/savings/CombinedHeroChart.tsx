@@ -120,14 +120,6 @@ export function CombinedHeroChart({
                 x={privateIncomeEndAge}
                 stroke="#047857"
                 strokeDasharray="2 6"
-                label={{
-                  value: `${privateIncomeEndAge} fin complemento`,
-                  position: "insideTop",
-                  dy: 18,
-                  dx: 8,
-                  fontSize: REFERENCE_LABEL_FONT_SIZE,
-                  fill: "#047857",
-                }}
               />
             )}
             {SCENARIO_ORDER.map((scenarioId) => (
@@ -194,10 +186,13 @@ export function CombinedHeroChart({
       </div>
       {showsPrivateIncomeEnd && (
         <p className="text-xs leading-relaxed text-gray-500">
-          El salto en los {privateIncomeEndAge} anos marca el fin del
-          complemento privado. El plan asume {drawdownYears} anos de apoyo
-          desde la jubilacion; a partir de ahi la linea vuelve a reflejar solo
-          la pension publica estimada.
+          La linea vertical verde marca el fin del complemento privado a los{" "}
+          <span className="font-semibold text-emerald-700">
+            {privateIncomeEndAge} anos
+          </span>
+          . El plan asume {drawdownYears} anos de apoyo desde la jubilacion; a
+          partir de ahi la linea verde gruesa vuelve a reflejar solo la
+          pension publica estimada.
         </p>
       )}
     </div>
