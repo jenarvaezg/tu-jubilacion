@@ -10,110 +10,106 @@ const html = `<!DOCTYPE html>
   body {
     width: 1200px;
     height: 630px;
-    background: #111827;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #fdfcfb;
+    font-family: 'Charter', 'Bitstream Charter', 'Sitka Text', 'Cambria', 'Georgia', serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 64px;
+    padding: 80px;
     position: relative;
     overflow: hidden;
+    color: #0f172a;
   }
-  .bg-accent {
+  .border-top {
     position: absolute;
-    top: -120px;
-    right: -120px;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
-    border-radius: 50%;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: #0f172a;
   }
-  .bg-accent2 {
+  .accent-bar {
     position: absolute;
-    bottom: -80px;
-    left: -80px;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%);
-    border-radius: 50%;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 48px;
-  }
-  .logo-square {
-    width: 56px;
-    height: 56px;
-    background: #2563eb;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: 800;
-    color: white;
-    letter-spacing: -1px;
+    top: 80px;
+    left: 80px;
+    width: 60px;
+    height: 4px;
+    background: #c2410c;
   }
   .logo-text {
-    font-size: 22px;
+    font-family: ui-monospace, monospace;
+    font-size: 14px;
     font-weight: 700;
-    color: #f9fafb;
-    letter-spacing: -0.5px;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 40px;
   }
   .title {
-    font-size: 64px;
-    font-weight: 800;
-    color: #f9fafb;
-    line-height: 1.1;
-    letter-spacing: -2px;
-    margin-bottom: 24px;
+    font-size: 84px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1;
+    letter-spacing: -3px;
+    margin-bottom: 32px;
+    max-width: 900px;
   }
   .title span {
-    color: #60a5fa;
+    color: #c2410c;
+    font-style: italic;
   }
   .subtitle {
-    font-size: 26px;
-    font-weight: 400;
-    color: #d1d5db;
+    font-size: 32px;
+    font-style: italic;
+    color: #475569;
     line-height: 1.4;
     max-width: 800px;
-    margin-bottom: 48px;
+    margin-bottom: 60px;
   }
   .footer {
     position: absolute;
-    bottom: 48px;
-    left: 64px;
-    right: 64px;
+    bottom: 80px;
+    left: 80px;
+    right: 80px;
     display: flex;
     align-items: center;
-    gap: 24px;
+    justify-content: space-between;
+    border-top: 1px solid rgba(15, 23, 42, 0.1);
+    padding-top: 32px;
+  }
+  .badge-container {
+    display: flex;
+    gap: 16px;
   }
   .badge {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 8px;
-    padding: 8px 16px;
+    border: 1px solid rgba(15, 23, 42, 0.2);
+    padding: 6px 12px;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .domain {
+    font-family: ui-monospace, monospace;
     font-size: 14px;
-    color: #9ca3af;
-    font-weight: 500;
+    color: #0f172a;
+    font-weight: bold;
   }
 </style>
 </head>
 <body>
-  <div class="bg-accent"></div>
-  <div class="bg-accent2"></div>
-  <div class="logo">
-    <div class="logo-square">TJ</div>
-    <span class="logo-text">Tu Jubilación</span>
-  </div>
-  <div class="title">Planifica tu<br /><span>pensión pública</span></div>
-  <div class="subtitle">Calculadora de pensión pública bajo diferentes escenarios de reforma</div>
+  <div class="border-top"></div>
+  <div class="accent-bar"></div>
+  <div class="logo-text">Tu Jubilación</div>
+  <div class="title">Análisis de<br /><span>Sostenibilidad</span></div>
+  <div class="subtitle">Calculadora interactiva de pensión pública y planificación de ahorro complementario.</div>
   <div class="footer">
-    <div class="badge">Datos SS/IRPF 2025</div>
-    <div class="badge">Mortalidad INE 2023</div>
-    <div class="badge">5 escenarios de reforma</div>
+    <div class="badge-container">
+      <div class="badge">Modelado SS/IRPF 2025</div>
+      <div class="badge">Datos INE 2023</div>
+    </div>
+    <div class="domain">tu-jubilacion.web.app</div>
   </div>
 </body>
 </html>`;
